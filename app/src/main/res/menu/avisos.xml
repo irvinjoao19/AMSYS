@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/trabajo"
+        android:icon="@drawable/ic_points"
+        android:orderInCategory="100"
+        android:title="@string/trabajo" />
+    <item
+        android:id="@+id/falla"
+        android:icon="@drawable/ic_points"
+        android:orderInCategory="200"
+        android:title="@string/falla" />
+    <item
+        android:id="@+id/parada"
+        android:icon="@drawable/ic_points"
+        android:orderInCategory="300"
+        android:title="@string/parada" />
+</menu>

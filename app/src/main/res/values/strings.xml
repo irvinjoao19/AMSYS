@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">AMSYS</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="singin">Acceder</string>
+    <string name="pass">Contraseña</string>
+    <string name="user">Usuario</string>
+    <string name="img">description</string>
+    <string name="version">V 1.0</string>
+    <string name="main">Principal</string>
+    <string name="login">Iniciando Sesión</string>
+    <string name="trabajo">Solicitud de Trabajo</string>
+    <string name="falla">Aviso de Falla</string>
+    <string name="parada">Aviso de Parada</string>
+
+
+
+
+    <string name="title_area">Área:</string>
+    <string name="title_sistema">Sistema:</string>
+    <string name="title_parte_repuesto">Parte / Repuesto:</string>
+    <string name="title_ubicacion_tecnica">Ubicación Técnica:</string>
+    <string name="title_emplazamiento">Emplazamiento:</string>
+    <string name="title_equipo_superior">Equipo Superior:</string>
+    <string name="title_componente">Componente:</string>
+    <string name="title_equipo">Equipo:</string>
+    <string name="title_tipo_aviso">Tipo de Aviso:</string>
+    <string name="title_consecuencias_relativas">Consecuencias relativas a:</string>
+    <string name="title_descripcion_breve">Descripción Breve:</string>
+    <string name="title_prioridad">Prioridad:</string>
+    <string name="title_estado">Estado:</string>
+    <string name="title_modo_falla">Modo de Falla:</string>
+    <string name="title_metodo_deteccion">Método de Detección:</string>
+    <string name="title_orden_trabajo">Orden de Trabajo:</string>
+    <string name="title_fecha">Fecha:</string>
+    <string name="title_comentario">Comentario:</string>
+    <string name="title_inicio_parada">Inicio de Parada:</string>
+    <string name="title_fin_parada">Fin de Parada:</string>
+    <string name="title_clase_parada">Clase de Parada:</string>
+    <string name="title_tipo_parada">Tipo de Parada:</string>
+    <string name="title_sub_tipo_parada">Sub-Tipo de Parada:</string>
+    <string name="title_causa_falla">Causa de Falla:</string>
+    <string name="title_impacto_funcion">Impacto en la Función:</string>
+    <string name="title_mecanismo_falla">Mecanismo de Falla:</string>
+    <string name="hint_nombre">Nombre</string>
+    <string name="hint_codigo">Codigo</string>
+    <string name="hint_search">Buscar</string>
+</resources>
