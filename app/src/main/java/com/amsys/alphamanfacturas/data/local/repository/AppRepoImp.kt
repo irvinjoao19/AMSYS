@@ -159,4 +159,19 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
     override fun getConsecuencia(): LiveData<List<Consecuencia>> {
         return dataBase.consecuenciaDao().getConsecuencia()
     }
+
+    override fun insertAviso(r: Registro): Completable {
+        return Completable.fromAction {
+            val registro: Registro? = dataBase.registroDao().getRegistroByIdTask(r.registroId)
+            if (registro == null) {
+                dataBase.registroDao().insertRegistroTask(r)
+                return@fromAction
+            }
+            dataBase.registroDao().updateRegistroTask(r)
+        }
+    }
+
+    override fun getRegistroById(id: Int): LiveData<Registro> {
+        return dataBase.registroDao().getRegistroById(id)
+    }
 }

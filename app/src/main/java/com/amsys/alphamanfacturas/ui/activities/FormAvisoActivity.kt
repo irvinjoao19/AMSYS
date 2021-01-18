@@ -7,6 +7,8 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.Gravity
+import android.view.View
+import android.widget.LinearLayout
 import com.amsys.alphamanfacturas.R
 import com.amsys.alphamanfacturas.ui.adapters.TabLayoutAdapter
 import com.ydn.viewpagerwithicons.StateViewPager.OnIconClickListener
@@ -14,8 +16,10 @@ import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_form_aviso.*
 
 
-class FormAvisoActivity : DaggerAppCompatActivity() {
+class FormAvisoActivity : DaggerAppCompatActivity(), View.OnClickListener {
 
+    override fun onClick(v: View) {
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +38,7 @@ class FormAvisoActivity : DaggerAppCompatActivity() {
         stepView.adapter = TabLayoutAdapter.Form(supportFragmentManager, 5, 1)
 
         stepView
+            .setOrientation(LinearLayout.HORIZONTAL)
             .setIntermediateIconSize(90, 2)
             .setNumberOfIcons(5) //.setOrientation(LinearLayout.HORIZONTAL)
             //.setGravity(Gravity.RIGHT)
@@ -41,21 +46,18 @@ class FormAvisoActivity : DaggerAppCompatActivity() {
             .setIconSize(30, 30)
             .setSelectedIconSize(30, 30)
             .setOnIconClickListener { iconNum ->
-                stepView.setPage(
-                    iconNum,
-                    true
-                )
+                stepView.setPage(iconNum, true)
             }
             .setMarginBetweenIcons(30) //.setIntermediateIconSize(100, 3)
             .setShowCheckmarks(false, false, false)
             .setCheckmarkColors(Color.parseColor("#FFA233"), 0, 0)
             .setTitles(
                 arrayOf(
-                     "General",
-                     "Objeto Técnico",
-                     "Registro de Evento",
-                     "Datos de Parada",
-                     "Datos de Contabilidad"
+                    "General",
+                    "Objeto Técnico",
+                    "Registro de Evento",
+                    "Datos de Parada",
+                    "Datos de Contabilidad"
                 )
             )
             .setIconColors(Color.parseColor("#e0e0e0"), Color.parseColor("#1AC512"), Color.LTGRAY)
@@ -77,7 +79,7 @@ class FormAvisoActivity : DaggerAppCompatActivity() {
             .setTextMargins(10, 10, 10)
             .setIntermediateIconColors(Color.parseColor("#FFA233"), Color.parseColor("#909090"))
             .setIntermediateIconStyles("solid", "dotted")
+            .requestLayout()
+        fabRegistrar.setOnClickListener(this)
     }
-
-
 }

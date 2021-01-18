@@ -34,4 +34,8 @@ interface AppRepository {
     fun getCausaFalla(): LiveData<List<CausaFalla>>
     fun getPrioridad(): LiveData<List<Prioridad>>
     fun getConsecuencia(): LiveData<List<Consecuencia>>
+
+    //Registro
+    fun insertAviso(r: Registro) :Completable
+    fun getRegistroById(id: Int): LiveData<Registro>
 }

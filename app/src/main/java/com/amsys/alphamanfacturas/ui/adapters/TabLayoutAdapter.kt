@@ -12,8 +12,8 @@ abstract class TabLayoutAdapter {
 
         override fun getItem(position: Int): Fragment {
             return when (position) {
-                0 -> Aviso1Fragment.newInstance("","")
-                1 -> Aviso2Fragment.newInstance("","")
+                0 -> Aviso1Fragment.newInstance(id,"")
+                1 -> Aviso2Fragment.newInstance(id,"")
                 2 -> Aviso3Fragment.newInstance("","")
                 3 -> Aviso4Fragment.newInstance("","")
                 4 -> Aviso5Fragment.newInstance("","")

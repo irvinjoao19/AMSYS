@@ -22,6 +22,7 @@ import com.amsys.alphamanfacturas.R
 import com.amsys.alphamanfacturas.data.local.model.*
 import com.amsys.alphamanfacturas.data.viewModel.AvisoViewModel
 import com.amsys.alphamanfacturas.data.viewModel.ViewModelFactory
+import com.amsys.alphamanfacturas.helper.Util
 import com.amsys.alphamanfacturas.ui.adapters.*
 import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
 import com.google.android.material.textfield.TextInputEditText
@@ -42,27 +43,25 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener {
         when (v.id) {
             R.id.editText2 -> spinnerDialog(1, "Consecuencias relativas")
             R.id.editText4 -> spinnerDialog(2, "Prioridad")
-
-
-            R.id.fab1 -> stepView!!.currentItem = 1
+            R.id.fab1 -> formAviso1()
         }
-
     }
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     lateinit var avisoViewModel: AvisoViewModel
 
-
-    private var param1: String? = null
+    private var registroId: Int = 0
     private var param2: String? = null
 
     private var stepView: StateViewPager? = null
+    lateinit var r: Registro
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        r = Registro()
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
+            registroId = it.getInt(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
     }
@@ -83,6 +82,23 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener {
         avisoViewModel =
             ViewModelProvider(this, viewModelFactory).get(AvisoViewModel::class.java)
 
+        avisoViewModel.getRegistroById(registroId).observe(viewLifecycleOwner) {
+            if (it != null) {
+                r = it
+                editText2.setText(it.consecuenciaIdNombre)
+                editText3.setText(it.descripcion)
+                editText4.setText(it.prioridadIdNombre)
+            }
+        }
+
+
+        avisoViewModel.mensajeError.observe(viewLifecycleOwner) {
+            Util.toastMensaje(requireContext(), it)
+        }
+        avisoViewModel.mensajeSuccess.observe(viewLifecycleOwner) {
+            stepView!!.currentItem = 1
+            Util.toastMensaje(requireContext(), it)
+        }
 
         editText2.setOnClickListener(this)
         editText4.setOnClickListener(this)
@@ -118,6 +134,8 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener {
                 val consecuenciaAdapter =
                     ConsecuenciaAdapter(object : OnItemClickListener.ConsecuenciaListener {
                         override fun onItemClick(c: Consecuencia, v: View, position: Int) {
+                            r.consecuenciaId = c.consecuenciaId
+                            editText2.setText(c.nombre)
                             dialog.dismiss()
                         }
                     })
@@ -137,6 +155,8 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener {
                 val prioridadAdapter =
                     PrioridadAdapter(object : OnItemClickListener.PrioridadListener {
                         override fun onItemClick(p: Prioridad, v: View, position: Int) {
+                            r.prioridadId = p.prioridadId
+                            editText4.setText(p.nombre)
                             dialog.dismiss()
                         }
                     })
@@ -155,12 +175,20 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener {
         }
     }
 
+    private fun formAviso1() {
+        r.tipoAviso = 1
+        r.consecuenciaIdNombre = editText2.text.toString()
+        r.descripcion = editText3.text.toString()
+        r.prioridadIdNombre = editText4.text.toString()
+        avisoViewModel.validateAviso1(r)
+    }
+
     companion object {
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(param1: Int, param2: String) =
             Aviso1Fragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
+                    putInt(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
                 }
             }

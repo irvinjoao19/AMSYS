@@ -156,4 +156,46 @@ internal constructor(private val roomRepository: AppRepository, private val retr
         return roomRepository.getConsecuencia()
     }
 
+    fun validateAviso1(r: Registro) {
+
+        insertAviso(r)
+    }
+
+    fun validateAviso2(r: Registro) {
+
+        insertAviso(r)
+    }
+
+    fun validateAviso3(r: Registro) {
+
+        insertAviso(r)
+    }
+
+    fun validateAviso4(r: Registro) {
+
+        insertAviso(r)
+    }
+
+    fun validateAviso5(r: Registro) {
+
+        insertAviso(r)
+    }
+
+    private fun insertAviso(r: Registro) {
+        roomRepository.insertAviso(r)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : CompletableObserver {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onError(e: Throwable) {}
+                override fun onComplete() {
+                    mensajeSync.value = "Datos Guardados"
+                }
+            })
+    }
+
+    fun getRegistroById(id: Int): LiveData<Registro> {
+        return roomRepository.getRegistroById(id)
+    }
+
 }

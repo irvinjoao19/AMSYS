@@ -73,4 +73,9 @@ class DataBaseModule {
     internal fun provideCausaFallaDao(appDataBase: AppDataBase): CausaFallaDao {
         return appDataBase.causaFallaDao()
     }
+
+    @Provides
+    internal fun provideRegistroDao(appDataBase: AppDataBase): RegistroDao {
+        return appDataBase.registroDao()
+    }
 }
