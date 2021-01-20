@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.ViewPager
 import com.amsys.alphamanfacturas.R
 import com.amsys.alphamanfacturas.data.local.model.*
 import com.amsys.alphamanfacturas.data.viewModel.AvisoViewModel
@@ -27,24 +26,31 @@ import com.amsys.alphamanfacturas.ui.adapters.*
 import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.ydn.viewpagerwithicons.StateViewPager
-//import com.shuhart.stepview.StepView
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.activity_form_aviso.*
 import kotlinx.android.synthetic.main.fragment_aviso_1.*
 import javax.inject.Inject
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+private const val ARG_PARAM3 = "param3"
 
-class Aviso1Fragment : DaggerFragment(), View.OnClickListener {
+class Aviso1Fragment : DaggerFragment(), View.OnClickListener, TextView.OnEditorActionListener {
 
     override fun onClick(v: View) {
         when (v.id) {
             R.id.editText2 -> spinnerDialog(1, "Consecuencias relativas")
             R.id.editText4 -> spinnerDialog(2, "Prioridad")
-            R.id.fab1 -> formAviso1()
         }
+    }
+
+    override fun onEditorAction(t: TextView, p1: Int, p2: KeyEvent?): Boolean {
+        if (t.text.isNotEmpty()) {
+            r.descripcion = editText3.text.toString()
+            avisoViewModel.validateAviso1(r)
+            return true
+        }
+
+        return false
     }
 
     @Inject
@@ -52,9 +58,9 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener {
     lateinit var avisoViewModel: AvisoViewModel
 
     private var registroId: Int = 0
-    private var param2: String? = null
+    private var tipoAviso: Int = 0
+    private var usuarioId: Int = 0
 
-    private var stepView: StateViewPager? = null
     lateinit var r: Registro
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +68,8 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener {
         r = Registro()
         arguments?.let {
             registroId = it.getInt(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            tipoAviso = it.getInt(ARG_PARAM2)
+            usuarioId = it.getInt(ARG_PARAM3)
         }
     }
 
@@ -78,31 +85,40 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener {
     }
 
     private fun bindUI() {
-        stepView = requireActivity().findViewById(R.id.stepView)
         avisoViewModel =
             ViewModelProvider(this, viewModelFactory).get(AvisoViewModel::class.java)
+
+        r.tipoAviso = tipoAviso
+        r.userId = usuarioId
+        r.tipoAvisoNombre = when (tipoAviso) {
+            1 -> "Solicitud de Trabajo"
+            2 -> "Aviso de Falla"
+            else -> "Aviso de Parada"
+        }
+        editText1.setText(r.tipoAvisoNombre)
+        avisoViewModel.validateAviso1(r)
 
         avisoViewModel.getRegistroById(registroId).observe(viewLifecycleOwner) {
             if (it != null) {
                 r = it
+                editText1.setText(it.tipoAvisoNombre)
                 editText2.setText(it.consecuenciaIdNombre)
                 editText3.setText(it.descripcion)
                 editText4.setText(it.prioridadIdNombre)
             }
         }
 
-
         avisoViewModel.mensajeError.observe(viewLifecycleOwner) {
             Util.toastMensaje(requireContext(), it)
         }
         avisoViewModel.mensajeSuccess.observe(viewLifecycleOwner) {
-            stepView!!.currentItem = 1
             Util.toastMensaje(requireContext(), it)
         }
 
         editText2.setOnClickListener(this)
         editText4.setOnClickListener(this)
-        fab1.setOnClickListener(this)
+        editText3.setOnEditorActionListener(this)
+        editText5.setText(String.format("Emitido"))
     }
 
     private fun spinnerDialog(tipo: Int, title: String) {
@@ -135,7 +151,8 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener {
                     ConsecuenciaAdapter(object : OnItemClickListener.ConsecuenciaListener {
                         override fun onItemClick(c: Consecuencia, v: View, position: Int) {
                             r.consecuenciaId = c.consecuenciaId
-                            editText2.setText(c.nombre)
+                            r.consecuenciaIdNombre = c.nombre
+                            avisoViewModel.validateAviso1(r)
                             dialog.dismiss()
                         }
                     })
@@ -156,7 +173,8 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener {
                     PrioridadAdapter(object : OnItemClickListener.PrioridadListener {
                         override fun onItemClick(p: Prioridad, v: View, position: Int) {
                             r.prioridadId = p.prioridadId
-                            editText4.setText(p.nombre)
+                            r.prioridadIdNombre = p.nombre
+                            avisoViewModel.validateAviso1(r)
                             dialog.dismiss()
                         }
                     })
@@ -175,23 +193,15 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener {
         }
     }
 
-    private fun formAviso1() {
-        r.tipoAviso = 1
-        r.consecuenciaIdNombre = editText2.text.toString()
-        r.descripcion = editText3.text.toString()
-        r.prioridadIdNombre = editText4.text.toString()
-        avisoViewModel.validateAviso1(r)
-    }
-
     companion object {
         @JvmStatic
-        fun newInstance(param1: Int, param2: String) =
+        fun newInstance(param1: Int, param2: Int, param3: Int) =
             Aviso1Fragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putInt(ARG_PARAM2, param2)
+                    putInt(ARG_PARAM3, param3)
                 }
             }
     }
-
 }

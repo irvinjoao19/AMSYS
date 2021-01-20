@@ -49,6 +49,7 @@ class AvisosFragment : DaggerFragment(), View.OnClickListener {
     private var lastVisibleItem: Int = 0
     private var totalItemCount: Int = 0
     private var visibleItemCount: Int = 0
+    private var registroId: Int = 0
     lateinit var q: Query
 
     lateinit var builder: AlertDialog.Builder
@@ -108,7 +109,7 @@ class AvisosFragment : DaggerFragment(), View.OnClickListener {
         })
         avisoViewModel.getPageNumber(pageNumber)
         q.userId = usuarioId
-        avisoViewModel.paginationAviso("Bearer $token", q)
+        avisoViewModel.paginationAviso(token, q)
 
         avisoViewModel.getAvisos().observe(viewLifecycleOwner) {
             avisoAdapter.addItems(it)
@@ -131,11 +132,15 @@ class AvisosFragment : DaggerFragment(), View.OnClickListener {
         avisoViewModel.mensajeSuccess.observe(viewLifecycleOwner) {
             closeLoad()
         }
-        avisoViewModel.mensajeSync.observe(viewLifecycleOwner){
-            if (it != null){
+        avisoViewModel.mensajeSync.observe(viewLifecycleOwner) {
+            if (it != 0) {
                 closeLoad()
-                goActivity()
+                goActivity(it)
             }
+        }
+
+        avisoViewModel.getIdentity().observe(viewLifecycleOwner){
+            registroId = if (it == null || it == 0) 1 else it + 1
         }
         fab.setOnClickListener(this)
     }
@@ -151,15 +156,15 @@ class AvisosFragment : DaggerFragment(), View.OnClickListener {
         popup.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.trabajo -> {
-                    generateSync()
+                    generateSync(1)
                     true
                 }
                 R.id.falla -> {
-                    generateSync()
+                    generateSync(2)
                     true
                 }
                 else -> {
-                    generateSync()
+                    generateSync(4)
                     true
                 }
             }
@@ -167,12 +172,18 @@ class AvisosFragment : DaggerFragment(), View.OnClickListener {
         popup.show()
     }
 
-    private fun goActivity() {
-        startActivity(Intent(requireContext(), FormAvisoActivity::class.java))
+    private fun goActivity(tipo: Int) {
+        startActivity(
+            Intent(requireContext(), FormAvisoActivity::class.java)
+                .putExtra("id", registroId)
+                .putExtra("tipo", tipo)
+                .putExtra("token", token)
+                .putExtra("user", usuarioId)
+        )
     }
 
-    private fun generateSync(){
-        avisoViewModel.sync("Bearer $token")
+    private fun generateSync(tipo: Int) {
+        avisoViewModel.sync(token, tipo)
         load()
     }
 
@@ -191,7 +202,7 @@ class AvisosFragment : DaggerFragment(), View.OnClickListener {
         dialog!!.show()
     }
 
-    private fun closeLoad(){
+    private fun closeLoad() {
         if (dialog != null) {
             if (dialog!!.isShowing) {
                 dialog!!.dismiss()

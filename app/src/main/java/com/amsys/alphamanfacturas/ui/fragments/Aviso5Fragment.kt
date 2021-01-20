@@ -17,32 +17,33 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amsys.alphamanfacturas.R
-import com.amsys.alphamanfacturas.data.local.model.CausaFalla
-import com.amsys.alphamanfacturas.data.local.model.Deteccion
-import com.amsys.alphamanfacturas.data.local.model.Impacto
-import com.amsys.alphamanfacturas.data.local.model.MecanismoFalla
+import com.amsys.alphamanfacturas.data.local.model.*
 import com.amsys.alphamanfacturas.data.viewModel.AvisoViewModel
 import com.amsys.alphamanfacturas.data.viewModel.ViewModelFactory
-import com.amsys.alphamanfacturas.ui.adapters.CausaFallaAdapter
-import com.amsys.alphamanfacturas.ui.adapters.DeteccionAdapter
-import com.amsys.alphamanfacturas.ui.adapters.ImpactoAdapter
-import com.amsys.alphamanfacturas.ui.adapters.MecanismoFallaAdapter
+import com.amsys.alphamanfacturas.ui.adapters.*
 import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.fragment_aviso_3.*
 import kotlinx.android.synthetic.main.fragment_aviso_5.*
+import kotlinx.android.synthetic.main.fragment_aviso_5.editText1
+import kotlinx.android.synthetic.main.fragment_aviso_5.editText2
+import kotlinx.android.synthetic.main.fragment_aviso_5.editText3
+import kotlinx.android.synthetic.main.fragment_aviso_5.editText4
+import kotlinx.android.synthetic.main.fragment_aviso_5.editText5
 import javax.inject.Inject
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class Aviso5Fragment : DaggerFragment(), View.OnClickListener {
+class Aviso5Fragment : DaggerFragment(), View.OnClickListener, TextWatcher {
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.editText2 -> spinnerDialog(2, "Modo de Falla")
-            R.id.editText3 -> spinnerDialog(3,"Método de Detección")
+            R.id.editText1 -> spinnerDialog(2, "Modo de Falla")
+            R.id.editText2 -> spinnerDialog(2, "Método de Detección")
+            R.id.editText3 -> spinnerDialog(3, "Mecanismo de Falla")
             R.id.editText4 -> spinnerDialog(4, "Impacto en la Función")
             R.id.editText5 -> spinnerDialog(5, "Causa de Falla")
         }
@@ -52,14 +53,14 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener {
     lateinit var viewModelFactory: ViewModelFactory
     lateinit var avisoViewModel: AvisoViewModel
 
-    private var param1: String? = null
-    private var param2: String? = null
+    private var registroId: Int = 0
+    lateinit var r: Registro
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        r = Registro()
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            registroId = it.getInt(ARG_PARAM1)
         }
     }
 
@@ -78,11 +79,23 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener {
         avisoViewModel =
             ViewModelProvider(this, viewModelFactory).get(AvisoViewModel::class.java)
 
+        avisoViewModel.getRegistroById(registroId).observe(viewLifecycleOwner) {
+            if (it != null) {
+                r = it
+                editText1.setText(it.modoFallaNombre)
+                editText2.setText(it.metodoDeteccionNombre)
+                editText3.setText(it.mecanismoFallaNombre)
+                editText4.setText(it.impactoNombre)
+                editText5.setText(it.causaNombre)
+                editText6.setText(it.comentario)
+            }
+        }
 
-        editText2.setOnClickListener(this)
+        editText1.setOnClickListener(this)
         editText3.setOnClickListener(this)
         editText4.setOnClickListener(this)
         editText5.setOnClickListener(this)
+        editText6.addTextChangedListener(this)
     }
 
     private fun spinnerDialog(tipo: Int, title: String) {
@@ -110,24 +123,29 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener {
 
         when (tipo) {
             1 -> {
-//                val cicloAdapter = ComboCicloAdapter(object : OnItemClickListener.CicloListener {
-//                    override fun onItemClick(c: Ciclo, view: View, position: Int) {
-//                        p.cicloId = c.cicloId
-//                        editTextCiclo.setText(c.nombre)
-//                        dialog.dismiss()
-//                    }
-//                })
-//                recyclerView.adapter = cicloAdapter
-//                itfViewModel.getCicloProceso().observe(this, {
-//
-//                    cicloAdapter.addItems(it)
-//                })
+                layoutSearch.visibility = View.GONE
+                val modoFallaAdapter =
+                    ModoFallaAdapter(object : OnItemClickListener.ModoFallaListener {
+                        override fun onItemClick(m: ModoFalla, v: View, position: Int) {
+                            r.modoFallaId = m.modoFallaId
+                            r.modoFallaNombre = m.nombre
+                            avisoViewModel.validateAviso5(r)
+                            dialog.dismiss()
+                        }
+                    })
+                recyclerView.adapter = modoFallaAdapter
+                avisoViewModel.getModoFallas().observe(viewLifecycleOwner) {
+                    modoFallaAdapter.addItems(it)
+                }
             }
             2 -> {
                 layoutSearch.visibility = View.VISIBLE
                 val deteccionAdapter =
                     DeteccionAdapter(object : OnItemClickListener.DeteccionListener {
                         override fun onItemClick(d: Deteccion, v: View, position: Int) {
+                            r.metodoDeteccionId = d.metodoDeteccionId
+                            r.metodoDeteccionNombre = d.nombre
+                            avisoViewModel.validateAviso5(r)
                             dialog.dismiss()
                         }
                     })
@@ -148,6 +166,9 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener {
                 val mecanismoAdapter =
                     MecanismoFallaAdapter(object : OnItemClickListener.MecanismoFallaListener {
                         override fun onItemClick(m: MecanismoFalla, v: View, position: Int) {
+                            r.mecanismoFallaId = m.mecanismoFallaId
+                            r.mecanismoFallaNombre = m.nombre
+                            avisoViewModel.validateAviso5(r)
                             dialog.dismiss()
                         }
                     })
@@ -168,6 +189,9 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener {
                 val impactoAdapter =
                     ImpactoAdapter(object : OnItemClickListener.ImpactoListener {
                         override fun onItemClick(m: Impacto, v: View, position: Int) {
+                            r.impactoId = m.impactoId
+                            r.impactoNombre = m.nombre
+                            avisoViewModel.validateAviso5(r)
                             dialog.dismiss()
                         }
                     })
@@ -188,6 +212,9 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener {
                 val causaFallaAdapter =
                     CausaFallaAdapter(object : OnItemClickListener.CausaFallaListener {
                         override fun onItemClick(c: CausaFalla, v: View, position: Int) {
+                            r.causaId = c.causaFallaId
+                            r.causaNombre = c.nombre
+                            avisoViewModel.validateAviso5(r)
                             dialog.dismiss()
                         }
                     })
@@ -208,12 +235,18 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener {
 
     companion object {
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(param1: Int) =
             Aviso5Fragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putInt(ARG_PARAM1, param1)
                 }
             }
+    }
+
+    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+    override fun afterTextChanged(p0: Editable?) {
+        r.comentario = editText6.text.toString()
+        avisoViewModel.validateAviso3(r)
     }
 }

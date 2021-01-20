@@ -3,17 +3,15 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="singin">Acceder</string>
-    <string name="pass">Contraseña</string>
-    <string name="user">Usuario</string>
+    <string name="title_pass">Contraseña:</string>
+    <string name="title_usuario">Usuario:</string>
     <string name="img">description</string>
-    <string name="version">V 1.0</string>
+    <string name="version">DATA ACQUISITION\n INTERFACE</string>
     <string name="main">Principal</string>
     <string name="login">Iniciando Sesión</string>
     <string name="trabajo">Solicitud de Trabajo</string>
     <string name="falla">Aviso de Falla</string>
     <string name="parada">Aviso de Parada</string>
-
-
 
 
     <string name="title_area">Área:</string>
@@ -45,4 +43,13 @@
     <string name="hint_nombre">Nombre</string>
     <string name="hint_codigo">Codigo</string>
     <string name="hint_search">Buscar</string>
+    <string name="hint_equipo">Buscar Equipo</string>
+    <string name="hint_time">dd/mm/yyyy hh:mm</string>
+    <string name="hint_tipo_consulta">Tipo de Consulta</string>
+    <string name="hint_date">dd/mm/yyyy</string>
+    <string name="title_aviso_falla">AVISO DE FALLA</string>
+    <string name="title_codigo">AV/00003-2021</string>
+    <string name="title_ubicacion">AGUA RESIDUAL</string>
+    <string name="title_quipo_codigo">EQ-000890</string>
+    <string name="title_equipo_nombre">BOMBA MULTIETAPA ALTAMIRA SCALA #1</string>
 </resources>

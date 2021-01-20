@@ -18,9 +18,13 @@ import com.amsys.alphamanfacturas.data.local.model.*
         MecanismoFalla::class,
         Impacto::class,
         CausaFalla::class,
-        Registro::class
+        Registro::class,
+        Equipo::class,
+        ModoFalla::class,
+        TipoParada::class,
+        SubTipoParada::class
     ],
-    version = 4, // version 1 en play store
+    version = 6, // version 1 en play store
     exportSchema = false
 )
 abstract class AppDataBase : RoomDatabase() {
@@ -35,6 +39,10 @@ abstract class AppDataBase : RoomDatabase() {
     abstract fun impactoDao(): ImpactoDao
     abstract fun causaFallaDao(): CausaFallaDao
     abstract fun registroDao(): RegistroDao
+    abstract fun equipoDao(): EquipoDao
+    abstract fun modoFallaDao(): ModoFallaDao
+    abstract fun tipoParadaDao(): TipoParadaDao
+    abstract fun subTipoParadaDao(): SubTipoParadaDao
 
     companion object {
         @Volatile

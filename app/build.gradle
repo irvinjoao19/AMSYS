@@ -84,8 +84,10 @@ dependencies {
     implementation 'com.github.AnyChart:AnyChart-Android:0.3.0'
 
     // StepView
-    implementation 'com.google.guava:guava:27.0.1-android'
-    implementation 'com.github.YablokovDmitry:StateViewPager:v1.1'
+    implementation 'com.params.stepview:stepview:1.0.2'
+//    implementation 'com.shuhart.stepview:stepview:1.5.1'
+//    implementation 'com.google.guava:guava:27.0.1-android'
+//    implementation 'com.github.YablokovDmitry:StateViewPager:v1.1'
 
 //    implementation 'com.github.nikartm:image-support:1.0.5'
 //    implementation 'com.getbase:floatingactionbutton:1.10.1'

@@ -33,4 +33,8 @@ interface RegistroDao {
 
     @Query("SELECT * FROM Registro WHERE registroId=:id")
     fun getRegistroById(id: Int): LiveData<Registro>
+
+
+    @Query("SELECT registroId FROM Registro ORDER BY registroId DESC LIMIT 1")
+    fun getIdentity(): LiveData<Int>
 }

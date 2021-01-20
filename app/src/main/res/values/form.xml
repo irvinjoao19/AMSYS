@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="form">
+        <item>General</item>
+        <item>Objeto Técnico</item>
+        <item>Registro de Evento</item>
+        <item>Datos de Parada</item>
+        <item>Datos de Contabilidad</item>
+    </string-array>
+</resources>

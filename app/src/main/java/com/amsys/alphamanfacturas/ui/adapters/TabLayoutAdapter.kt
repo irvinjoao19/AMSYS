@@ -7,16 +7,19 @@ import com.amsys.alphamanfacturas.ui.fragments.*
 
 abstract class TabLayoutAdapter {
 
-    class Form(fm: FragmentManager, private val numberOfTabs: Int, var id: Int)
-        : FragmentStatePagerAdapter(fm, numberOfTabs) {
+    class Form(
+        fm: FragmentManager,
+        private val numberOfTabs: Int, var id: Int, var tipo: Int, var token: String, var user: Int
+    ) :
+        FragmentStatePagerAdapter(fm, numberOfTabs) {
 
         override fun getItem(position: Int): Fragment {
             return when (position) {
-                0 -> Aviso1Fragment.newInstance(id,"")
-                1 -> Aviso2Fragment.newInstance(id,"")
-                2 -> Aviso3Fragment.newInstance("","")
-                3 -> Aviso4Fragment.newInstance("","")
-                4 -> Aviso5Fragment.newInstance("","")
+                0 -> Aviso1Fragment.newInstance(id, tipo, user)
+                1 -> Aviso2Fragment.newInstance(id, token,user)
+                2 -> Aviso3Fragment.newInstance(id, tipo)
+                3 -> Aviso4Fragment.newInstance(id, token, user)
+                4 -> Aviso5Fragment.newInstance(id)
                 else -> Fragment()
             }
         }

@@ -42,19 +42,19 @@ class MainActivity : DaggerAppCompatActivity() {
                 setSupportActionBar(toolbar)
                 supportActionBar!!.title = "Principal"
 
-                fragmentByDefault(MainFragment.newInstance(u.token, u.usuarioId))
+                fragmentByDefault(MainFragment.newInstance("Bearer ${u.token}", u.usuarioId))
                 bottomNavigation.setOnNavigationItemSelectedListener(object :
                     BottomNavigationView.OnNavigationItemSelectedListener {
                     override fun onNavigationItemSelected(item: MenuItem): Boolean {
                         when (item.itemId) {
                             R.id.main -> {
                                 supportActionBar!!.title = "Principal"
-                                changeFragment(MainFragment.newInstance(u.token, u.usuarioId))
+                                changeFragment(MainFragment.newInstance("Bearer ${u.token}", u.usuarioId))
                                 return true
                             }
                             R.id.alert -> {
                                 supportActionBar!!.title = "Avisos"
-                                changeFragment(AvisosFragment.newInstance(u.token, u.usuarioId))
+                                changeFragment(AvisosFragment.newInstance("Bearer ${u.token}", u.usuarioId))
                                 return true
                             }
                             R.id.inspection -> {

@@ -160,6 +160,22 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
         return dataBase.consecuenciaDao().getConsecuencia()
     }
 
+    override fun getParada(): LiveData<List<Parada>> {
+        return dataBase.paradaDao().getParada()
+    }
+
+    override fun getTipoParada(): LiveData<List<TipoParada>> {
+        return dataBase.tipoParadaDao().getTipoParadas()
+    }
+
+    override fun getSubTipoParada(): LiveData<List<SubTipoParada>> {
+        return dataBase.subTipoParadaDao().getSubTipoParadas()
+    }
+
+    override fun getIdentity(): LiveData<Int> {
+        return dataBase.registroDao().getIdentity()
+    }
+
     override fun insertAviso(r: Registro): Completable {
         return Completable.fromAction {
             val registro: Registro? = dataBase.registroDao().getRegistroByIdTask(r.registroId)
@@ -173,5 +189,117 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
 
     override fun getRegistroById(id: Int): LiveData<Registro> {
         return dataBase.registroDao().getRegistroById(id)
+    }
+
+    override fun deleteEquipo(): Completable {
+        return Completable.fromAction {
+            dataBase.equipoDao().deleteAll()
+        }
+    }
+
+    override fun getEquipos(token: String, q: Query): Observable<ResponseModel> {
+        val json = Gson().toJson(q)
+        Log.i("TAG", json)
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return apiService.getEquipos(token, body)
+    }
+
+    override fun insertEquipos(t: Any): Completable {
+        return Completable.fromAction {
+            val gson = Gson().toJson(t)
+            Log.i("TAG", gson)
+            val e: List<Equipo>? = Gson().fromJson(
+                gson, object : TypeToken<List<Equipo>>() {}.type
+            )
+            if (e != null) {
+                dataBase.equipoDao().insertEquipoListTask(e)
+            }
+        }
+    }
+
+    override fun getEquipos(): LiveData<List<Equipo>> {
+        return dataBase.equipoDao().getEquipos()
+    }
+
+    override fun getInformacion(token: String, q: Query): Observable<ResponseModel> {
+        val json = Gson().toJson(q)
+        Log.i("TAG", json)
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return apiService.getInformacion(token, body)
+    }
+
+    override fun deleteModoFalla(): Completable {
+        return Completable.fromAction {
+            dataBase.modoFallaDao().deleteAll()
+        }
+    }
+
+    override fun getModoFalla(token: String, q: Query): Observable<ResponseModel> {
+        val json = Gson().toJson(q)
+        Log.i("TAG", json)
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return apiService.getModoFalla(token, body)
+    }
+
+    override fun insertModoFalla(t: Any): Completable {
+        return Completable.fromAction {
+            val gson = Gson().toJson(t)
+            Log.i("TAG", gson)
+            val e: List<ModoFalla>? = Gson().fromJson(
+                gson, object : TypeToken<List<ModoFalla>>() {}.type
+            )
+            if (e != null) {
+                dataBase.modoFallaDao().insertModoFallaListTask(e)
+            }
+        }
+    }
+
+    override fun getModoFallas(): LiveData<List<ModoFalla>> {
+        return dataBase.modoFallaDao().getModoFallas()
+    }
+
+    override fun deleteTipoParada(): Completable {
+        return Completable.fromAction {
+            dataBase.tipoParadaDao().deleteAll()
+        }
+    }
+
+    override fun getTipoParada(token: String, q: Query): Observable<ResponseModel> {
+        val json = Gson().toJson(q)
+        Log.i("TAG", json)
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return apiService.getTipoParada(token, body)
+    }
+
+    override fun insertTipoParada(t: Any): Completable {
+        return Completable.fromAction {
+            val gson = Gson().toJson(t)
+            Log.i("TAG", gson)
+            val e: List<TipoParada>? = Gson().fromJson(
+                gson, object : TypeToken<List<TipoParada>>() {}.type
+            )
+            if (e != null) {
+                dataBase.tipoParadaDao().insertTipoParadaListTask(e)
+            }
+        }
+    }
+
+    override fun deleteSubTipoParada(): Completable {
+        return Completable.fromAction {
+            dataBase.subTipoParadaDao().deleteAll()
+        }
+    }
+
+    override fun getSubTipoParada(token: String, q: Query): Observable<ResponseModel> {
+        val json = Gson().toJson(q)
+        Log.i("TAG", json)
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return apiService.getSubTipoParada(token, body)
+    }
+
+    override fun insertSubTipoParada(t: Any): Completable {
+        return Completable.fromAction {
+
+        }
     }
 }

@@ -20,12 +20,51 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.ydn.viewpagerwithicons.StateViewPager
-        android:id="@+id/stepView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+        <params.com.stepview.StatusViewScroller
+            android:id="@+id/statusViewScroller"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/form"
+            android:padding="4dp"
+            app:alignStatusWithCurrent="true"
+            app:circleColor="@color/colorPrimary"
+            app:circleColorCurrent="@color/colorPrimary"
+            app:circleColorIncomplete="@color/colorWhite"
+            app:circleColorType="fillStroke"
+            app:circleStrokeColor="@color/colorWhite"
+            app:circleStrokeColorCurrent="@color/colorPrimary"
+            app:circleStrokeColorIncomplete="@color/colorPrimary"
+            app:circleStrokeWidth="2dp"
+            app:completeDrawable="@drawable/ic_check"
+            app:currentCount="5"
+            app:currentStepZoom="0.1"
+            app:drawLabels="true"
+            app:lineColor="@color/colorAccent"
+            app:lineColorCurrent="#91A8D0"
+            app:lineColorIncomplete="#B4B7BA"
+            app:lineGap="5dp"
+            app:lineWidth="1dp"
+            app:minStatusAdjacentMargin="5dp"
+            app:statusTopMargin="5dp"
+            app:stepCount="5"
+            app:textColorLabels="@android:color/white"
+            app:textColorLabelsCurrent="@android:color/white"
+            app:textColorLabelsIncomplete="@color/colorPrimary"
+            app:textSizeLabels="15sp" />
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabRegistrar"

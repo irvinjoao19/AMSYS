@@ -31,4 +31,28 @@ interface OnItemClickListener {
     interface PrioridadListener {
         fun onItemClick(p: Prioridad, v: View, position: Int)
     }
+
+    interface ComboListener {
+        fun onItemClick(q: Query, v: View, position: Int)
+    }
+
+    interface EquipoListener {
+        fun onItemClick(e: Equipo, v: View, position: Int)
+    }
+
+    interface ModoFallaListener {
+        fun onItemClick(m: ModoFalla, v: View, position: Int)
+    }
+
+    interface ParadaListener {
+        fun onItemClick(p: Parada, v: View, position: Int)
+    }
+
+    interface TipoParadaListener {
+        fun onItemClick(p: TipoParada, v: View, position: Int)
+    }
+
+    interface SubTipoParadaListener {
+        fun onItemClick(p: SubTipoParada, v: View, position: Int)
+    }
 }

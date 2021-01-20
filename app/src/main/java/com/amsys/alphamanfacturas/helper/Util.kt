@@ -169,7 +169,7 @@ object Util {
         return id + "_" + tipo + "_" + FechaActual
     }
 
-    inline fun <reified T> genericCastOrNull(anything: Any):T {
+    inline fun <reified T> genericCastOrNull(anything: Any): T {
         return anything as T
     }
 
@@ -178,7 +178,7 @@ object Util {
     //    return if (clazz.isInstance(anything)) {
     //        anything as T
     //    } else null
-   // }
+    // }
 
     fun getFotoName(id: Int): String {
         val date = Date()
@@ -621,6 +621,38 @@ object Util {
             text.text = fecha
         }, mYear, mMonth, mDay)
         datePickerDialog.show()
+    }
+
+    fun getFullDialog(context: Context, input: TextInputEditText) {
+        val c = Calendar.getInstance()
+        val mYear = c.get(Calendar.YEAR)
+        val mMonth = c.get(Calendar.MONTH)
+        val mDay = c.get(Calendar.DAY_OF_MONTH)
+        val datePickerDialog = DatePickerDialog(context, { _, year, monthOfYear, dayOfMonth ->
+            val month =
+                if (((monthOfYear + 1) / 10) == 0) "0" + (monthOfYear + 1).toString() else (monthOfYear + 1).toString()
+            val day = if (((dayOfMonth + 1) / 10) == 0) "0$dayOfMonth" else dayOfMonth.toString()
+            val fecha = "$day/$month/$year"
+//            input.setText(fecha)
+
+
+            val d = Calendar.getInstance()
+            val mHour = d.get(Calendar.HOUR_OF_DAY)
+            val mMinute = d.get(Calendar.MINUTE)
+            val timePickerDialog =
+                TimePickerDialog(context, { _, hourOfDay, minute ->
+                    val hour = if (hourOfDay < 10) "0$hourOfDay" else hourOfDay.toString()
+                    val minutes = if (minute < 10) "0$minute" else minute.toString()
+                    val dayH = if (hourOfDay < 12) "a.m." else "p.m."
+                    input.setText(String.format("%s %s:%s %s", fecha, hour, minutes, dayH))
+                }, mHour, mMinute, false)
+            timePickerDialog.show()
+
+
+        }, mYear, mMonth, mDay)
+        datePickerDialog.show()
+
+
     }
 
     fun getDateDialog(context: Context, input: TextInputEditText) {

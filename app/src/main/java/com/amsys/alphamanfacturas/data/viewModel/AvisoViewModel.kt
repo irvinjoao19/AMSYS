@@ -8,6 +8,7 @@ import com.amsys.alphamanfacturas.data.local.model.*
 import com.amsys.alphamanfacturas.data.local.repository.ApiError
 import com.amsys.alphamanfacturas.data.local.repository.AppRepository
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.jakewharton.retrofit2.adapter.rxjava2.HttpException
 import io.reactivex.CompletableObserver
 import io.reactivex.Observer
@@ -28,11 +29,12 @@ internal constructor(private val roomRepository: AppRepository, private val retr
 
     val mensajeError = MutableLiveData<String>()
     val mensajeSuccess = MutableLiveData<String>()
-    val mensajeSync = MutableLiveData<String>()
+    val mensajeSync = MutableLiveData<Int>()
     val loading: MutableLiveData<Boolean> = MutableLiveData()
     val compositeDisposable = CompositeDisposable()
     val paginator = PublishProcessor.create<Int>()
     val pageNumber: MutableLiveData<Int> = MutableLiveData()
+    val informacion: MutableLiveData<EquipoInformacion> = MutableLiveData()
 //    val lista: MutableLiveData<List<Aviso>> = MutableLiveData()
 
     fun setError(s: String) {
@@ -102,7 +104,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
         paginator.onNext(page)
     }
 
-    fun sync(s: String) {
+    fun sync(s: String, tipo: Int) {
         roomRepository.getParametros(s)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -110,7 +112,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                 override fun onSubscribe(d: Disposable) {}
                 override fun onComplete() {}
                 override fun onNext(t: ResponseModel) {
-                    insertSync(t.data)
+                    insertSync(t.data, tipo)
                 }
 
                 override fun onError(e: Throwable) {
@@ -119,7 +121,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
             })
     }
 
-    private fun insertSync(a: Any) {
+    private fun insertSync(a: Any, tipo: Int) {
         roomRepository.insertSync(a)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -127,7 +129,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                 override fun onSubscribe(d: Disposable) {}
                 override fun onError(e: Throwable) {}
                 override fun onComplete() {
-                    mensajeSync.value = "Ok"
+                    mensajeSync.value = tipo
                 }
             })
     }
@@ -157,7 +159,6 @@ internal constructor(private val roomRepository: AppRepository, private val retr
     }
 
     fun validateAviso1(r: Registro) {
-
         insertAviso(r)
     }
 
@@ -188,14 +189,215 @@ internal constructor(private val roomRepository: AppRepository, private val retr
             .subscribe(object : CompletableObserver {
                 override fun onSubscribe(d: Disposable) {}
                 override fun onError(e: Throwable) {}
-                override fun onComplete() {
-                    mensajeSync.value = "Datos Guardados"
-                }
+                override fun onComplete() {}
             })
     }
 
     fun getRegistroById(id: Int): LiveData<Registro> {
         return roomRepository.getRegistroById(id)
     }
+
+    fun searchEquipo(token: String, q: Query) {
+        roomRepository.deleteEquipo()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : CompletableObserver {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onError(e: Throwable) {}
+                override fun onComplete() {
+                    roomRepository.getEquipos(token, q)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(object : Observer<ResponseModel> {
+                            override fun onSubscribe(d: Disposable) {}
+                            override fun onComplete() {}
+                            override fun onNext(t: ResponseModel) {
+                                insertEquipos(t.data)
+                            }
+
+                            override fun onError(e: Throwable) {
+                                mensajeError.value = e.toString()
+                            }
+                        })
+                }
+            })
+    }
+
+    private fun insertEquipos(t: Any) {
+        roomRepository.insertEquipos(t)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : CompletableObserver {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onError(e: Throwable) {}
+                override fun onComplete() {}
+            })
+    }
+
+    fun getEquipos(): LiveData<List<Equipo>> {
+        return roomRepository.getEquipos()
+    }
+
+    fun getInformacion(token: String, q: Query) {
+        roomRepository.getInformacion(token, q)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<ResponseModel> {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onComplete() {
+                    getModoFalla(token, q)
+                }
+
+                override fun onNext(t: ResponseModel) {
+                    val gson = Gson().toJson(t.data)
+                    Log.i("TAG", gson)
+                    val e: EquipoInformacion? = Gson().fromJson(
+                        gson, object : TypeToken<EquipoInformacion>() {}.type
+                    )
+                    if (e != null) {
+                        informacion.value = e
+                    } else {
+                        informacion.value = null
+                    }
+                }
+
+                override fun onError(e: Throwable) {
+                    mensajeError.value = e.toString()
+                }
+            })
+    }
+
+    fun getModoFalla(token: String, q: Query) {
+        roomRepository.deleteModoFalla()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : CompletableObserver {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onError(e: Throwable) {}
+                override fun onComplete() {
+                    roomRepository.getModoFalla(token, q)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(object : Observer<ResponseModel> {
+                            override fun onSubscribe(d: Disposable) {}
+                            override fun onComplete() {}
+                            override fun onNext(t: ResponseModel) {
+                                insertModoFalla(t.data)
+                            }
+
+                            override fun onError(e: Throwable) {
+                                mensajeError.value = e.toString()
+                            }
+                        })
+                }
+            })
+    }
+
+    private fun insertModoFalla(t: Any) {
+        roomRepository.insertModoFalla(t)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : CompletableObserver {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onError(e: Throwable) {}
+                override fun onComplete() {}
+            })
+    }
+
+    fun getModoFallas(): LiveData<List<ModoFalla>> {
+        return roomRepository.getModoFallas()
+    }
+
+    fun getParada(): LiveData<List<Parada>> {
+        return roomRepository.getParada()
+    }
+
+    fun getTipoParada(token: String, q: Query) {
+        roomRepository.deleteTipoParada()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : CompletableObserver {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onError(e: Throwable) {}
+                override fun onComplete() {
+                    roomRepository.getTipoParada(token, q)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(object : Observer<ResponseModel> {
+                            override fun onSubscribe(d: Disposable) {}
+                            override fun onComplete() {}
+                            override fun onNext(t: ResponseModel) {
+                                insertTipoParada(t.data)
+                            }
+
+                            override fun onError(e: Throwable) {
+                                mensajeError.value = e.toString()
+                            }
+                        })
+                }
+            })
+    }
+
+    private fun insertTipoParada(t: Any) {
+        roomRepository.insertTipoParada(t)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : CompletableObserver {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onError(e: Throwable) {}
+                override fun onComplete() {}
+            })
+    }
+
+    fun getTipoParada(): LiveData<List<TipoParada>> {
+        return roomRepository.getTipoParada()
+    }
+
+    fun getSubTipoParada(token: String, q: Query) {
+        roomRepository.deleteSubTipoParada()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : CompletableObserver {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onError(e: Throwable) {}
+                override fun onComplete() {
+                    roomRepository.getSubTipoParada(token, q)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(object : Observer<ResponseModel> {
+                            override fun onSubscribe(d: Disposable) {}
+                            override fun onComplete() {}
+                            override fun onNext(t: ResponseModel) {
+                                insertSubTipoParada(t.data)
+                            }
+
+                            override fun onError(e: Throwable) {
+                                mensajeError.value = e.toString()
+                            }
+                        })
+
+                }
+            })
+    }
+
+    private fun insertSubTipoParada(t: Any) {
+        roomRepository.insertSubTipoParada(t)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : CompletableObserver {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onError(e: Throwable) {}
+                override fun onComplete() {}
+            })
+    }
+
+    fun getSubTipoParada(): LiveData<List<SubTipoParada>> {
+        return roomRepository.getSubTipoParada()
+    }
+
+    fun getIdentity(): LiveData<Int> {
+        return roomRepository.getIdentity()
+    }
+
 
 }

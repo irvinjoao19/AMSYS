@@ -20,7 +20,7 @@ interface ParadaDao {
     fun deleteParadaTask(c: Parada)
 
     @Query("SELECT * FROM Parada")
-    fun getParada(): LiveData<Parada>
+    fun getParada(): LiveData<List<Parada>>
 
     @Query("SELECT * FROM Parada")
     fun getParadaTask(): Parada

@@ -78,4 +78,24 @@ class DataBaseModule {
     internal fun provideRegistroDao(appDataBase: AppDataBase): RegistroDao {
         return appDataBase.registroDao()
     }
+
+    @Provides
+    internal fun provideEquipoDao(appDataBase: AppDataBase): EquipoDao {
+        return appDataBase.equipoDao()
+    }
+
+    @Provides
+    internal fun provideModoFallaDao(appDataBase: AppDataBase): ModoFallaDao {
+        return appDataBase.modoFallaDao()
+    }
+
+    @Provides
+    internal fun provideTipoParadaDao(appDataBase: AppDataBase): TipoParadaDao {
+        return appDataBase.tipoParadaDao()
+    }
+
+    @Provides
+    internal fun provideSubTipoParadaDao(appDataBase: AppDataBase): SubTipoParadaDao {
+        return appDataBase.subTipoParadaDao()
+    }
 }

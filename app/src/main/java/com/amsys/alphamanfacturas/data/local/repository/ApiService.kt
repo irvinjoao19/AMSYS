@@ -16,10 +16,45 @@ interface ApiService {
     @POST("aviso/listar")
     fun getAvisos(
         @Header("Authorization") token: String,
-        @Body query: RequestBody
+        @Body body: RequestBody
     ): Flowable<ResponseModel>
 
     @Headers("Cache-Control: no-cache")
     @POST("aviso/parametros")
     fun getParametros(@Header("Authorization") token: String): Observable<ResponseModel>
+
+
+    @Headers("Cache-Control: no-cache")
+    @POST("aviso/listarequipos")
+    fun getEquipos(
+        @Header("Authorization") token: String,
+        @Body query: RequestBody
+    ): Observable<ResponseModel>
+
+    @Headers("Cache-Control: no-cache")
+    @POST("aviso/buscarinformacion")
+    fun getInformacion(
+        @Header("Authorization") token: String, @Body body: RequestBody
+    ): Observable<ResponseModel>
+
+    @Headers("Cache-Control: no-cache")
+    @POST("aviso/listarmodosfalla")
+    fun getModoFalla(
+        @Header("Authorization") token: String, @Body body: RequestBody
+    ): Observable<ResponseModel>
+
+    @Headers("Cache-Control: no-cache")
+    @POST("aviso/listartiposparada")
+    fun getTipoParada(
+        @Header("Authorization") token: String,
+        @Body body: RequestBody
+    ): Observable<ResponseModel>
+
+    @Headers("Cache-Control: no-cache")
+    @POST("aviso/listarsubtiposparada")
+    fun getSubTipoParada(
+        @Header("Authorization") token: String,
+        @Body body: RequestBody
+    ): Observable<ResponseModel>
+
 }
