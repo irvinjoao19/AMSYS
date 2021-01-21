@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="form">
+    <string-array name="form_avisos">
         <item>General</item>
         <item>Objeto Técnico</item>
         <item>Registro de Evento</item>
         <item>Datos de Parada</item>
         <item>Datos de Contabilidad</item>
+    </string-array>
+
+    <string-array name="form_inspeccciones">
+        <item>Puntos de Medida</item>
+        <item>Contadores</item>
+        <item>Aspectos</item>
     </string-array>
 </resources>

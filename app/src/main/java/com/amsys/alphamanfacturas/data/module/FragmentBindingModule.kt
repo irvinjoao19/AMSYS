@@ -13,10 +13,13 @@ abstract class FragmentBindingModule {
 
         @ContributesAndroidInjector
         internal abstract fun providAvisosFragment(): AvisosFragment
+
+        @ContributesAndroidInjector
+        internal abstract fun providInspeccionFragment(): InspeccionFragment
     }
 
     @Module
-    abstract class Form {
+    abstract class FormAviso {
         @ContributesAndroidInjector
         internal abstract fun providAviso1Fragment(): Aviso1Fragment
 
@@ -33,4 +36,15 @@ abstract class FragmentBindingModule {
         internal abstract fun providAviso5Fragment(): Aviso5Fragment
     }
 
+    @Module
+    abstract class FormInspeccion {
+        @ContributesAndroidInjector
+        internal abstract fun providInspeccion1Fragment(): Inspeccion1Fragment
+
+        @ContributesAndroidInjector
+        internal abstract fun providInspeccion2Fragment(): Inspeccion2Fragment
+
+        @ContributesAndroidInjector
+        internal abstract fun providInspeccion3Fragment(): Inspeccion3Fragment
+    }
 }

@@ -30,6 +30,7 @@
         android:vmSafeMode="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="m">
+        <activity android:name=".ui.activities.FormInspeccionActivity" />
         <activity android:name=".ui.activities.FormAvisoActivity" />
         <activity android:name=".ui.activities.LoginActivity" />
         <activity android:name=".ui.activities.MainActivity">
@@ -40,4 +41,5 @@
             </intent-filter>
         </activity>
     </application>
+
 </manifest>

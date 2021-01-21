@@ -3,8 +3,7 @@ package com.amsys.alphamanfacturas.ui.fragments
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,7 +34,8 @@ import javax.inject.Inject
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class Aviso3Fragment : DaggerFragment(), View.OnClickListener, TextWatcher {
+class Aviso3Fragment : DaggerFragment(), View.OnClickListener,
+    TextView.OnEditorActionListener {
 
     override fun onClick(v: View) {
         when (v.id) {
@@ -103,7 +103,7 @@ class Aviso3Fragment : DaggerFragment(), View.OnClickListener, TextWatcher {
         editText2.setOnClickListener(this)
         editText4.setOnClickListener(this)
 
-        editText5.addTextChangedListener(this)
+        editText5.setOnEditorActionListener(this)
 //        fab3.setOnClickListener(this)
     }
 
@@ -152,6 +152,7 @@ class Aviso3Fragment : DaggerFragment(), View.OnClickListener, TextWatcher {
                         override fun onItemClick(d: Deteccion, v: View, position: Int) {
                             r.metodoDeteccionOrigenId = d.metodoDeteccionId
                             r.metodoDeteccionOrigenNombre = d.nombre
+                            avisoViewModel.validateAviso3(r)
                             dialog.dismiss()
                         }
                     })
@@ -192,10 +193,11 @@ class Aviso3Fragment : DaggerFragment(), View.OnClickListener, TextWatcher {
             }
     }
 
-    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-    override fun afterTextChanged(p0: Editable?) {
-        r.comentarioRegistro = editText5.text.toString()
-        avisoViewModel.validateAviso3(r)
+    override fun onEditorAction(t: TextView, p1: Int, p2: KeyEvent?): Boolean {
+        if(t.text.isNotEmpty()){
+            r.comentarioRegistro = editText5.text.toString()
+            avisoViewModel.validateAviso3(r)
+        }
+        return false
     }
 }

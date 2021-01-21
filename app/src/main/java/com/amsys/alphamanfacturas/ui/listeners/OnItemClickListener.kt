@@ -55,4 +55,8 @@ interface OnItemClickListener {
     interface SubTipoParadaListener {
         fun onItemClick(p: SubTipoParada, v: View, position: Int)
     }
+
+    interface InspeccionListener {
+        fun onItemClick(p: Inspeccion, v: View, position: Int)
+    }
 }

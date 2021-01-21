@@ -11,6 +11,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.jakewharton.retrofit2.adapter.rxjava2.HttpException
 import io.reactivex.CompletableObserver
+import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -18,6 +19,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
 import okhttp3.MediaType
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.IOException
 import java.util.concurrent.TimeUnit
@@ -397,6 +399,69 @@ internal constructor(private val roomRepository: AppRepository, private val retr
 
     fun getIdentity(): LiveData<Int> {
         return roomRepository.getIdentity()
+    }
+
+    fun sendRegistro(token: String, id: Int) {
+        val ots: Observable<Registro> = roomRepository.getRegistroByIdTask(id)
+        ots.flatMap { a ->
+            val body = MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("tipoAviso", a.tipoAviso.toString())
+                .addFormDataPart("consecuenciaId", a.consecuenciaId.toString())
+                .addFormDataPart("descripcion", a.descripcion)
+                .addFormDataPart("prioridadId", a.prioridadId.toString())
+                .addFormDataPart("ubicacionTecnicaId", a.ubicacionTecnicaId.toString())
+                .addFormDataPart("emplazamientoId", a.emplazamientoId.toString())
+                .addFormDataPart("equipoSuperiorId", a.equipoSuperiorId.toString())
+                .addFormDataPart("componenteId", a.componenteId.toString())
+                .addFormDataPart("equipoId", a.equipoId.toString())
+                .addFormDataPart("areaId", a.areaId.toString())
+                .addFormDataPart("sistemaId", a.sistemaId.toString())
+                .addFormDataPart("parteId", a.parteId.toString())
+                .addFormDataPart("modoFallaOrigenId", a.modoFallaOrigenId.toString())
+                .addFormDataPart("metodoDeteccionOrigenId", a.metodoDeteccionOrigenId.toString())
+                .addFormDataPart("ordenTrabajoId", a.ordenTrabajoId.toString())
+                .addFormDataPart("fecha", a.fecha)
+                .addFormDataPart("comentarioRegistro", a.comentarioRegistro)
+                .addFormDataPart("inicioParada", a.inicioParada)
+                .addFormDataPart("finParada", a.finParada)
+                .addFormDataPart("claseParadaId", a.claseParadaId.toString())
+                .addFormDataPart("tipoParadaId", a.tipoParadaId.toString())
+                .addFormDataPart("subTipoParadaId", a.subTipoParadaId.toString())
+                .addFormDataPart("modoFallaId", a.modoFallaId.toString())
+                .addFormDataPart("metodoDeteccionId", a.metodoDeteccionId.toString())
+                .addFormDataPart("mecanismoFallaId", a.mecanismoFallaId.toString())
+                .addFormDataPart("impactoId", a.impactoId.toString())
+                .addFormDataPart("causaId", a.causaId.toString())
+                .addFormDataPart("comentario", a.comentario)
+                .addFormDataPart("userId", a.userId.toString())
+                .addFormDataPart("plantaId", a.plantaId.toString())
+                .build()
+            Observable.zip(
+                Observable.just(a),
+                roomRepository.sendRegistro(token, body), { _, m -> m })
+        }.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<ResponseModel> {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onComplete() {
+                }
+
+                override fun onNext(t: ResponseModel) {
+                    if (t.response.codigo == "0000") {
+                        mensajeSuccess.value = t.response.descripcion
+                    } else {
+                        mensajeError.value = "${t.response.descripcion} \n${t.response.comentario}"
+                    }
+                }
+
+                override fun onError(t: Throwable) {
+                    mensajeError.value = t.toString()
+                }
+            })
+    }
+
+    private fun updateRegistro() {
+
     }
 
 

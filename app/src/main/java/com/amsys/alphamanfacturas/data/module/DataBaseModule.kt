@@ -98,4 +98,9 @@ class DataBaseModule {
     internal fun provideSubTipoParadaDao(appDataBase: AppDataBase): SubTipoParadaDao {
         return appDataBase.subTipoParadaDao()
     }
+
+    @Provides
+    internal fun provideInspeccionDao(appDataBase: AppDataBase): InspeccionDao {
+        return appDataBase.inspeccionDao()
+    }
 }

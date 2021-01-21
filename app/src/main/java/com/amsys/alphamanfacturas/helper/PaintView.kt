@@ -117,7 +117,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         return x1 + y1 > 100
     }
 
-    fun save(context: Context, id: Int, tipo: Int, f: String): String {
+    fun save(context: Context, id: Int, tipo: Int): String {
         val folder = Util.getFolder(context)
         val nameImg: String = Util.getFechaActualForPhoto(id.toString(), tipo)
 
@@ -151,6 +151,7 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         mPaint.strokeCap = Paint.Cap.ROUND
         mPaint.xfermode = null
         mPaint.alpha = 0xff
+        @Suppress("DEPRECATION")
         mEmboss = EmbossMaskFilter(floatArrayOf(1f, 1f, 1f), 0.4f, 6f, 3.5f)
         mBlur = BlurMaskFilter(5f, BlurMaskFilter.Blur.NORMAL)
     }

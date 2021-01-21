@@ -110,35 +110,6 @@ class Aviso2Fragment : DaggerFragment(), View.OnClickListener {
                 r.areaNombre = it.areaNombre
                 r.plantaId = it.plantaId
                 avisoViewModel.validateAviso2(r)
-            } else {
-                editText1.text = null
-                editText2.text = null
-                editText3.text = null
-                editText4.text = null
-                editText5.text = null
-                editText6.text = null
-                editText7.text = null
-                editText8.text = null
-                editText9.text = null
-                editText10.text = null
-                r.ubicacionTecnicaId = 0
-                r.ubicacionTecnicaCodigo = ""
-                r.ubicacionTecnicaNombre = ""
-                r.emplazamientoId = 0
-                r.emplazamientoCodigo = ""
-                r.emplazamientoNombre = ""
-                r.equipoPadreId = 0
-                r.equipoPadreCodigo = ""
-                r.equipoPadreNombre = ""
-                r.componenteId = 0
-                r.componenteNombre = ""
-                r.equipoId = 0
-                r.equipoCodigo = ""
-                r.equipoNombre = ""
-                r.areaId = 0
-                r.areaNombre = ""
-                r.plantaId = 0
-                avisoViewModel.validateAviso2(r)
             }
         }
         editText5.setOnClickListener(this)
@@ -176,6 +147,7 @@ class Aviso2Fragment : DaggerFragment(), View.OnClickListener {
                         q.name = tv.text.toString()
                     }
                     avisoViewModel.searchEquipo(token, q)
+                    Util.hideKeyboardFrom(requireContext(),tv)
                 }
             }
             false

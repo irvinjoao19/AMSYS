@@ -1,6 +1,6 @@
 package com.amsys.alphamanfacturas.data.local.model
 
-open class Sync {
+open class SyncAviso {
     var consecuencias: List<Consecuencia> = ArrayList()
     var prioridades: List<Prioridad> = ArrayList()
     var clasesParada: List<Parada> = ArrayList()

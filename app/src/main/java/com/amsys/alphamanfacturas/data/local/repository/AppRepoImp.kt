@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import com.amsys.alphamanfacturas.data.local.model.*
 import com.amsys.alphamanfacturas.data.local.AppDataBase
-import com.amsys.alphamanfacturas.helper.Util
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.reactivex.Completable
@@ -12,7 +11,6 @@ import io.reactivex.Flowable
 import io.reactivex.Observable
 import okhttp3.MediaType
 import okhttp3.RequestBody
-import java.util.*
 
 class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDataBase) :
     AppRepository {
@@ -50,24 +48,21 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
 
     override fun deleteSesion(): Completable {
         return Completable.fromAction {
-//            dataBase.formatoDao().deleteAll()
-//            dataBase.photoDao().deleteAll()
-//            dataBase.reciboDao().deleteAll()
-//            dataBase.registroDao().deleteAll()
-//            dataBase.repartoDao().deleteAll()
-//            dataBase.servicioDao().deleteAll()
-//            dataBase.usuarioDao().deleteAll()
-        }
-    }
-
-    override fun deleteSync(): Completable {
-        return Completable.fromAction {
-//            dataBase.formatoDao().deleteAll()
-//            dataBase.photoDao().deleteAll()
-//            dataBase.reciboDao().deleteAll()
-//            dataBase.registroDao().deleteAll()
-//            dataBase.repartoDao().deleteAll()
-//            dataBase.servicioDao().deleteAll()
+            dataBase.avisoDao().deleteAll()
+            dataBase.causaFallaDao().deleteAll()
+            dataBase.consecuenciaDao().deleteAll()
+            dataBase.deteccionDao().deleteAll()
+            dataBase.equipoDao().deleteAll()
+            dataBase.impactoDao().deleteAll()
+            dataBase.inspeccionDao().deleteAll()
+            dataBase.mecanismoFallaDao().deleteAll()
+            dataBase.modoFallaDao().deleteAll()
+            dataBase.paradaDao().deleteAll()
+            dataBase.prioridadDao().deleteAll()
+            dataBase.registroDao().deleteAll()
+            dataBase.subTipoParadaDao().deleteAll()
+            dataBase.tipoParadaDao().deleteAll()
+            dataBase.usuarioDao().deleteAll()
         }
     }
 
@@ -82,8 +77,12 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
             val l: Lista = Gson().fromJson(
                 gson, object : TypeToken<Lista>() {}.type
             )
-
-            val v1: List<Aviso>? = l.lista
+            val gson2 = Gson().toJson(l.lista)
+            Log.i("TAG", gson2)
+            val l2: List<Aviso>? = Gson().fromJson(
+                gson2, object : TypeToken<List<Aviso>>() {}.type
+            )
+            val v1: List<Aviso>? = l2
             if (v1 != null) {
                 dataBase.avisoDao().insertAvisoListTask(v1)
             }
@@ -102,8 +101,8 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
         return Completable.fromAction {
             val gson = Gson().toJson(a)
             Log.i("TAG", gson)
-            val l: Sync = Gson().fromJson(
-                gson, object : TypeToken<Sync>() {}.type
+            val l: SyncAviso = Gson().fromJson(
+                gson, object : TypeToken<SyncAviso>() {}.type
             )
             val v1: List<Consecuencia>? = l.consecuencias
             if (v1 != null) {
@@ -299,7 +298,58 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
 
     override fun insertSubTipoParada(t: Any): Completable {
         return Completable.fromAction {
-
+            val gson = Gson().toJson(t)
+            Log.i("TAG", gson)
+            val e: List<SubTipoParada>? = Gson().fromJson(
+                gson, object : TypeToken<List<SubTipoParada>>() {}.type
+            )
+            if (e != null) {
+                dataBase.subTipoParadaDao().insertSubTipoParadaListTask(e)
+            }
         }
+    }
+
+    override fun sendRegistro(token: String, body: RequestBody): Observable<ResponseModel> {
+        return apiService.sendRegistro(token, body)
+    }
+
+    override fun getRegistroByIdTask(id: Int): Observable<Registro> {
+        return Observable.create {
+            val r = dataBase.registroDao().getRegistroByIdTask(id)
+//            if (r == null){
+//                it.onError(Throwable(""))
+//                it.onComplete()
+//                return@create
+//            }
+            it.onNext(r)
+            it.onComplete()
+        }
+    }
+
+    override fun paginationInspeccion(token: String, body: RequestBody): Flowable<ResponseModel> {
+        return apiService.getInspecciones(token, body)
+    }
+
+    override fun insertInspecciones(r: Any): Completable {
+        return Completable.fromAction {
+            val gson = Gson().toJson(r)
+            Log.i("TAG", gson)
+            val l: Lista = Gson().fromJson(
+                gson, object : TypeToken<Lista>() {}.type
+            )
+            val gson2 = Gson().toJson(l.lista)
+            Log.i("TAG", gson2)
+            val l2: List<Inspeccion>? = Gson().fromJson(
+                gson2, object : TypeToken<List<Inspeccion>>() {}.type
+            )
+            val v1: List<Inspeccion>? = l2
+            if (v1 != null) {
+                dataBase.inspeccionDao().insertInspeccionListTask(v1)
+            }
+        }
+    }
+
+    override fun getInspecciones(): LiveData<List<Inspeccion>> {
+        return dataBase.inspeccionDao().getInspeccions()
     }
 }

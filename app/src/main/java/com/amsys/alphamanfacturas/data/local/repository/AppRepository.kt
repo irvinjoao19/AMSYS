@@ -16,7 +16,6 @@ interface AppRepository {
 
     fun insertUsuario(o: Any): Completable
     fun deleteSesion(): Completable
-    fun deleteSync(): Completable
 
     // Avisos
     fun paginationAviso(token: String, body: RequestBody): Flowable<ResponseModel>
@@ -63,5 +62,14 @@ interface AppRepository {
     fun deleteSubTipoParada(): Completable
     fun getSubTipoParada(token: String, q: Query): Observable<ResponseModel>
     fun insertSubTipoParada(t: Any): Completable
+
+    //Save Registro
+    fun sendRegistro(token: String, body: RequestBody): Observable<ResponseModel>
+    fun getRegistroByIdTask(id: Int): Observable<Registro>
+
+    //Inspecciones
+    fun paginationInspeccion(token: String, body: RequestBody): Flowable<ResponseModel>
+    fun insertInspecciones(r: Any): Completable
+    fun getInspecciones(): LiveData<List<Inspeccion>>
 
 }

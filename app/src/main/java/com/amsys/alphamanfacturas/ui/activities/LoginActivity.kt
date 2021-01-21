@@ -10,9 +10,9 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.amsys.alphamanfacturas.R
+import com.amsys.alphamanfacturas.data.local.model.Query
 import com.amsys.alphamanfacturas.data.viewModel.UsuarioViewModel
 import com.amsys.alphamanfacturas.data.viewModel.ViewModelFactory
 import com.amsys.alphamanfacturas.helper.Permission
@@ -48,35 +48,23 @@ class LoginActivity : DaggerAppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.buttonEnviar -> {
-                val usuario = editTextUser.text.toString().trim()
-                val pass = editTextPass.text.toString().trim()
-                if (usuario.isNotEmpty()) {
-                    if (pass.isNotEmpty()) {
-                        load()
-                        usuarioViewModel.getLogin(usuario, pass)
-                    } else {
-                        usuarioViewModel.setError("Ingrese password")
-                    }
-                } else {
-                    usuarioViewModel.setError("Ingrese usuario")
-
-                }
-            }
+            R.id.buttonEnviar -> formLogin()
         }
     }
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     lateinit var usuarioViewModel: UsuarioViewModel
+    lateinit var q: Query
+
     lateinit var builder: AlertDialog.Builder
     private var dialog: AlertDialog? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         bindUI()
-        message()
         if (Build.VERSION.SDK_INT >= 23) {
             permision()
         }
@@ -95,8 +83,21 @@ class LoginActivity : DaggerAppCompatActivity(), View.OnClickListener {
     private fun bindUI() {
         usuarioViewModel =
             ViewModelProvider(this, viewModelFactory).get(UsuarioViewModel::class.java)
-        textViewVersion.text = String.format("Versión %s", Util.getVersion(this))
+
         buttonEnviar.setOnClickListener(this)
+
+        usuarioViewModel.mensajeError.observe(this) {
+            if (it != null) {
+                closeLoad()
+                Util.toastMensaje(this, it)
+            }
+        }
+        usuarioViewModel.mensajeSuccess.observe(this) {
+            if (it != null) {
+                closeLoad()
+                goMainActivity()
+            }
+        }
     }
 
     private fun load() {
@@ -110,34 +111,27 @@ class LoginActivity : DaggerAppCompatActivity(), View.OnClickListener {
         dialog!!.show()
     }
 
-    private fun message() {
-        usuarioViewModel.mensajeError.observe(this) {
-            if (it != null) {
-                if (dialog != null) {
-                    if (dialog!!.isShowing) {
-                        dialog!!.dismiss()
-                    }
-                }
-                Util.toastMensaje(this, it)
-            }
-        }
-        usuarioViewModel.mensajeSuccess.observe(this) {
-            if (it != null) {
-                if (dialog != null) {
-                    if (dialog!!.isShowing) {
-                        dialog!!.dismiss()
-                    }
-                }
-                goMainActivity()
-            }
-        }
-    }
-
     private fun goMainActivity() {
         startActivity(
             Intent(this, MainActivity::class.java)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         )
+    }
+
+    private fun closeLoad() {
+        if (dialog != null) {
+            if (dialog!!.isShowing) {
+                dialog!!.dismiss()
+            }
+        }
+    }
+
+    private fun formLogin() {
+        q = Query()
+        q.User = editTextUser.text.toString().trim()
+        q.Password = editTextPass.text.toString().trim()
+        load()
+        usuarioViewModel.validateLogin(q)
     }
 
     private fun messagePermission() {

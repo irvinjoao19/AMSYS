@@ -13,7 +13,9 @@ abstract class ActivityBindingModule {
     @ContributesAndroidInjector(modules = [FragmentBindingModule.Main::class])
     internal abstract fun bindMainActivity(): MainActivity
 
-    @ContributesAndroidInjector(modules = [FragmentBindingModule.Form::class])
+    @ContributesAndroidInjector(modules = [FragmentBindingModule.FormAviso::class])
     internal abstract fun bindFormAvisoActivity(): FormAvisoActivity
 
+    @ContributesAndroidInjector(modules = [FragmentBindingModule.FormInspeccion::class])
+    internal abstract fun bindFormInspeccionActivity(): FormInspeccionActivity
 }

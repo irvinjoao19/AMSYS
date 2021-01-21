@@ -181,7 +181,7 @@ class Aviso4Fragment : DaggerFragment(), View.OnClickListener {
         }
     }
 
-    fun getFullDialog(context: Context, tipo: Int) {
+    private fun getFullDialog(context: Context, tipo: Int) {
         val c = Calendar.getInstance()
         val mYear = c.get(Calendar.YEAR)
         val mMonth = c.get(Calendar.MONTH)
@@ -204,7 +204,7 @@ class Aviso4Fragment : DaggerFragment(), View.OnClickListener {
                     if (tipo == 1) {
                         r.inicioParada = result
                         avisoViewModel.validateAviso4(r)
-                    }else{
+                    } else {
                         r.finParada = result
                         avisoViewModel.validateAviso4(r)
                     }
@@ -215,8 +215,6 @@ class Aviso4Fragment : DaggerFragment(), View.OnClickListener {
 
         }, mYear, mMonth, mDay)
         datePickerDialog.show()
-
-
     }
 
     companion object {

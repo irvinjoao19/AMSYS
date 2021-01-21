@@ -8,9 +8,13 @@ import retrofit2.http.*
 
 interface ApiService {
 
+    //todo login
+
     @Headers("Cache-Control: no-cache")
     @POST("usuario/login")
     fun getLogin(@Body query: RequestBody): Observable<ResponseModel>
+
+    //todo aviso
 
     @Headers("Cache-Control: no-cache")
     @POST("aviso/listar")
@@ -22,7 +26,6 @@ interface ApiService {
     @Headers("Cache-Control: no-cache")
     @POST("aviso/parametros")
     fun getParametros(@Header("Authorization") token: String): Observable<ResponseModel>
-
 
     @Headers("Cache-Control: no-cache")
     @POST("aviso/listarequipos")
@@ -56,5 +59,21 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Body body: RequestBody
     ): Observable<ResponseModel>
+
+    @Headers("Cache-Control: no-cache")
+    @POST("aviso/guardar")
+    fun sendRegistro(
+        @Header("Authorization") token: String,
+        @Body body: RequestBody
+    ): Observable<ResponseModel>
+
+    //todo inspecciones
+
+    @Headers("Cache-Control: no-cache")
+    @POST("inspeccion/listar")
+    fun getInspecciones(
+        @Header("Authorization") token: String,
+        @Body body: RequestBody
+    ): Flowable<ResponseModel>
 
 }

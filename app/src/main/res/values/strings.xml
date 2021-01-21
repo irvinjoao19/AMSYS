@@ -52,4 +52,6 @@
     <string name="title_ubicacion">AGUA RESIDUAL</string>
     <string name="title_quipo_codigo">EQ-000890</string>
     <string name="title_equipo_nombre">BOMBA MULTIETAPA ALTAMIRA SCALA #1</string>
+    <string name="title_send">Enviar</string>
+    <string name="title_logout">Cerrar Sesión</string>
 </resources>

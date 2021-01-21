@@ -21,5 +21,10 @@ abstract class ViewModelModule {
     internal abstract fun bindAvisoViewModel(avisoViewModel: AvisoViewModel): ViewModel
 
     @Binds
+    @IntoMap
+    @ViewModelKey(InspeccionViewModel::class)
+    internal abstract fun bindInspeccionViewModel(inspeccionViewModel: InspeccionViewModel): ViewModel
+
+    @Binds
     internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
 }

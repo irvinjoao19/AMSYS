@@ -22,9 +22,10 @@ import com.amsys.alphamanfacturas.data.local.model.*
         Equipo::class,
         ModoFalla::class,
         TipoParada::class,
-        SubTipoParada::class
+        SubTipoParada::class,
+        Inspeccion::class
     ],
-    version = 6, // version 1 en play store
+    version = 9, // version 1 en play store
     exportSchema = false
 )
 abstract class AppDataBase : RoomDatabase() {
@@ -43,6 +44,8 @@ abstract class AppDataBase : RoomDatabase() {
     abstract fun modoFallaDao(): ModoFallaDao
     abstract fun tipoParadaDao(): TipoParadaDao
     abstract fun subTipoParadaDao(): SubTipoParadaDao
+
+    abstract fun inspeccionDao(): InspeccionDao
 
     companion object {
         @Volatile

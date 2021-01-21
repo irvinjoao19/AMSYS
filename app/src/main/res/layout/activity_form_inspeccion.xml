@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activities.FormAvisoActivity">
+    tools:context=".ui.activities.FormInspeccionActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -16,7 +16,6 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-
             android:background="@color/colorWhite"
             app:titleTextColor="@color/colorPrimary" />
     </com.google.android.material.appbar.AppBarLayout>
@@ -29,10 +28,10 @@
 
         <params.com.stepview.StatusViewScroller
             android:id="@+id/statusViewScroller"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:entries="@array/form_avisos"
+            android:entries="@array/form_inspeccciones"
             app:alignStatusWithCurrent="true"
             app:circleColor="@color/colorPrimary"
             app:circleColorCurrent="@color/colorPrimary"
@@ -43,7 +42,7 @@
             app:circleStrokeColorIncomplete="@color/colorPrimary"
             app:circleStrokeWidth="2dp"
             app:completeDrawable="@drawable/ic_check"
-            app:currentCount="5"
+            app:currentCount="3"
             app:currentStepZoom="0.1"
             app:drawLabels="true"
             app:lineColor="@color/colorAccent"
@@ -53,7 +52,7 @@
             app:lineWidth="1dp"
             app:minStatusAdjacentMargin="5dp"
             app:statusTopMargin="5dp"
-            app:stepCount="5"
+            app:stepCount="3"
             app:textColorLabels="@android:color/white"
             app:textColorLabelsCurrent="@android:color/white"
             app:textColorLabelsIncomplete="@color/colorPrimary"

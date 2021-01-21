@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +26,7 @@ import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.fragment_aviso_1.*
 import kotlinx.android.synthetic.main.fragment_aviso_3.*
 import kotlinx.android.synthetic.main.fragment_aviso_5.*
 import kotlinx.android.synthetic.main.fragment_aviso_5.editText1
@@ -37,11 +39,12 @@ import javax.inject.Inject
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class Aviso5Fragment : DaggerFragment(), View.OnClickListener, TextWatcher {
+class Aviso5Fragment : DaggerFragment(), View.OnClickListener,
+    TextView.OnEditorActionListener {
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.editText1 -> spinnerDialog(2, "Modo de Falla")
+            R.id.editText1 -> spinnerDialog(1, "Modo de Falla")
             R.id.editText2 -> spinnerDialog(2, "Método de Detección")
             R.id.editText3 -> spinnerDialog(3, "Mecanismo de Falla")
             R.id.editText4 -> spinnerDialog(4, "Impacto en la Función")
@@ -92,10 +95,11 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener, TextWatcher {
         }
 
         editText1.setOnClickListener(this)
+        editText2.setOnClickListener(this)
         editText3.setOnClickListener(this)
         editText4.setOnClickListener(this)
         editText5.setOnClickListener(this)
-        editText6.addTextChangedListener(this)
+        editText6.setOnEditorActionListener(this)
     }
 
     private fun spinnerDialog(tipo: Int, title: String) {
@@ -243,10 +247,12 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener, TextWatcher {
             }
     }
 
-    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-    override fun afterTextChanged(p0: Editable?) {
-        r.comentario = editText6.text.toString()
-        avisoViewModel.validateAviso3(r)
+    override fun onEditorAction(t: TextView, p1: Int, p2: KeyEvent?): Boolean {
+        if (t.text.isNotEmpty()) {
+            r.comentario = editText6.text.toString()
+            avisoViewModel.validateAviso1(r)
+            return true
+        }
+        return false
     }
 }

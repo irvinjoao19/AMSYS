@@ -5,9 +5,9 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.amsys.alphamanfacturas.ui.fragments.*
 
-abstract class TabLayoutAdapter {
+abstract class ViewPagerAdapter {
 
-    class Form(
+    class FormAvisos(
         fm: FragmentManager,
         private val numberOfTabs: Int, var id: Int, var tipo: Int, var token: String, var user: Int
     ) :
@@ -16,10 +16,30 @@ abstract class TabLayoutAdapter {
         override fun getItem(position: Int): Fragment {
             return when (position) {
                 0 -> Aviso1Fragment.newInstance(id, tipo, user)
-                1 -> Aviso2Fragment.newInstance(id, token,user)
+                1 -> Aviso2Fragment.newInstance(id, token, user)
                 2 -> Aviso3Fragment.newInstance(id, tipo)
                 3 -> Aviso4Fragment.newInstance(id, token, user)
                 4 -> Aviso5Fragment.newInstance(id)
+                else -> Fragment()
+            }
+        }
+
+        override fun getCount(): Int {
+            return numberOfTabs
+        }
+    }
+
+    class FormInspeccion(
+        fm: FragmentManager,
+        private val numberOfTabs: Int, var id: Int, var token: String, var user: Int
+    ) :
+        FragmentStatePagerAdapter(fm, numberOfTabs) {
+
+        override fun getItem(position: Int): Fragment {
+            return when (position) {
+                0 -> Inspeccion1Fragment.newInstance("", "")
+                1 -> Inspeccion2Fragment.newInstance("", "")
+                2 -> Inspeccion3Fragment.newInstance("", "")
                 else -> Fragment()
             }
         }

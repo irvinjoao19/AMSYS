@@ -31,8 +31,21 @@ internal constructor(private val roomRepository: AppRepository, private val retr
         mensajeError.value = s
     }
 
-    fun getLogin(usuario: String, pass: String) {
-        roomRepository.getUsuarioService(Query(usuario, pass))
+    fun validateLogin(q: Query) {
+        if (q.User.isEmpty()) {
+            mensajeError.value = "Ingrese usuario."
+            return
+        }
+
+        if (q.Password.isEmpty()) {
+            mensajeError.value = "Ingrese contraseña."
+            return
+        }
+        getLogin(q)
+    }
+
+    private fun getLogin(q: Query) {
+        roomRepository.getUsuarioService(q)
             .delay(1000, TimeUnit.MILLISECONDS)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -41,7 +54,11 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                 override fun onError(t: Throwable) {}
                 override fun onComplete() {}
                 override fun onNext(t: ResponseModel) {
-                    insertUsuario(t)
+                    if (t.response.codigo == "0000") {
+                        insertUsuario(t)
+                    } else {
+                        mensajeError.value = t.response.comentario
+                    }
                 }
             })
     }
@@ -55,14 +72,14 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                 override fun onError(e: Throwable) {
                     mensajeError.value = e.toString()
                 }
+
                 override fun onComplete() {
                     mensajeSuccess.value = "Ok"
                 }
             })
     }
 
-
-    private fun deleteUser(mensaje: String) {
+    fun logout() {
         roomRepository.deleteSesion()
             .delay(2, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.computation())

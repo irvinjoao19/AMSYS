@@ -1,49 +1,96 @@
 package com.amsys.alphamanfacturas.ui.activities
 
-//import com.shuhart.stepview.StepView
-
-//import com.ydn.viewpagerwithicons.StateViewPager
-//import com.ydn.viewpagerwithicons.StateViewPager.OnIconClickListener
-
+import android.R.color
 import android.annotation.SuppressLint
-import android.graphics.Color
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
+import android.graphics.PorterDuff
+import android.os.Build
 import android.os.Bundle
-import android.view.View
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.view.ContextThemeWrapper
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.amsys.alphamanfacturas.R
+import com.amsys.alphamanfacturas.data.viewModel.AvisoViewModel
+import com.amsys.alphamanfacturas.data.viewModel.ViewModelFactory
 import com.amsys.alphamanfacturas.helper.Util
-import com.amsys.alphamanfacturas.ui.adapters.TabLayoutAdapter
+import com.amsys.alphamanfacturas.ui.adapters.ViewPagerAdapter
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_form_aviso.*
+import javax.inject.Inject
 
 
-class FormAvisoActivity : DaggerAppCompatActivity(), View.OnClickListener {
+class FormAvisoActivity : DaggerAppCompatActivity() {
 
-    override fun onClick(v: View) {}
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.send, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.save -> {
+                confirmation(token, id)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+    lateinit var avisoViewModel: AvisoViewModel
+    lateinit var builder: AlertDialog.Builder
+    private var dialog: AlertDialog? = null
+
+    private var token: String = ""
+    private var id: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form_aviso)
         val b = intent.extras
         if (b != null) {
+            token = b.getString("token")!!
+            id = b.getInt("id")
             bindUI(b.getInt("id"), b.getInt("tipo"), b.getString("token")!!, b.getInt("user"))
         }
     }
 
-    @SuppressLint("ResourceType")
     private fun bindUI(id: Int, tipo: Int, token: String, user: Int) {
+        avisoViewModel =
+            ViewModelProvider(this, viewModelFactory).get(AvisoViewModel::class.java)
         setSupportActionBar(toolbar)
         supportActionBar!!.title = "Nuevo Aviso"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        toolbar.setNavigationOnClickListener {
-            finish()
+        val drawable = toolbar.navigationIcon
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            drawable!!.colorFilter = BlendModeColorFilter(
+                ContextCompat.getColor(this, R.color.colorBlack),
+                BlendMode.SRC_ATOP
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            drawable!!.setColorFilter(
+                ContextCompat.getColor(this, R.color.colorBlack),
+                PorterDuff.Mode.SRC_ATOP
+            )
         }
+        toolbar.setNavigationOnClickListener { finish() }
 
         statusViewScroller.statusView.run {
             currentCount = 1
         }
 
-        val formAdapter = TabLayoutAdapter.Form(supportFragmentManager, 5, id, tipo, token, user)
+        val formAdapter =
+            ViewPagerAdapter.FormAvisos(supportFragmentManager, 5, id, tipo, token, user)
         viewPager.adapter = formAdapter
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(p: Int, pos: Float, posp: Int) {}
@@ -52,14 +99,55 @@ class FormAvisoActivity : DaggerAppCompatActivity(), View.OnClickListener {
                 statusViewScroller.scrollToStep(position)
                 statusViewScroller.statusView.run {
                     currentCount = position + 1
-//                    circleFillColorCurrent = Color.parseColor(getString(R.color.colorPrimary))
                 }
-//                stepView.go(position, true);
                 viewPager.currentItem = position
                 Util.hideKeyboard(this@FormAvisoActivity)
             }
         })
 
-        fabRegistrar.setOnClickListener(this)
+        avisoViewModel.mensajeSuccess.observe(this) {
+            closeLoad()
+            Util.toastMensaje(this, it)
+        }
+
+        avisoViewModel.mensajeError.observe(this) {
+            closeLoad()
+            Util.toastMensaje(this, it)
+        }
+    }
+
+    private fun confirmation(token: String, id: Int) {
+        MaterialAlertDialogBuilder(ContextThemeWrapper(this, R.style.AppTheme))
+            .setTitle("Mensaje")
+            .setMessage("Deseas enviar registro ?")
+            .setPositiveButton("Enviar") { d, _ ->
+                load()
+                avisoViewModel.sendRegistro(token, id)
+                d.dismiss()
+            }
+            .setNegativeButton("No") { d, _ ->
+                d.cancel()
+            }.show()
+    }
+
+    private fun load() {
+        builder = AlertDialog.Builder(ContextThemeWrapper(this, R.style.AppTheme))
+        @SuppressLint("InflateParams") val view =
+            LayoutInflater.from(this).inflate(R.layout.dialog_login, null)
+        val textViewTitle: TextView = view.findViewById(R.id.textViewTitle)
+        builder.setView(view)
+        textViewTitle.text = String.format("Enviando...")
+        dialog = builder.create()
+        dialog!!.setCanceledOnTouchOutside(false)
+        dialog!!.setCancelable(false)
+        dialog!!.show()
+    }
+
+    private fun closeLoad() {
+        if (dialog != null) {
+            if (dialog!!.isShowing) {
+                dialog!!.dismiss()
+            }
+        }
     }
 }
