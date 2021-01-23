@@ -2,6 +2,8 @@ package com.amsys.alphamanfacturas.ui.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.InputFilter
+import android.text.InputFilter.LengthFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,17 +17,21 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amsys.alphamanfacturas.R
-import com.amsys.alphamanfacturas.data.local.model.*
+import com.amsys.alphamanfacturas.data.local.model.Equipo
+import com.amsys.alphamanfacturas.data.local.model.Query
+import com.amsys.alphamanfacturas.data.local.model.Registro
 import com.amsys.alphamanfacturas.data.viewModel.AvisoViewModel
 import com.amsys.alphamanfacturas.data.viewModel.ViewModelFactory
 import com.amsys.alphamanfacturas.helper.Util
-import com.amsys.alphamanfacturas.ui.adapters.*
+import com.amsys.alphamanfacturas.ui.adapters.ComboAdapter
+import com.amsys.alphamanfacturas.ui.adapters.EquipoAdapter
 import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_aviso_2.*
 import javax.inject.Inject
+
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -35,7 +41,7 @@ class Aviso2Fragment : DaggerFragment(), View.OnClickListener {
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.editText5 -> dialogEquipo()
+            R.id.editText8 -> dialogEquipo()
         }
     }
 
@@ -112,7 +118,12 @@ class Aviso2Fragment : DaggerFragment(), View.OnClickListener {
                 avisoViewModel.validateAviso2(r)
             }
         }
-        editText5.setOnClickListener(this)
+
+        avisoViewModel.mensajeLogout.observe(viewLifecycleOwner) {
+            Util.dialogMensajeLogin(requireActivity())
+        }
+
+        editText8.setOnClickListener(this)
     }
 
     private fun dialogEquipo() {
@@ -133,7 +144,7 @@ class Aviso2Fragment : DaggerFragment(), View.OnClickListener {
         val q = Query()
         q.userId = usuarioId
 
-        editTextTipo.setOnClickListener { spinnerDialog(editTextTipo, q) }
+        editTextTipo.setOnClickListener { spinnerDialog(editTextTipo, q, editTextSearch) }
         editTextSearch.setOnEditorActionListener { tv, _, _ ->
             if (q.tipo == 0) {
                 Util.toastMensaje(requireContext(), "Seleccione Tipo")
@@ -147,7 +158,7 @@ class Aviso2Fragment : DaggerFragment(), View.OnClickListener {
                         q.name = tv.text.toString()
                     }
                     avisoViewModel.searchEquipo(token, q)
-                    Util.hideKeyboardFrom(requireContext(),tv)
+                    Util.hideKeyboardFrom(requireContext(), tv)
                 }
             }
             false
@@ -172,7 +183,7 @@ class Aviso2Fragment : DaggerFragment(), View.OnClickListener {
         }
     }
 
-    private fun spinnerDialog(input: TextInputEditText, t: Query) {
+    private fun spinnerDialog(input: TextInputEditText, t: Query, input2: TextInputEditText) {
         val builder = AlertDialog.Builder(ContextThemeWrapper(context, R.style.AppTheme))
         @SuppressLint("InflateParams") val v =
             LayoutInflater.from(context).inflate(R.layout.dialog_combo, null)
@@ -200,6 +211,11 @@ class Aviso2Fragment : DaggerFragment(), View.OnClickListener {
                 override fun onItemClick(q: Query, v: View, position: Int) {
                     t.tipo = q.tipo
                     input.setText(q.name)
+                    if (q.tipo == 1) {
+                        Util.editTextMaxLength(input2, 3)
+                    } else {
+                        Util.editTextMaxLength(input2, 4)
+                    }
                     dialog.dismiss()
                 }
             })
@@ -211,7 +227,7 @@ class Aviso2Fragment : DaggerFragment(), View.OnClickListener {
 
     companion object {
         @JvmStatic
-        fun newInstance(param1: Int, param2: String,param3:Int) =
+        fun newInstance(param1: Int, param2: String, param3: Int) =
             Aviso2Fragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_PARAM1, param1)

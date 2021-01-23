@@ -76,4 +76,11 @@ interface ApiService {
         @Body body: RequestBody
     ): Flowable<ResponseModel>
 
+    @Headers("Cache-Control: no-cache")
+    @POST("inspeccion/buscar")
+    fun getSearchInspeccion(
+        @Header("Authorization") token: String,
+        @Body body: RequestBody
+    ): Observable<ResponseModel>
+
 }

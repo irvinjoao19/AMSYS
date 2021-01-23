@@ -37,9 +37,9 @@ abstract class ViewPagerAdapter {
 
         override fun getItem(position: Int): Fragment {
             return when (position) {
-                0 -> Inspeccion1Fragment.newInstance("", "")
-                1 -> Inspeccion2Fragment.newInstance("", "")
-                2 -> Inspeccion3Fragment.newInstance("", "")
+                0 -> Inspeccion1Fragment.newInstance(id, user)
+                1 -> Inspeccion2Fragment.newInstance(id, user)
+                2 -> Inspeccion3Fragment.newInstance(id, user)
                 else -> Fragment()
             }
         }

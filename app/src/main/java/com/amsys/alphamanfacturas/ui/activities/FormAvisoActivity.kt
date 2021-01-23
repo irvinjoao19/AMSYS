@@ -109,10 +109,12 @@ class FormAvisoActivity : DaggerAppCompatActivity() {
             closeLoad()
             Util.toastMensaje(this, it)
         }
-
         avisoViewModel.mensajeError.observe(this) {
             closeLoad()
             Util.toastMensaje(this, it)
+        }
+        avisoViewModel.mensajeLogout.observe(this) {
+            Util.dialogMensajeLogin(this)
         }
     }
 

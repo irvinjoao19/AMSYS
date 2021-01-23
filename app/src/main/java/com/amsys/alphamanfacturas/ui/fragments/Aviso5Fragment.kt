@@ -251,7 +251,6 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener,
         if (t.text.isNotEmpty()) {
             r.comentario = editText6.text.toString()
             avisoViewModel.validateAviso1(r)
-            return true
         }
         return false
     }

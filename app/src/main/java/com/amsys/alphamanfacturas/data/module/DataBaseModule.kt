@@ -103,4 +103,19 @@ class DataBaseModule {
     internal fun provideInspeccionDao(appDataBase: AppDataBase): InspeccionDao {
         return appDataBase.inspeccionDao()
     }
+
+    @Provides
+    internal fun providePuntoMedidaDao(appDataBase: AppDataBase): PuntoMedidaDao {
+        return appDataBase.puntoMedidaDao()
+    }
+
+    @Provides
+    internal fun provideAspectoDao(appDataBase: AppDataBase): AspectoDao {
+        return appDataBase.aspectoDao()
+    }
+
+    @Provides
+    internal fun provideContadorDao(appDataBase: AppDataBase): ContadorDao {
+        return appDataBase.contadorDao()
+    }
 }

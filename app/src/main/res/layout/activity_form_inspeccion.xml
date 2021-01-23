@@ -30,7 +30,7 @@
             android:id="@+id/statusViewScroller"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="10dp"
             android:entries="@array/form_inspeccciones"
             app:alignStatusWithCurrent="true"
             app:circleColor="@color/colorPrimary"

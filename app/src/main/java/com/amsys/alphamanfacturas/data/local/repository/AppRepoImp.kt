@@ -120,7 +120,7 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
             if (v4 != null) {
                 dataBase.deteccionDao().insertDeteccionListTask(v4)
             }
-            val v5: List<MecanismoFalla>? = l.mecanismoFalla
+            val v5: List<MecanismoFalla>? = l.mecanismosFalla
             if (v5 != null) {
                 dataBase.mecanismoFallaDao().insertMecanismoFallaListTask(v5)
             }
@@ -351,5 +351,49 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
 
     override fun getInspecciones(): LiveData<List<Inspeccion>> {
         return dataBase.inspeccionDao().getInspeccions()
+    }
+
+    override fun getSearchInspeccion(token: String, q: Query): Observable<ResponseModel> {
+        val json = Gson().toJson(q)
+        Log.i("TAG", json)
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return apiService.getSearchInspeccion(token, body)
+    }
+
+    override fun insertSyncInspeccion(t: Any): Completable {
+        return Completable.fromAction {
+
+            val gson = Gson().toJson(t)
+            Log.i("TAG", gson)
+            val l: SyncInspeccion = Gson().fromJson(
+                gson, object : TypeToken<SyncInspeccion>() {}.type
+            )
+
+
+//            var puntosMedida: List<PuntoMedida> = ArrayList()
+
+
+            val v2: List<Contador>? = l.contadores
+            if (v2 != null) {
+                dataBase.contadorDao().insertContadorListTask(v2)
+            }
+
+            val v3: List<Aspecto>? = l.aspectos
+            if (v3 != null) {
+                dataBase.aspectoDao().insertAspectoListTask(v3)
+            }
+        }
+    }
+
+    override fun getPuntoMedidaById(inspeccionId: Int): LiveData<List<PuntoMedida>> {
+        return dataBase.puntoMedidaDao().getPuntoMedidas()
+    }
+
+    override fun getContadorById(inspeccionId: Int): LiveData<List<Contador>> {
+        return dataBase.contadorDao().getContadors()
+    }
+
+    override fun getAspectoById(inspeccionId: Int): LiveData<List<Aspecto>> {
+        return dataBase.aspectoDao().getAspectos()
     }
 }

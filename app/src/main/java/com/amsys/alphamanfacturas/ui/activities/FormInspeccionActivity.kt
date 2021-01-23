@@ -1,16 +1,22 @@
 package com.amsys.alphamanfacturas.ui.activities
 
+import android.annotation.SuppressLint
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.amsys.alphamanfacturas.R
+import com.amsys.alphamanfacturas.data.local.model.Query
 import com.amsys.alphamanfacturas.data.viewModel.InspeccionViewModel
 import com.amsys.alphamanfacturas.data.viewModel.ViewModelFactory
 import com.amsys.alphamanfacturas.helper.Util
@@ -41,14 +47,26 @@ class FormInspeccionActivity : DaggerAppCompatActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     lateinit var inspeccionViewModel: InspeccionViewModel
+    private var token: String = ""
+    private var inspeccionId: Int = 0
+    private var usuarioId: Int = 0
+
+    lateinit var builder: AlertDialog.Builder
+    private var dialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form_inspeccion)
-        bindUI()
+        val b = intent.extras
+        if (b != null) {
+            token = b.getString("token")!!
+            inspeccionId = b.getInt("id")
+            usuarioId = b.getInt("user")
+            bindUI(token, inspeccionId, usuarioId)
+        }
     }
 
-    private fun bindUI() {
+    private fun bindUI(t: String, id: Int, user: Int) {
         inspeccionViewModel =
             ViewModelProvider(this, viewModelFactory).get(InspeccionViewModel::class.java)
         setSupportActionBar(toolbar)
@@ -68,12 +86,13 @@ class FormInspeccionActivity : DaggerAppCompatActivity() {
             )
         }
         toolbar.setNavigationOnClickListener { finish() }
-
+        generateInspeccion(t, id, user)
         statusViewScroller.statusView.run {
             currentCount = 1
         }
 
-        val formAdapter = ViewPagerAdapter.FormInspeccion(supportFragmentManager, 5, 1, "", 1)
+        val formAdapter =
+            ViewPagerAdapter.FormInspeccion(supportFragmentManager, 5, id, token, user)
         viewPager.adapter = formAdapter
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(p: Int, pos: Float, posp: Int) {}
@@ -87,5 +106,48 @@ class FormInspeccionActivity : DaggerAppCompatActivity() {
                 Util.hideKeyboard(this@FormInspeccionActivity)
             }
         })
+
+        inspeccionViewModel.mensajeSuccess.observe(this) {
+            closeLoad()
+            Util.toastMensaje(this, it)
+        }
+        inspeccionViewModel.mensajeError.observe(this) {
+            closeLoad()
+            Util.toastMensaje(this, it)
+        }
+        inspeccionViewModel.mensajeLogout.observe(this) {
+            Util.dialogMensajeLogin(this)
+        }
+    }
+
+    private fun load() {
+        builder = AlertDialog.Builder(ContextThemeWrapper(this, R.style.AppTheme))
+        @SuppressLint("InflateParams") val view =
+            LayoutInflater.from(this).inflate(R.layout.dialog_login, null)
+        val textViewTitle: TextView = view.findViewById(R.id.textViewTitle)
+        builder.setView(view)
+
+        textViewTitle.text = String.format("Sincronizando...")
+
+        dialog = builder.create()
+        dialog!!.setCanceledOnTouchOutside(false)
+        dialog!!.setCancelable(false)
+        dialog!!.show()
+    }
+
+    private fun closeLoad() {
+        if (dialog != null) {
+            if (dialog!!.isShowing) {
+                dialog!!.dismiss()
+            }
+        }
+    }
+
+    private fun generateInspeccion(token: String, id: Int, user: Int) {
+        val q = Query()
+        q.userId = user
+        q.inspeccionId = id
+        load()
+        inspeccionViewModel.sync(token, q)
     }
 }

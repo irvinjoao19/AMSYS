@@ -8,6 +8,7 @@ open class Query {
     var pageSize: Int = 0
     var userId: Int = 0
     var assetId: Int = 0
+    var inspeccionId : Int = 0
 
     var claseParadaId: Int = 0
     var tipoParadaId: Int = 0
@@ -50,4 +51,5 @@ open class Query {
 //        this.claseParadaId = claseParadaId
 //        this.assetId = assetId
 //    }
+
 }

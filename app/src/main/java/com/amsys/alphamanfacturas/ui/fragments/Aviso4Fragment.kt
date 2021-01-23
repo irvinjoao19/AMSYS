@@ -21,7 +21,10 @@ import com.amsys.alphamanfacturas.R
 import com.amsys.alphamanfacturas.data.local.model.*
 import com.amsys.alphamanfacturas.data.viewModel.AvisoViewModel
 import com.amsys.alphamanfacturas.data.viewModel.ViewModelFactory
-import com.amsys.alphamanfacturas.ui.adapters.*
+import com.amsys.alphamanfacturas.helper.Util
+import com.amsys.alphamanfacturas.ui.adapters.ParadaAdapter
+import com.amsys.alphamanfacturas.ui.adapters.SubTipoParadaAdapter
+import com.amsys.alphamanfacturas.ui.adapters.TipoParadaAdapter
 import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
 import com.google.android.material.textfield.TextInputLayout
 import dagger.android.support.DaggerFragment
@@ -88,6 +91,10 @@ class Aviso4Fragment : DaggerFragment(), View.OnClickListener {
                 editText4.setText(it.tipoParadaNombre)
                 editText5.setText(it.subTipoParadaNombre)
             }
+        }
+
+        avisoViewModel.mensajeLogout.observe(viewLifecycleOwner) {
+            Util.dialogMensajeLogin(requireActivity())
         }
 
         editText1.setOnClickListener(this)
@@ -196,10 +203,10 @@ class Aviso4Fragment : DaggerFragment(), View.OnClickListener {
             val mMinute = d.get(Calendar.MINUTE)
             val timePickerDialog =
                 TimePickerDialog(context, { _, hourOfDay, minute ->
-                    val hour = if (hourOfDay < 10) "0$hourOfDay" else hourOfDay.toString()
+                    val hourFormat = if (hourOfDay == 12 || hourOfDay == 0) 12 else hourOfDay % 12
+                    val hour = if (hourFormat < 10) "0$hourFormat" else hourFormat.toString()
                     val minutes = if (minute < 10) "0$minute" else minute.toString()
-                    val dayH = if (hourOfDay < 12) "a.m." else "p.m."
-                    val result = String.format("%s %s:%s %s", fecha, hour, minutes, dayH)
+                    val result = String.format("%s %s:%s", fecha, hour, minutes)
 
                     if (tipo == 1) {
                         r.inicioParada = result

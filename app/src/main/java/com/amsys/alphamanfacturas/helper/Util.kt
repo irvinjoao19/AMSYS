@@ -17,6 +17,7 @@ import android.provider.MediaStore
 import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.text.Html
+import android.text.InputFilter
 import android.text.Spanned
 import android.util.Log
 import android.view.View
@@ -28,6 +29,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.exifinterface.media.ExifInterface
 import com.amsys.alphamanfacturas.R
+import com.amsys.alphamanfacturas.ui.activities.LoginActivity
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
@@ -53,6 +55,7 @@ import kotlin.math.*
 
 object Util {
 
+    val messageToken: String = "Token expirado volver a iniciar sesión."
     val FolderImg = "Dsige/Lds"
     val UrlFoto = "http://190.117.104.122/WebApi_Itf/Imagen/"
 
@@ -172,13 +175,6 @@ object Util {
     inline fun <reified T> genericCastOrNull(anything: Any): T {
         return anything as T
     }
-
-
-    //fun <T> genericCastOrNull(anything: Any, clazz: Class<T>): T? {
-    //    return if (clazz.isInstance(anything)) {
-    //        anything as T
-    //    } else null
-    // }
 
     fun getFotoName(id: Int): String {
         val date = Date()
@@ -675,7 +671,7 @@ object Util {
         val mHour = c.get(Calendar.HOUR_OF_DAY)
         val mMinute = c.get(Calendar.MINUTE)
         val timePickerDialog =
-            TimePickerDialog(context, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+            TimePickerDialog(context, { _, hourOfDay, minute ->
                 val hour = if (hourOfDay < 10) "0$hourOfDay" else hourOfDay.toString()
                 val minutes = if (minute < 10) "0$minute" else minute.toString()
                 val day = if (hourOfDay < 12) "a.m." else "p.m."
@@ -1066,6 +1062,11 @@ object Util {
         }
     }
 
+    fun editTextMaxLength(input: TextInputEditText, i: Int) {
+        input.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(i))
+    }
+
+
     // execute services
 //    fun executeRepartoWork(context: Context) {
 //        val downloadConstraints = Constraints.Builder()
@@ -1102,4 +1103,21 @@ object Util {
 //    fun closeGpsWork(context: Context) {
 //        WorkManager.getInstance(context).cancelAllWorkByTag("Gps-Work")
 //    }
+
+
+    fun dialogMensajeLogin(activity: Activity) {
+        val dialog = MaterialAlertDialogBuilder(activity)
+            .setTitle("Mensaje")
+            .setMessage(messageToken)
+            .setPositiveButton("Entendido") { dialog, _ ->
+                val intent = Intent(activity, LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                activity.startActivity(intent)
+                activity.finish()
+                dialog.dismiss()
+
+            }
+        dialog.show()
+    }
+
 }

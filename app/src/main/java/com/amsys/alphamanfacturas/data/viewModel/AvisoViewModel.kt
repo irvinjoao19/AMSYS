@@ -32,6 +32,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
     val mensajeError = MutableLiveData<String>()
     val mensajeSuccess = MutableLiveData<String>()
     val mensajeSync = MutableLiveData<Int>()
+    val mensajeLogout = MutableLiveData<String>()
     val loading: MutableLiveData<Boolean> = MutableLiveData()
     val compositeDisposable = CompositeDisposable()
     val paginator = PublishProcessor.create<Int>()
@@ -72,8 +73,8 @@ internal constructor(private val roomRepository: AppRepository, private val retr
             .subscribe({ s ->
                 insertLista(s.data)
                 loading.postValue(false)
-            }, { t ->
-                mensajeError.postValue(t.toString())
+            }, {
+                logout()
                 pageNumber.postValue(1)
             })
 
@@ -118,7 +119,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                 }
 
                 override fun onError(e: Throwable) {
-                    mensajeError.value = e.toString()
+                    logout()
                 }
             })
     }
@@ -165,22 +166,18 @@ internal constructor(private val roomRepository: AppRepository, private val retr
     }
 
     fun validateAviso2(r: Registro) {
-
         insertAviso(r)
     }
 
     fun validateAviso3(r: Registro) {
-
         insertAviso(r)
     }
 
     fun validateAviso4(r: Registro) {
-
         insertAviso(r)
     }
 
     fun validateAviso5(r: Registro) {
-
         insertAviso(r)
     }
 
@@ -218,7 +215,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                             }
 
                             override fun onError(e: Throwable) {
-                                mensajeError.value = e.toString()
+                                logout()
                             }
                         })
                 }
@@ -264,7 +261,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                 }
 
                 override fun onError(e: Throwable) {
-                    mensajeError.value = e.toString()
+                    logout()
                 }
             })
     }
@@ -288,7 +285,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                             }
 
                             override fun onError(e: Throwable) {
-                                mensajeError.value = e.toString()
+                                logout()
                             }
                         })
                 }
@@ -333,7 +330,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                             }
 
                             override fun onError(e: Throwable) {
-                                mensajeError.value = e.toString()
+                                logout()
                             }
                         })
                 }
@@ -374,10 +371,9 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                             }
 
                             override fun onError(e: Throwable) {
-                                mensajeError.value = e.toString()
+                                logout()
                             }
                         })
-
                 }
             })
     }
@@ -443,9 +439,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : Observer<ResponseModel> {
                 override fun onSubscribe(d: Disposable) {}
-                override fun onComplete() {
-                }
-
+                override fun onComplete() {}
                 override fun onNext(t: ResponseModel) {
                     if (t.response.codigo == "0000") {
                         mensajeSuccess.value = t.response.descripcion
@@ -455,14 +449,22 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                 }
 
                 override fun onError(t: Throwable) {
-                    mensajeError.value = t.toString()
+                    logout()
                 }
             })
     }
 
-    private fun updateRegistro() {
-
+    private fun logout() {
+        roomRepository.deleteSesion()
+            .delay(2, TimeUnit.SECONDS)
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : CompletableObserver {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onError(e: Throwable) {}
+                override fun onComplete() {
+                    mensajeLogout.value = "Close"
+                }
+            })
     }
-
-
 }

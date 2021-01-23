@@ -47,9 +47,7 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener, TextView.OnEditor
         if (t.text.isNotEmpty()) {
             r.descripcion = editText3.text.toString()
             avisoViewModel.validateAviso1(r)
-            return true
         }
-
         return false
     }
 

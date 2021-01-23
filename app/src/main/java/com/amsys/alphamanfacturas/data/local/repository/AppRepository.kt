@@ -71,5 +71,12 @@ interface AppRepository {
     fun paginationInspeccion(token: String, body: RequestBody): Flowable<ResponseModel>
     fun insertInspecciones(r: Any): Completable
     fun getInspecciones(): LiveData<List<Inspeccion>>
+    fun getSearchInspeccion(token: String, q: Query): Observable<ResponseModel>
+    fun insertSyncInspeccion(t: Any): Completable
+
+    //Form Inspecciones
+    fun getPuntoMedidaById(inspeccionId: Int): LiveData<List<PuntoMedida>>
+    fun getContadorById(inspeccionId: Int): LiveData<List<Contador>>
+    fun getAspectoById(inspeccionId: Int): LiveData<List<Aspecto>>
 
 }

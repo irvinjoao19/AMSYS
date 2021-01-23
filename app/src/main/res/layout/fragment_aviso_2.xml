@@ -148,9 +148,8 @@
                     android:id="@+id/editText5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/ic_down"
-                    android:focusable="false"
-                    android:hint="@string/hint_codigo" />
+                    android:hint="@string/hint_codigo"
+                    android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -234,8 +233,9 @@
                     android:id="@+id/editText8"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_codigo"
-                    android:inputType="text" />
+                    android:drawableEnd="@drawable/ic_search_black"
+                    android:focusable="false"
+                    android:hint="@string/hint_codigo" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout

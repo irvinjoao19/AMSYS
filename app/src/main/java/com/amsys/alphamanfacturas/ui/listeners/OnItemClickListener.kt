@@ -1,6 +1,8 @@
 package com.amsys.alphamanfacturas.ui.listeners
 
+import android.view.KeyEvent
 import android.view.View
+import android.widget.TextView
 import com.amsys.alphamanfacturas.data.local.model.*
 
 interface OnItemClickListener {
@@ -58,5 +60,26 @@ interface OnItemClickListener {
 
     interface InspeccionListener {
         fun onItemClick(p: Inspeccion, v: View, position: Int)
+    }
+
+    interface PuntoMedidaListener {
+        fun onItemClick(p: PuntoMedida, v: View, position: Int)
+
+
+        fun onEditorAction(c: PuntoMedida, t: TextView, p1: Int, p2: KeyEvent): Boolean
+    }
+
+    interface ContadorListener {
+
+        fun onItemClick(c: Contador, v: View, position: Int)
+
+        fun onEditorAction(c: Contador, t: TextView, p1: Int, p2: KeyEvent): Boolean
+    }
+
+    interface AspectoListener {
+        fun onItemClick(a: Aspecto, v: View, position: Int)
+
+
+        fun onEditorAction(c: Aspecto, t: TextView, p1: Int, p2: KeyEvent): Boolean
     }
 }

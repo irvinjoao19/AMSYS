@@ -139,7 +139,7 @@ class AvisosFragment : DaggerFragment(), View.OnClickListener {
             }
         }
 
-        avisoViewModel.getIdentity().observe(viewLifecycleOwner){
+        avisoViewModel.getIdentity().observe(viewLifecycleOwner) {
             registroId = if (it == null || it == 0) 1 else it + 1
         }
         fab.setOnClickListener(this)

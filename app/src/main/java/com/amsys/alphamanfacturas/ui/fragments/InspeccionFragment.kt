@@ -1,10 +1,14 @@
 package com.amsys.alphamanfacturas.ui.fragments
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -67,7 +71,12 @@ class InspeccionFragment : DaggerFragment() {
 
         val inspeccionAdapter = InspeccionAdapter(object : OnItemClickListener.InspeccionListener {
             override fun onItemClick(p: Inspeccion, v: View, position: Int) {
-                startActivity(Intent(requireContext(), FormInspeccionActivity::class.java))
+                startActivity(
+                    Intent(requireContext(), FormInspeccionActivity::class.java)
+                        .putExtra("token", token)
+                        .putExtra("user", usuarioId)
+                        .putExtra("id", p.inspeccionId)
+                )
             }
         })
 

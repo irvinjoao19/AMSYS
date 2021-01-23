@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.amsys.alphamanfacturas.data.local.dao.*
 import com.amsys.alphamanfacturas.data.local.model.*
 
@@ -23,11 +24,16 @@ import com.amsys.alphamanfacturas.data.local.model.*
         ModoFalla::class,
         TipoParada::class,
         SubTipoParada::class,
-        Inspeccion::class
+        Inspeccion::class,
+        PuntoMedida::class,
+        Aspecto::class,
+        Contador::class
+
     ],
-    version = 9, // version 1 en play store
+    version = 11, // version 1 en play store
     exportSchema = false
 )
+@TypeConverters(Converts::class)
 abstract class AppDataBase : RoomDatabase() {
 
     abstract fun usuarioDao(): UsuarioDao
@@ -46,6 +52,9 @@ abstract class AppDataBase : RoomDatabase() {
     abstract fun subTipoParadaDao(): SubTipoParadaDao
 
     abstract fun inspeccionDao(): InspeccionDao
+    abstract fun puntoMedidaDao(): PuntoMedidaDao
+    abstract fun aspectoDao(): AspectoDao
+    abstract fun contadorDao(): ContadorDao
 
     companion object {
         @Volatile
