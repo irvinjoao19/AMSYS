@@ -64,22 +64,16 @@ interface OnItemClickListener {
 
     interface PuntoMedidaListener {
         fun onItemClick(p: PuntoMedida, v: View, position: Int)
-
-
-        fun onEditorAction(c: PuntoMedida, t: TextView, p1: Int, p2: KeyEvent): Boolean
+        fun onEditorAction(c: PuntoMedida, t: TextView, p1: Int, p2: KeyEvent?): Boolean
     }
 
     interface ContadorListener {
-
         fun onItemClick(c: Contador, v: View, position: Int)
-
-        fun onEditorAction(c: Contador, t: TextView, p1: Int, p2: KeyEvent): Boolean
+        fun onEditorAction(c: Contador, t: TextView, p1: Int, p2: KeyEvent?): Boolean
     }
 
     interface AspectoListener {
         fun onItemClick(a: Aspecto, v: View, position: Int)
-
-
-        fun onEditorAction(c: Aspecto, t: TextView, p1: Int, p2: KeyEvent): Boolean
+        fun onEditorAction(c: Aspecto, t: TextView, p1: Int, p2: KeyEvent?): Boolean
     }
 }

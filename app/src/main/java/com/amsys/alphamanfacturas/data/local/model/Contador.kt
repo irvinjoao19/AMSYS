@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 open class Contador {
     @PrimaryKey(autoGenerate = true)
     var contadorId: Int = 0
+    var inspeccionId:Int = 0
     var equipoCodigo: String = ""
     var equipoNombre: String = ""
     var unidadMedida: String = ""

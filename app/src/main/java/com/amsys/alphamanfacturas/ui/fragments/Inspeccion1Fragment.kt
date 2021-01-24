@@ -1,5 +1,6 @@
 package com.amsys.alphamanfacturas.ui.fragments
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -16,7 +17,9 @@ import com.amsys.alphamanfacturas.data.viewModel.ViewModelFactory
 import com.amsys.alphamanfacturas.ui.adapters.PuntoMedidaAdapter
 import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.fragment_aviso_1.*
 import kotlinx.android.synthetic.main.fragment_inspeccion_1.*
+import java.util.*
 import javax.inject.Inject
 
 private const val ARG_PARAM1 = "param1"
@@ -56,12 +59,28 @@ class Inspeccion1Fragment : DaggerFragment() {
         val puntoMedidaAdapter =
             PuntoMedidaAdapter(object : OnItemClickListener.PuntoMedidaListener {
                 override fun onItemClick(p: PuntoMedida, v: View, position: Int) {
-
+                    when (v.id) {
+                        R.id.editText1 -> dialogFecha(p)
+                    }
                 }
 
                 override fun onEditorAction(
-                    c: PuntoMedida, t: TextView, p1: Int, p2: KeyEvent
+                    c: PuntoMedida, t: TextView, p1: Int, p2: KeyEvent?
                 ): Boolean {
+                    when(t.id){
+                        R.id.editText2 ->{
+                            if (t.text.isNotEmpty()) {
+                                c.valor = t.text.toString()
+                                inspeccionViewModel.updatePuntoMedida(c)
+                            }
+                        }
+                        R.id.editText3 -> {
+                            if (t.text.isNotEmpty()) {
+                                c.comentario = t.text.toString()
+                                inspeccionViewModel.updatePuntoMedida(c)
+                            }
+                        }
+                    }
                     return false
                 }
             })
@@ -74,6 +93,24 @@ class Inspeccion1Fragment : DaggerFragment() {
         inspeccionViewModel.getPuntoMedidaById(inspeccionId).observe(viewLifecycleOwner) {
             puntoMedidaAdapter.addItems(it)
         }
+    }
+
+    private fun dialogFecha(p: PuntoMedida) {
+        val c = Calendar.getInstance()
+        val mYear = c.get(Calendar.YEAR)
+        val mMonth = c.get(Calendar.MONTH)
+        val mDay = c.get(Calendar.DAY_OF_MONTH)
+        val datePickerDialog =
+            DatePickerDialog(requireContext(), { _, year, monthOfYear, dayOfMonth ->
+                val month =
+                    if (((monthOfYear + 1) / 10) == 0) "0${monthOfYear + 1}" else "${monthOfYear + 1}"
+                val day =
+                    if (((dayOfMonth + 1) / 10) == 0) "0$dayOfMonth" else "$dayOfMonth"
+                val fecha = "$day/$month/$year"
+                p.fechaMuestra = fecha
+                inspeccionViewModel.updatePuntoMedida(p)
+            }, mYear, mMonth, mDay)
+        datePickerDialog.show()
     }
 
     companion object {

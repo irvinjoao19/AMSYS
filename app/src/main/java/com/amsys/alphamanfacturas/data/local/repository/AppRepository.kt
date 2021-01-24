@@ -79,4 +79,9 @@ interface AppRepository {
     fun getContadorById(inspeccionId: Int): LiveData<List<Contador>>
     fun getAspectoById(inspeccionId: Int): LiveData<List<Aspecto>>
 
+
+    fun updatePuntoMedida(p: PuntoMedida): Completable
+    fun updateContador(c: Contador): Completable
+    fun updateAspecto(a: Aspecto): Completable
+
 }

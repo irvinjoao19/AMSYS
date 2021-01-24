@@ -1,5 +1,6 @@
 package com.amsys.alphamanfacturas.ui.fragments
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -11,12 +12,14 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amsys.alphamanfacturas.R
 import com.amsys.alphamanfacturas.data.local.model.Contador
+import com.amsys.alphamanfacturas.data.local.model.PuntoMedida
 import com.amsys.alphamanfacturas.data.viewModel.InspeccionViewModel
 import com.amsys.alphamanfacturas.data.viewModel.ViewModelFactory
 import com.amsys.alphamanfacturas.ui.adapters.ContadorAdapter
 import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_inspeccion_2.*
+import java.util.*
 import javax.inject.Inject
 
 private const val ARG_PARAM1 = "param1"
@@ -56,12 +59,28 @@ class Inspeccion2Fragment : DaggerFragment() {
         val contadorAdapter =
             ContadorAdapter(object : OnItemClickListener.ContadorListener {
                 override fun onItemClick(c: Contador, v: View, position: Int) {
-
+                    when (v.id) {
+                        R.id.editText1 -> dialogFecha(c)
+                    }
                 }
 
                 override fun onEditorAction(
-                    c: Contador, t: TextView, p1: Int, p2: KeyEvent
+                    c: Contador, t: TextView, p1: Int, p2: KeyEvent?
                 ): Boolean {
+                    when(t.id){
+                        R.id.editText2 ->{
+                            if (t.text.isNotEmpty()) {
+                                c.valor = t.text.toString().toDouble()
+                                inspeccionViewModel.updateContador(c)
+                            }
+                        }
+                        R.id.editText3 -> {
+                            if (t.text.isNotEmpty()) {
+                                c.comentario = t.text.toString()
+                                inspeccionViewModel.updateContador(c)
+                            }
+                        }
+                    }
                     return false
                 }
             })
@@ -74,6 +93,24 @@ class Inspeccion2Fragment : DaggerFragment() {
         inspeccionViewModel.getContadorById(inspeccionId).observe(viewLifecycleOwner) {
             contadorAdapter.addItems(it)
         }
+    }
+
+    private fun dialogFecha(n: Contador) {
+        val c = Calendar.getInstance()
+        val mYear = c.get(Calendar.YEAR)
+        val mMonth = c.get(Calendar.MONTH)
+        val mDay = c.get(Calendar.DAY_OF_MONTH)
+        val datePickerDialog =
+            DatePickerDialog(requireContext(), { _, year, monthOfYear, dayOfMonth ->
+                val month =
+                    if (((monthOfYear + 1) / 10) == 0) "0${monthOfYear + 1}" else "${monthOfYear + 1}"
+                val day =
+                    if (((dayOfMonth + 1) / 10) == 0) "0$dayOfMonth" else "$dayOfMonth"
+                val fecha = "$day/$month/$year"
+                n.fechaMuestra = fecha
+                inspeccionViewModel.updateContador(n)
+            }, mYear, mMonth, mDay)
+        datePickerDialog.show()
     }
 
     companion object {

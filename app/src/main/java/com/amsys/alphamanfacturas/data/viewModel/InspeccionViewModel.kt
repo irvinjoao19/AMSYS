@@ -159,4 +159,37 @@ internal constructor(private val roomRepository: AppRepository, private val retr
     fun getAspectoById(inspeccionId: Int): LiveData<List<Aspecto>> {
         return roomRepository.getAspectoById(inspeccionId)
     }
+
+    fun updatePuntoMedida(p: PuntoMedida) {
+        roomRepository.updatePuntoMedida(p)
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : CompletableObserver {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onError(e: Throwable) {}
+                override fun onComplete() {}
+            })
+    }
+
+    fun updateContador(c:Contador) {
+        roomRepository.updateContador(c)
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : CompletableObserver {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onError(e: Throwable) {}
+                override fun onComplete() {}
+            })
+    }
+
+    fun updateAspecto(a:Aspecto) {
+        roomRepository.updateAspecto(a)
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : CompletableObserver {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onError(e: Throwable) {}
+                override fun onComplete() {}
+            })
+    }
 }

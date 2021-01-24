@@ -7,15 +7,13 @@ import androidx.room.PrimaryKey
 open class PuntoMedida {
     @PrimaryKey(autoGenerate = true)
     var puntoMedidaId: Int = 0
+    var inspeccionId: Int = 0
     var equipoCodigo: String = ""
     var equipoNombre: String = ""
     var unidadMedida: String = ""
+    var puntoMedida: String = ""
     var nroMuestra: Int = 0
-
-
     var fechaMuestra: String = ""
     var valor: String = ""
     var comentario: String = ""
-
-
 }

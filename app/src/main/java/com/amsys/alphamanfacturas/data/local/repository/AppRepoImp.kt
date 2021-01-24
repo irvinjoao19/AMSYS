@@ -362,22 +362,20 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
 
     override fun insertSyncInspeccion(t: Any): Completable {
         return Completable.fromAction {
-
             val gson = Gson().toJson(t)
             Log.i("TAG", gson)
             val l: SyncInspeccion = Gson().fromJson(
                 gson, object : TypeToken<SyncInspeccion>() {}.type
             )
 
-
-//            var puntosMedida: List<PuntoMedida> = ArrayList()
-
-
+            val v1: List<PuntoMedida>? = l.puntosMedida
+            if (v1 != null) {
+                dataBase.puntoMedidaDao().insertPuntoMedidaListTask(v1)
+            }
             val v2: List<Contador>? = l.contadores
             if (v2 != null) {
                 dataBase.contadorDao().insertContadorListTask(v2)
             }
-
             val v3: List<Aspecto>? = l.aspectos
             if (v3 != null) {
                 dataBase.aspectoDao().insertAspectoListTask(v3)
@@ -386,14 +384,32 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
     }
 
     override fun getPuntoMedidaById(inspeccionId: Int): LiveData<List<PuntoMedida>> {
-        return dataBase.puntoMedidaDao().getPuntoMedidas()
+        return dataBase.puntoMedidaDao().getPuntoMedidas(inspeccionId)
     }
 
     override fun getContadorById(inspeccionId: Int): LiveData<List<Contador>> {
-        return dataBase.contadorDao().getContadors()
+        return dataBase.contadorDao().getContadors(inspeccionId)
     }
 
     override fun getAspectoById(inspeccionId: Int): LiveData<List<Aspecto>> {
-        return dataBase.aspectoDao().getAspectos()
+        return dataBase.aspectoDao().getAspectos(inspeccionId)
+    }
+
+    override fun updatePuntoMedida(p: PuntoMedida): Completable {
+        return Completable.fromAction {
+            dataBase.puntoMedidaDao().updatePuntoMedidaTask(p)
+        }
+    }
+
+    override fun updateContador(c: Contador): Completable {
+        return Completable.fromAction {
+            dataBase.contadorDao().updateContadorTask(c)
+        }
+    }
+
+    override fun updateAspecto(a: Aspecto): Completable {
+        return Completable.fromAction {
+            dataBase.aspectoDao().updateAspectoTask(a)
+        }
     }
 }

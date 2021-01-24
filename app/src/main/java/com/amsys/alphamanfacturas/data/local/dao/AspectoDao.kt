@@ -19,8 +19,8 @@ interface AspectoDao {
     @Delete
     fun deleteAspectoTask(c: Aspecto)
 
-    @Query("SELECT * FROM Aspecto")
-    fun getAspectos(): LiveData<List<Aspecto>>
+    @Query("SELECT * FROM Aspecto WHERE inspeccionId=:id")
+    fun getAspectos(id: Int): LiveData<List<Aspecto>>
 
     @Query("SELECT * FROM Aspecto")
     fun getAspectoTask(): Aspecto

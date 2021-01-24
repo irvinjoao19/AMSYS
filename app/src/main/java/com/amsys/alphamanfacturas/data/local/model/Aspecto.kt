@@ -8,6 +8,7 @@ open class Aspecto {
 
     @PrimaryKey(autoGenerate = true)
     var aspectoId: Int = 0
+    var inspeccionId:Int = 0
     var equipoCodigo: String = ""
     var equipoNombre: String = ""
     var aspecto: String = ""

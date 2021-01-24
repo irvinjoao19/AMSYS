@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.amsys.alphamanfacturas.R
 import com.amsys.alphamanfacturas.data.local.model.PuntoMedida
+import com.amsys.alphamanfacturas.helper.Util
 import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
 import kotlinx.android.synthetic.main.cardview_form_inspecciones.view.*
 
@@ -40,16 +41,20 @@ class PuntoMedidaAdapter(private val listener: OnItemClickListener.PuntoMedidaLi
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(a: PuntoMedida, listener: OnItemClickListener.PuntoMedidaListener) =
             with(itemView) {
-//                textView1.text = a.equipoCodigo
-//                textView2.text = String.format("Muestra N°%s", a.nroMuestra)
-//                textView3.text = a.equipoNombre
-//                textView4.text = a.aspecto
-//
-//                textView5.visibility = View.GONE
-//
-//                editText1.setText(a.fechaMuestra)
-//                editText2.setText(a.valor)
-//                editText3.setText(a.comentario)
+                textView1.text = a.equipoCodigo
+                textView2.text = String.format("Muestra N°%s", a.nroMuestra)
+                textView3.text = a.equipoNombre
+                Util.getTextStyleHtml(
+                    "<font style='color:#29A2E6'>UMS:</font> ${a.unidadMedida}",
+                    textView4
+                )
+                Util.getTextStyleHtml(
+                    "<font style='color:#29A2E6'>PM:</font> ${a.puntoMedida}",
+                    textView5
+                )
+                editText1.setText(a.fechaMuestra)
+                editText2.setText(a.valor)
+                editText3.setText(a.comentario)
 
                 editText1.setOnClickListener { v -> listener.onItemClick(a, v, adapterPosition) }
                 editText2.setOnEditorActionListener { editText, p1, p2 ->
@@ -60,5 +65,4 @@ class PuntoMedidaAdapter(private val listener: OnItemClickListener.PuntoMedidaLi
                 }
             }
     }
-
 }

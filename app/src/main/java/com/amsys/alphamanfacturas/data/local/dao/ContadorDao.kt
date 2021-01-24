@@ -19,8 +19,8 @@ interface ContadorDao {
     @Delete
     fun deleteContadorTask(c: Contador)
 
-    @Query("SELECT * FROM Contador")
-    fun getContadors(): LiveData<List<Contador>>
+    @Query("SELECT * FROM Contador WHERE inspeccionId=:id")
+    fun getContadors(id:Int): LiveData<List<Contador>>
 
     @Query("SELECT * FROM Contador")
     fun getContadorTask(): Contador

@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.amsys.alphamanfacturas.R
 import com.amsys.alphamanfacturas.data.local.model.Aspecto
+import com.amsys.alphamanfacturas.helper.Util
 import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
 import kotlinx.android.synthetic.main.cardview_form_inspecciones.view.*
 
@@ -44,11 +45,8 @@ class AspectoAdapter(private val listener: OnItemClickListener.AspectoListener) 
                 textView2.text = String.format("Muestra N° %s", a.nroMuestra)
                 textView3.text = a.equipoNombre
                 textView4.text = a.aspecto
-
                 textView5.visibility = View.GONE
-
                 editText1.setText(a.fechaMuestra)
-
                 editText2.setText(a.valor)
                 editText3.setText(a.comentario)
 
