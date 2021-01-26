@@ -9,7 +9,6 @@ import com.amsys.alphamanfacturas.data.local.repository.ApiError
 import com.amsys.alphamanfacturas.data.local.repository.AppRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.jakewharton.retrofit2.adapter.rxjava2.HttpException
 import io.reactivex.CompletableObserver
 import io.reactivex.Observable
 import io.reactivex.Observer
@@ -21,7 +20,6 @@ import io.reactivex.schedulers.Schedulers
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import java.io.IOException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -398,8 +396,8 @@ internal constructor(private val roomRepository: AppRepository, private val retr
     }
 
     fun sendRegistro(token: String, id: Int) {
-        val ots: Observable<Registro> = roomRepository.getRegistroByIdTask(id)
-        ots.flatMap { a ->
+        val register: Observable<Registro> = roomRepository.getRegistroByIdTask(id)
+        register.flatMap { a ->
             val body = MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart("tipoAviso", a.tipoAviso.toString())
                 .addFormDataPart("consecuenciaId", a.consecuenciaId.toString())

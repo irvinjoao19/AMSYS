@@ -21,12 +21,12 @@ import com.amsys.alphamanfacturas.data.viewModel.InspeccionViewModel
 import com.amsys.alphamanfacturas.data.viewModel.ViewModelFactory
 import com.amsys.alphamanfacturas.helper.Util
 import com.amsys.alphamanfacturas.ui.adapters.ViewPagerAdapter
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_form_aviso.*
 import javax.inject.Inject
 
 class FormInspeccionActivity : DaggerAppCompatActivity() {
-
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.send, menu)
@@ -36,7 +36,7 @@ class FormInspeccionActivity : DaggerAppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.save -> {
-//                confirmation(token, id)
+                confirmation(token, inspeccionId, usuarioId)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -120,14 +120,14 @@ class FormInspeccionActivity : DaggerAppCompatActivity() {
         }
     }
 
-    private fun load() {
+    private fun load(title: String) {
         builder = AlertDialog.Builder(ContextThemeWrapper(this, R.style.AppTheme))
         @SuppressLint("InflateParams") val view =
             LayoutInflater.from(this).inflate(R.layout.dialog_login, null)
         val textViewTitle: TextView = view.findViewById(R.id.textViewTitle)
         builder.setView(view)
 
-        textViewTitle.text = String.format("Sincronizando...")
+        textViewTitle.text = title
 
         dialog = builder.create()
         dialog!!.setCanceledOnTouchOutside(false)
@@ -147,7 +147,21 @@ class FormInspeccionActivity : DaggerAppCompatActivity() {
         val q = Query()
         q.userId = user
         q.inspeccionId = id
-        load()
+        load("Sincronizando...")
         inspeccionViewModel.sync(token, q)
+    }
+
+    private fun confirmation(token: String, id: Int, user: Int) {
+        MaterialAlertDialogBuilder(ContextThemeWrapper(this, R.style.AppTheme))
+            .setTitle("Mensaje")
+            .setMessage("Deseas enviar esta inspeccion ?")
+            .setPositiveButton("Enviar") { d, _ ->
+                load("Enviando...")
+                inspeccionViewModel.sendInspeccionFile(token, id, user, this)
+                d.dismiss()
+            }
+            .setNegativeButton("No") { d, _ ->
+                d.cancel()
+            }.show()
     }
 }

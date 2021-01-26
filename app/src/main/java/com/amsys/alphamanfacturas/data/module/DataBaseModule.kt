@@ -118,4 +118,9 @@ class DataBaseModule {
     internal fun provideContadorDao(appDataBase: AppDataBase): ContadorDao {
         return appDataBase.contadorDao()
     }
+
+    @Provides
+    internal fun provideInspeccionFileDao(appDataBase: AppDataBase): InspeccionFileDao {
+        return appDataBase.inspeccionFileDao()
+    }
 }

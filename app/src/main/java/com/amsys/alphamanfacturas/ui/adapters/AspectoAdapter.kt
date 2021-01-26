@@ -1,5 +1,6 @@
 package com.amsys.alphamanfacturas.ui.adapters
 
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,7 +48,26 @@ class AspectoAdapter(private val listener: OnItemClickListener.AspectoListener) 
                 textView4.text = a.aspecto
                 textView5.visibility = View.GONE
                 editText1.setText(a.fechaMuestra)
+
+
                 editText2.setText(a.valor)
+
+                when (a.tipoAspecto) {
+                    1 -> {
+                        if (a.tipoValor == 2) {
+                            editText2.inputType =
+                                InputType.TYPE_CLASS_NUMBER
+                            Util.editTextMaxLength(editText2, 1)
+                        }
+                    }
+                    2 -> {
+                        editText2.isFocusable = false
+                        editText2.setOnClickListener { v ->
+                            listener.onItemClick(a, v, adapterPosition)
+                        }
+                    }
+                }
+
                 editText3.setText(a.comentario)
 
                 editText1.setOnClickListener { v -> listener.onItemClick(a, v, adapterPosition) }

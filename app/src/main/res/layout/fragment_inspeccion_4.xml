@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.fragments.Inspeccion4Fragment">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnFiles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        android:text="@string/title_seleccionar_archivos"
+        android:textColor="@color/colorBlack"
+        app:backgroundTint="@color/colorWhite"
+        app:cardCornerRadius="10dp"
+        app:elevation="8dp"
+        app:icon="@drawable/ic_file"
+        app:iconGravity="end"
+        app:iconTint="@color/colorBlack" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:scrollbars="vertical" />
+</LinearLayout>

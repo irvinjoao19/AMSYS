@@ -27,10 +27,10 @@ import com.amsys.alphamanfacturas.data.local.model.*
         Inspeccion::class,
         PuntoMedida::class,
         Aspecto::class,
-        Contador::class
-
+        Contador::class,
+        InspeccionFile::class
     ],
-    version = 12, // version 1 en play store
+    version = 14, // version 1 en play store
     exportSchema = false
 )
 @TypeConverters(Converts::class)
@@ -55,6 +55,7 @@ abstract class AppDataBase : RoomDatabase() {
     abstract fun puntoMedidaDao(): PuntoMedidaDao
     abstract fun aspectoDao(): AspectoDao
     abstract fun contadorDao(): ContadorDao
+    abstract fun inspeccionFileDao(): InspeccionFileDao
 
     companion object {
         @Volatile

@@ -76,4 +76,8 @@ interface OnItemClickListener {
         fun onItemClick(a: Aspecto, v: View, position: Int)
         fun onEditorAction(c: Aspecto, t: TextView, p1: Int, p2: KeyEvent?): Boolean
     }
+
+    interface InspeccionFileListener {
+        fun onItemClick(f: InspeccionFile, v: View, position: Int)
+    }
 }

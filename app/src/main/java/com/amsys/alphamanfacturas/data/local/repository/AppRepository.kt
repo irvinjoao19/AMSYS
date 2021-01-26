@@ -1,5 +1,6 @@
 package com.amsys.alphamanfacturas.data.local.repository
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import com.amsys.alphamanfacturas.data.local.model.*
 import io.reactivex.Completable
@@ -79,9 +80,17 @@ interface AppRepository {
     fun getContadorById(inspeccionId: Int): LiveData<List<Contador>>
     fun getAspectoById(inspeccionId: Int): LiveData<List<Aspecto>>
 
-
     fun updatePuntoMedida(p: PuntoMedida): Completable
     fun updateContador(c: Contador): Completable
     fun updateAspecto(a: Aspecto): Completable
+    fun insertInspeccionFile(f: InspeccionFile): Completable
+    fun getInspeccionFiles(id: Int): LiveData<List<InspeccionFile>>
+    fun deleteFile(f: InspeccionFile, context: Context): Completable
+    fun getInspeccionTaskFile(id: Int): Observable<List<InspeccionFile>>
+    fun getInspeccionData(id: Int): Observable<SyncInspeccion>
+
+    // Save Inspeccion Registro
+    fun sendInspeccionFile(token: String, body: RequestBody): Observable<ResponseModel>
+    fun sendInspeccionData(token: String,  body: RequestBody): Observable<ResponseModel>
 
 }

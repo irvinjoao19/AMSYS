@@ -1,9 +1,11 @@
 package com.amsys.alphamanfacturas.data.local.repository
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import com.amsys.alphamanfacturas.data.local.model.*
 import com.amsys.alphamanfacturas.data.local.AppDataBase
+import com.amsys.alphamanfacturas.helper.Util
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.reactivex.Completable
@@ -411,5 +413,49 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
         return Completable.fromAction {
             dataBase.aspectoDao().updateAspectoTask(a)
         }
+    }
+
+    override fun insertInspeccionFile(f: InspeccionFile): Completable {
+        return Completable.fromAction {
+            dataBase.inspeccionFileDao().insertInspeccionFileTask(f)
+        }
+    }
+
+    override fun getInspeccionFiles(id: Int): LiveData<List<InspeccionFile>> {
+        return dataBase.inspeccionFileDao().getInspeccionFiles(id)
+    }
+
+    override fun deleteFile(f: InspeccionFile, context: Context): Completable {
+        return Completable.fromAction {
+            Util.deleteFile(f.url, context)
+            dataBase.inspeccionFileDao().deleteInspeccionFileTask(f)
+        }
+    }
+
+    override fun getInspeccionTaskFile(id: Int): Observable<List<InspeccionFile>> {
+        return Observable.create {
+            val list = dataBase.inspeccionFileDao().getInspeccionFilesTask(id)
+            it.onNext(list)
+            it.onComplete()
+        }
+    }
+
+    override fun getInspeccionData(id: Int): Observable<SyncInspeccion> {
+        return Observable.create {
+            val sync = SyncInspeccion()
+            sync.aspectos = dataBase.aspectoDao().getAspectosTask(id)
+            sync.contadores = dataBase.contadorDao().getContadoresTask(id)
+            sync.puntosMedida = dataBase.puntoMedidaDao().getPuntoMedidasTask(id)
+            it.onNext(sync)
+            it.onComplete()
+        }
+    }
+
+    override fun sendInspeccionFile(token: String, body: RequestBody): Observable<ResponseModel> {
+        return apiService.sendInspeccionFile(token, body)
+    }
+
+    override fun sendInspeccionData(token: String, body: RequestBody): Observable<ResponseModel> {
+        return apiService.sendInspeccion(token, body)
     }
 }

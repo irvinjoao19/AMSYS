@@ -27,4 +27,7 @@ interface AspectoDao {
 
     @Query("DELETE FROM Aspecto")
     fun deleteAll()
+
+    @Query("SELECT * FROM Aspecto WHERE inspeccionId=:id")
+    fun getAspectosTask(id: Int): List<Aspecto>
 }

@@ -14,6 +14,7 @@ import android.location.Location
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.text.Html
@@ -29,6 +30,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.exifinterface.media.ExifInterface
 import com.amsys.alphamanfacturas.R
+import com.amsys.alphamanfacturas.data.local.model.InspeccionFile
 import com.amsys.alphamanfacturas.ui.activities.LoginActivity
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -37,7 +39,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -56,9 +57,6 @@ import kotlin.math.*
 object Util {
 
     val messageToken: String = "Token expirado volver a iniciar sesión."
-    val FolderImg = "Dsige/Lds"
-    val UrlFoto = "http://190.117.104.122/WebApi_Itf/Imagen/"
-
     private var FechaActual: String? = ""
 
     private const val img_height_default = 800
@@ -152,24 +150,17 @@ object Util {
         return format.format(date)
     }
 
-    fun getHoraActual(): String {
+    private fun getHoraActual(): String {
         val date = Date()
         @SuppressLint("SimpleDateFormat") val format = SimpleDateFormat("HH:mm:ss aaa")
         return format.format(date)
     }
 
-    fun getFechaEditar(): String? {
+    fun getFechaFile(id: Int, user: Int, type: String): String {
         val date = Date()
         @SuppressLint("SimpleDateFormat") val format = SimpleDateFormat("ddMMyyyy_HHmmssSSSS")
-        FechaActual = format.format(date)
-        return FechaActual
-    }
-
-    fun getFechaActualForPhoto(id: String, tipo: Int): String {
-        val date = Date()
-        @SuppressLint("SimpleDateFormat") val format = SimpleDateFormat("ddMMyyyy_HHmmssSSSS")
-        FechaActual = format.format(date)
-        return id + "_" + tipo + "_" + FechaActual
+        format.format(date)
+        return String.format("%s_%s_%s%s", user, id, format.format(date), type)
     }
 
     inline fun <reified T> genericCastOrNull(anything: Any): T {
@@ -777,7 +768,7 @@ object Util {
         }
     }
 
-    fun deletePhoto(photo: String, context: Context) {
+    fun deleteFile(photo: String, context: Context) {
         val f = File(getFolder(context), photo)
         if (f.exists()) {
             f.delete()
@@ -1041,69 +1032,57 @@ object Util {
     }
 
     fun getFolderAdjunto(
-        file: String, context: Context, data: Intent
-    ): Completable {
-        return Completable.fromAction {
-            val imagepath = getFolder(context).toString() + "/" + file
-            val f = File(imagepath)
-            if (!f.exists()) {
-                try {
-                    val success = f.createNewFile()
-                    if (success) {
-                        Log.i("TAG", "FILE CREATED")
-                    }
-                    copyFile(File(getRealPathFromURI(context, data.data!!)), f)
-//                    shrinkBitmapOnlyReduceCamera2(imagepath)
-//                    getAngleImage(imagepath)
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
+        user: Int, id: Int, context: Context, data: Intent
+    ): Observable<InspeccionFile> {
+        return Observable.create {
+            val file = InspeccionFile()
+            data.data?.let { returnUri ->
+                file.type = context.contentResolver.getType(returnUri)!!
+                context.contentResolver.query(returnUri, null, null, null, null)
+            }?.use { cursor ->
+                val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+                cursor.moveToFirst()
+                file.name = cursor.getString(nameIndex)
+                file.size = cursor.getLong(sizeIndex)
             }
+
+            val type = file.name.substring(file.name.lastIndexOf("."))
+            val format = getFechaFile(user, id, type)
+            val f = File(getFolder(context), format)
+
+            val input = context.contentResolver.openInputStream(data.data!!) as FileInputStream
+            val out = FileOutputStream(f)
+            val inChannel = input.channel
+            val outChannel = out.channel
+            inChannel.transferTo(0, inChannel.size(), outChannel)
+            input.close()
+            out.close()
+
+            file.inspeccionId = id
+            file.usuarioId = user
+            file.url = format
+            it.onNext(file)
+            it.onComplete()
         }
     }
+
+    @Throws(IOException::class)
+    private fun createImageFile(name: String, type: String, file: File): File {
+        return File.createTempFile(
+            name, /* prefix */
+            type, /* suffix */
+            file /* directory */
+        ).apply {
+            // Save a file: path for use with ACTION_VIEW intents
+            absolutePath
+        }
+    }
+
 
     fun editTextMaxLength(input: TextInputEditText, i: Int) {
         input.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(i))
     }
-
-
-    // execute services
-//    fun executeRepartoWork(context: Context) {
-//        val downloadConstraints = Constraints.Builder()
-//            .setRequiresCharging(true)
-//            .setRequiredNetworkType(NetworkType.CONNECTED)
-//            .build()
-//        // Define the input data for work manager
-////        val data = Data.Builder()
-////        data.putInt("tipo", tipo)
-//
-//        // Create an one time work request
-//        val downloadImageWork = OneTimeWorkRequest
-//            .Builder(RepartoWork::class.java)
-////          .setInputData(data.build())
-////          .setConstraints(downloadConstraints)
-//            .build()
-//        WorkManager.getInstance(context).enqueue((downloadImageWork))
-//    }
-//
-//    fun executeGpsWork(context: Context) {
-//        val locationWorker =
-//            PeriodicWorkRequestBuilder<GpsWork>(
-//                15, TimeUnit.MINUTES
-//            )
-//                .build()
-//        WorkManager
-//            .getInstance(context)
-//            .enqueueUniquePeriodicWork(
-//                "Gps-Work",
-//                ExistingPeriodicWorkPolicy.KEEP, locationWorker
-//            )
-//    }
-//
-//    fun closeGpsWork(context: Context) {
-//        WorkManager.getInstance(context).cancelAllWorkByTag("Gps-Work")
-//    }
-
 
     fun dialogMensajeLogin(activity: Activity) {
         val dialog = MaterialAlertDialogBuilder(activity)
@@ -1115,9 +1094,23 @@ object Util {
                 activity.startActivity(intent)
                 activity.finish()
                 dialog.dismiss()
-
             }
         dialog.show()
     }
 
+    fun getStringSizeLengthFile(size: Long): String? {
+        val df = DecimalFormat("0.00")
+        val sizeKb = 1024.0f
+        val sizeMb = sizeKb * sizeKb
+        val sizeGb = sizeMb * sizeKb
+        val sizeTerra = sizeGb * sizeKb
+        return when {
+            size < sizeMb -> df.format(size / sizeKb.toDouble()) + " Kb"
+            size < sizeGb -> df.format(
+                size / sizeMb.toDouble()
+            ) + " Mb"
+            size < sizeTerra -> df.format(size / sizeGb.toDouble()) + " Gb"
+            else -> ""
+        }
+    }
 }

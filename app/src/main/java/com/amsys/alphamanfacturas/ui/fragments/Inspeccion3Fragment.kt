@@ -1,26 +1,35 @@
 package com.amsys.alphamanfacturas.ui.fragments
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.amsys.alphamanfacturas.R
 import com.amsys.alphamanfacturas.data.local.model.Aspecto
-import com.amsys.alphamanfacturas.data.local.model.Contador
+import com.amsys.alphamanfacturas.data.local.model.Query
 import com.amsys.alphamanfacturas.data.viewModel.InspeccionViewModel
 import com.amsys.alphamanfacturas.data.viewModel.ViewModelFactory
 import com.amsys.alphamanfacturas.ui.adapters.AspectoAdapter
+import com.amsys.alphamanfacturas.ui.adapters.ComboAdapter
 import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
+import com.google.android.material.textfield.TextInputLayout
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_inspeccion_3.*
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -61,19 +70,20 @@ class Inspeccion3Fragment : DaggerFragment() {
                 override fun onItemClick(a: Aspecto, v: View, position: Int) {
                     when (v.id) {
                         R.id.editText1 -> dialogFecha(a)
+                        R.id.editText2 -> spinnerDialog(a)
                     }
                 }
 
                 override fun onEditorAction(
                     c: Aspecto, t: TextView, p1: Int, p2: KeyEvent?
                 ): Boolean {
-                    when(t.id){
-                       // R.id.editText2 ->{
-                         //   if (t.text.isNotEmpty()) {
-                           //     c.valor = t.text.toString()
-                           //     inspeccionViewModel.updatePuntoMedida(c)
-                           // }
-                       // }
+                    when (t.id) {
+                        R.id.editText2 -> {
+                            if (t.text.isNotEmpty()) {
+                                c.valor = t.text.toString()
+                                inspeccionViewModel.updateAspecto(c)
+                            }
+                        }
                         R.id.editText3 -> {
                             if (t.text.isNotEmpty()) {
                                 c.comentario = t.text.toString()
@@ -96,8 +106,50 @@ class Inspeccion3Fragment : DaggerFragment() {
         }
     }
 
+    private fun spinnerDialog(a: Aspecto) {
+        val builder = AlertDialog.Builder(ContextThemeWrapper(context, R.style.AppTheme))
+        @SuppressLint("InflateParams") val v =
+            LayoutInflater.from(context).inflate(R.layout.dialog_combo, null)
+        val progressBar: ProgressBar = v.findViewById(R.id.progressBar)
+        val textViewTitulo: TextView = v.findViewById(R.id.textViewTitulo)
+        val recyclerView: RecyclerView = v.findViewById(R.id.recyclerView)
+        val layoutSearch: TextInputLayout = v.findViewById(R.id.layoutSearch)
+        val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context)
+        progressBar.visibility = View.GONE
+        layoutSearch.visibility = View.GONE
+        builder.setView(v)
+        val dialog = builder.create()
+        dialog.show()
+        recyclerView.itemAnimator = DefaultItemAnimator()
+        recyclerView.layoutManager = layoutManager
+        recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                recyclerView.context, DividerItemDecoration.VERTICAL
+            )
+        )
+        textViewTitulo.text = String.format("Tipo de Aspectos")
 
-    private fun dialogFecha(a:Aspecto) {
+
+        val comboAdapter =
+            ComboAdapter(object : OnItemClickListener.ComboListener {
+                override fun onItemClick(q: Query, v: View, position: Int) {
+                    a.valor = q.name
+                    inspeccionViewModel.updateAspecto(a)
+                    dialog.dismiss()
+                }
+            })
+        recyclerView.adapter = comboAdapter
+
+        var enum = 0
+        val lista: ArrayList<Query> = ArrayList()
+        a.valores.forEach {
+            lista.add(Query(enum++, it))
+        }
+        comboAdapter.addItems(lista)
+    }
+
+
+    private fun dialogFecha(a: Aspecto) {
         val c = Calendar.getInstance()
         val mYear = c.get(Calendar.YEAR)
         val mMonth = c.get(Calendar.MONTH)

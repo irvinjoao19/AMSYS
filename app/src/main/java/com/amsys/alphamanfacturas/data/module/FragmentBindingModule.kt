@@ -46,5 +46,8 @@ abstract class FragmentBindingModule {
 
         @ContributesAndroidInjector
         internal abstract fun providInspeccion3Fragment(): Inspeccion3Fragment
+
+        @ContributesAndroidInjector
+        internal abstract fun providInspeccion4Fragment(): Inspeccion4Fragment
     }
 }

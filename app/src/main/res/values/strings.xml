@@ -58,4 +58,5 @@
     <string name="title_pm_t1">PM: T1</string>
     <string name="title_fecha_muestra">Fecha de muestra:</string>
     <string name="title_valor_muestra">Valor de muestra:</string>
+    <string name="title_seleccionar_archivos">SELECCIONAR ARCHIVOS</string>
 </resources>

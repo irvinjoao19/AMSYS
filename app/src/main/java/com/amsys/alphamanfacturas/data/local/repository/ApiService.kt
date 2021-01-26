@@ -83,4 +83,20 @@ interface ApiService {
         @Body body: RequestBody
     ): Observable<ResponseModel>
 
+    @Headers("Cache-Control: no-cache")
+    @POST("inspeccion/guardarfoto")
+    fun sendInspeccionFile(
+        @Header("Authorization") token: String,
+        @Body body: RequestBody
+    ): Observable<ResponseModel>
+
+
+    @Headers("Cache-Control: no-cache")
+    @POST("inspeccion/guardar")
+    fun sendInspeccion(
+        @Header("Authorization") token: String,
+        @Body body: RequestBody
+    ): Observable<ResponseModel>
+
+
 }

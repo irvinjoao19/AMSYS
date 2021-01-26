@@ -1,5 +1,7 @@
 package com.amsys.alphamanfacturas.data.viewModel
 
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,13 +12,16 @@ import com.amsys.alphamanfacturas.data.local.repository.AppRepository
 import com.amsys.alphamanfacturas.helper.Util
 import com.google.gson.Gson
 import io.reactivex.CompletableObserver
+import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
+import java.io.File
 import okhttp3.MediaType
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -171,7 +176,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
             })
     }
 
-    fun updateContador(c:Contador) {
+    fun updateContador(c: Contador) {
         roomRepository.updateContador(c)
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
@@ -182,7 +187,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
             })
     }
 
-    fun updateAspecto(a:Aspecto) {
+    fun updateAspecto(a: Aspecto) {
         roomRepository.updateAspecto(a)
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
@@ -190,6 +195,118 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                 override fun onSubscribe(d: Disposable) {}
                 override fun onError(e: Throwable) {}
                 override fun onComplete() {}
+            })
+    }
+
+    fun getFolderAdjunto(user: Int, id: Int, context: Context, data: Intent) {
+        Util.getFolderAdjunto(user, id, context, data)
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<InspeccionFile> {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onComplete() {}
+                override fun onNext(t: InspeccionFile) {
+                    insertInspeccionFile(t)
+                }
+
+                override fun onError(e: Throwable) {
+                    mensajeError.value = e.toString()
+                }
+            })
+    }
+
+    private fun insertInspeccionFile(f: InspeccionFile) {
+        roomRepository.insertInspeccionFile(f)
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : CompletableObserver {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onError(e: Throwable) {}
+                override fun onComplete() {}
+            })
+    }
+
+    fun getInspeccionFiles(id: Int): LiveData<List<InspeccionFile>> {
+        return roomRepository.getInspeccionFiles(id)
+    }
+
+    fun deleteFile(f: InspeccionFile, context: Context) {
+        roomRepository.deleteFile(f, context)
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : CompletableObserver {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onError(e: Throwable) {}
+                override fun onComplete() {}
+            })
+    }
+
+    fun sendInspeccionFile(token: String, id: Int, user: Int, context: Context) {
+        val files = roomRepository.getInspeccionTaskFile(id)
+        files.flatMap { observable ->
+            Observable.fromIterable(observable).flatMap { a ->
+                val b = MultipartBody.Builder()
+                b.setType(MultipartBody.FORM)
+                b.addFormDataPart("userId", user.toString())
+                val file = File(Util.getFolder(context), a.url)
+                if (file.exists()) {
+                    b.addFormDataPart(
+                        "foto", file.name,
+                        RequestBody.create(
+                            MediaType.parse("multipart/form-data"), file
+                        )
+                    )
+                }
+                val body = b.build()
+                Observable.zip(
+                    Observable.just(a), roomRepository.sendInspeccionFile(token, body),
+                    { _, mensaje -> mensaje })
+            }
+        }.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<ResponseModel> {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onComplete() {
+                    sendInspeccionData(token, id)
+                }
+
+                override fun onNext(t: ResponseModel) {
+                    if (t.response.codigo != "0000") {
+                        mensajeError.value = "${t.response.descripcion} \n${t.response.comentario}"
+                        return
+                    }
+                }
+
+                override fun onError(t: Throwable) {
+                    logout()
+                }
+            })
+    }
+
+    private fun sendInspeccionData(token: String, id: Int) {
+        roomRepository.getInspeccionData(id).flatMap { data ->
+            val json = Gson().toJson(data)
+            Log.i("TAG", json)
+            val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+            Observable.zip(
+                Observable.just(data),
+                roomRepository.sendInspeccionData(token, body), { _, it -> it })
+        }.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<ResponseModel> {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onComplete() {}
+                override fun onNext(t: ResponseModel) {
+                    if (t.response.codigo == "0000") {
+                        mensajeSuccess.value = t.response.descripcion
+                    } else {
+                        mensajeError.value = "${t.response.descripcion} \n${t.response.comentario}"
+                    }
+                }
+
+                override fun onError(t: Throwable) {
+                    logout()
+                }
             })
     }
 }
