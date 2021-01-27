@@ -133,6 +133,7 @@ class Aviso4Fragment : DaggerFragment(), View.OnClickListener {
                 val paradaAdapter =
                     ParadaAdapter(object : OnItemClickListener.ParadaListener {
                         override fun onItemClick(p: Parada, v: View, position: Int) {
+                            editText3.setText(p.nombre)
                             r.claseParadaId = p.claseParadaId
                             r.claseParadaNombre = p.nombre
                             avisoViewModel.validateAviso4(r)
@@ -154,6 +155,7 @@ class Aviso4Fragment : DaggerFragment(), View.OnClickListener {
                 val tipoParadaAdapter =
                     TipoParadaAdapter(object : OnItemClickListener.TipoParadaListener {
                         override fun onItemClick(p: TipoParada, v: View, position: Int) {
+                            editText4.setText(p.nombre)
                             r.tipoParadaId = p.tipoParadaId
                             r.tipoParadaNombre = p.nombre
                             avisoViewModel.validateAviso4(r)
@@ -174,6 +176,7 @@ class Aviso4Fragment : DaggerFragment(), View.OnClickListener {
                 val subTipoParadaAdapter =
                     SubTipoParadaAdapter(object : OnItemClickListener.SubTipoParadaListener {
                         override fun onItemClick(p: SubTipoParada, v: View, position: Int) {
+                            editText5.setText(p.nombre)
                             r.subTipoParadaId = p.subTipoParadaId
                             r.subTipoParadaNombre = p.nombre
                             avisoViewModel.validateAviso4(r)
@@ -209,9 +212,11 @@ class Aviso4Fragment : DaggerFragment(), View.OnClickListener {
                     val result = String.format("%s %s:%s", fecha, hour, minutes)
 
                     if (tipo == 1) {
+                        editText1.setText(result)
                         r.inicioParada = result
                         avisoViewModel.validateAviso4(r)
                     } else {
+                        editText2.setText(result)
                         r.finParada = result
                         avisoViewModel.validateAviso4(r)
                     }

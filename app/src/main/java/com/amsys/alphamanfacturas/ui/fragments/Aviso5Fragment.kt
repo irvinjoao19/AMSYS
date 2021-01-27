@@ -131,6 +131,7 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener,
                 val modoFallaAdapter =
                     ModoFallaAdapter(object : OnItemClickListener.ModoFallaListener {
                         override fun onItemClick(m: ModoFalla, v: View, position: Int) {
+                            editText1.setText(m.nombre)
                             r.modoFallaId = m.modoFallaId
                             r.modoFallaNombre = m.nombre
                             avisoViewModel.validateAviso5(r)
@@ -147,6 +148,7 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener,
                 val deteccionAdapter =
                     DeteccionAdapter(object : OnItemClickListener.DeteccionListener {
                         override fun onItemClick(d: Deteccion, v: View, position: Int) {
+                            editText2.setText(d.nombre)
                             r.metodoDeteccionId = d.metodoDeteccionId
                             r.metodoDeteccionNombre = d.nombre
                             avisoViewModel.validateAviso5(r)
@@ -170,6 +172,7 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener,
                 val mecanismoAdapter =
                     MecanismoFallaAdapter(object : OnItemClickListener.MecanismoFallaListener {
                         override fun onItemClick(m: MecanismoFalla, v: View, position: Int) {
+                            editText3.setText(m.nombre)
                             r.mecanismoFallaId = m.mecanismoFallaId
                             r.mecanismoFallaNombre = m.nombre
                             avisoViewModel.validateAviso5(r)
@@ -193,6 +196,7 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener,
                 val impactoAdapter =
                     ImpactoAdapter(object : OnItemClickListener.ImpactoListener {
                         override fun onItemClick(m: Impacto, v: View, position: Int) {
+                            editText4.setText(m.nombre)
                             r.impactoId = m.impactoId
                             r.impactoNombre = m.nombre
                             avisoViewModel.validateAviso5(r)
@@ -216,6 +220,7 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener,
                 val causaFallaAdapter =
                     CausaFallaAdapter(object : OnItemClickListener.CausaFallaListener {
                         override fun onItemClick(c: CausaFalla, v: View, position: Int) {
+                            editText5.setText(c.nombre)
                             r.causaId = c.causaFallaId
                             r.causaNombre = c.nombre
                             avisoViewModel.validateAviso5(r)

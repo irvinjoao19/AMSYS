@@ -135,6 +135,7 @@ class Aviso3Fragment : DaggerFragment(), View.OnClickListener,
                 val modoFallaAdapter =
                     ModoFallaAdapter(object : OnItemClickListener.ModoFallaListener {
                         override fun onItemClick(m: ModoFalla, v: View, position: Int) {
+                            editText1.setText(m.nombre)
                             r.modoFallaId = m.modoFallaId
                             r.modoFallaOriginNombre = m.nombre
                             avisoViewModel.validateAviso3(r)
@@ -150,6 +151,7 @@ class Aviso3Fragment : DaggerFragment(), View.OnClickListener,
                 val deteccionAdapter =
                     DeteccionAdapter(object : OnItemClickListener.DeteccionListener {
                         override fun onItemClick(d: Deteccion, v: View, position: Int) {
+                            editText2.setText(d.nombre)
                             r.metodoDeteccionOrigenId = d.metodoDeteccionId
                             r.metodoDeteccionOrigenNombre = d.nombre
                             avisoViewModel.validateAviso3(r)
@@ -176,6 +178,7 @@ class Aviso3Fragment : DaggerFragment(), View.OnClickListener,
                 val day =
                     if (((dayOfMonth + 1) / 10) == 0) "0$dayOfMonth" else "$dayOfMonth"
                 val fecha = "$day/$month/$year"
+                editText4.setText(fecha)
                 r.fecha = fecha
                 avisoViewModel.validateAviso3(r)
             }, mYear, mMonth, mDay)
@@ -194,7 +197,7 @@ class Aviso3Fragment : DaggerFragment(), View.OnClickListener,
     }
 
     override fun onEditorAction(t: TextView, p1: Int, p2: KeyEvent?): Boolean {
-        if(t.text.isNotEmpty()){
+        if (t.text.isNotEmpty()) {
             r.comentarioRegistro = editText5.text.toString()
             avisoViewModel.validateAviso3(r)
         }

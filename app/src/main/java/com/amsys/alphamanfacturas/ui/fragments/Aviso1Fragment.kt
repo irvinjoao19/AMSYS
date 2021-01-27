@@ -148,6 +148,7 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener, TextView.OnEditor
                 val consecuenciaAdapter =
                     ConsecuenciaAdapter(object : OnItemClickListener.ConsecuenciaListener {
                         override fun onItemClick(c: Consecuencia, v: View, position: Int) {
+                            editText2.setText(c.nombre)
                             r.consecuenciaId = c.consecuenciaId
                             r.consecuenciaIdNombre = c.nombre
                             avisoViewModel.validateAviso1(r)
@@ -170,6 +171,7 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener, TextView.OnEditor
                 val prioridadAdapter =
                     PrioridadAdapter(object : OnItemClickListener.PrioridadListener {
                         override fun onItemClick(p: Prioridad, v: View, position: Int) {
+                            editText4.setText(p.nombre)
                             r.prioridadId = p.prioridadId
                             r.prioridadIdNombre = p.nombre
                             avisoViewModel.validateAviso1(r)

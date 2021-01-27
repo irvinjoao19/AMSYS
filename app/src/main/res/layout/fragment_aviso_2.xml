@@ -42,8 +42,8 @@
                     android:id="@+id/editText1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_codigo"
-                    android:inputType="text" />
+                    android:focusable="false"
+                    android:hint="@string/hint_codigo" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -63,8 +63,8 @@
                     android:id="@+id/editText2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_nombre"
-                    android:inputType="text" />
+                    android:focusable="false"
+                    android:hint="@string/hint_nombre" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -95,8 +95,8 @@
                     android:id="@+id/editText3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_codigo"
-                    android:inputType="text" />
+                    android:focusable="false"
+                    android:hint="@string/hint_codigo" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -116,8 +116,8 @@
                     android:id="@+id/editText4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_nombre"
-                    android:inputType="text" />
+                    android:focusable="false"
+                    android:hint="@string/hint_nombre" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -148,8 +148,8 @@
                     android:id="@+id/editText5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_codigo"
-                    android:inputType="text" />
+                    android:focusable="false"
+                    android:hint="@string/hint_codigo" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -169,8 +169,8 @@
                     android:id="@+id/editText6"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_nombre"
-                    android:inputType="text" />
+                    android:focusable="false"
+                    android:hint="@string/hint_nombre" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -202,7 +202,7 @@
                     android:id="@+id/editText7"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text" />
+                    android:focusable="false" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -255,8 +255,8 @@
                     android:id="@+id/editText9"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_nombre"
-                    android:inputType="text" />
+                    android:focusable="false"
+                    android:hint="@string/hint_nombre" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -287,7 +287,7 @@
                     android:id="@+id/editText10"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text" />
+                    android:focusable="false" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
