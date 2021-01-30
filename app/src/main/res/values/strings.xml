@@ -2,7 +2,7 @@
     <string name="app_name">AMSYS</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="singin">Acceder</string>
+    <string name="singin">Ingresar</string>
     <string name="title_pass">Contraseña:</string>
     <string name="title_usuario">Usuario:</string>
     <string name="img">description</string>
@@ -59,4 +59,7 @@
     <string name="title_fecha_muestra">Fecha de muestra:</string>
     <string name="title_valor_muestra">Valor de muestra:</string>
     <string name="title_seleccionar_archivos">SELECCIONAR ARCHIVOS</string>
+    <string name="title_logo_alpha">AMSYS - Alphamanufacturas</string>
+    <string name="title_avisos">Avisos</string>
+    <string name="title_inspeccion">Inspección</string>
 </resources>

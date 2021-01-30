@@ -31,7 +31,6 @@
         android:text="@string/version"
         android:textAlignment="center"
         android:textColor="@color/colorBlack"
-        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -122,9 +121,24 @@
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:contentDescription="@string/img"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonEnviar"
         app:srcCompat="@drawable/logo_app" />
+
+
+    <TextView
+        android:id="@+id/textViewLogo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"
+        android:text="@string/title_logo_alpha"
+        android:textAlignment="center"
+        android:textColor="@color/colorBlack"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewLogo" />
 </androidx.constraintlayout.widget.ConstraintLayout>

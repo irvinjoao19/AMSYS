@@ -104,7 +104,7 @@ class Inspeccion4Fragment : DaggerFragment(), View.OnClickListener {
     override fun onClick(v: View) {
         val i = Intent(Intent.ACTION_GET_CONTENT)
         i.type = "*/*"
-//        i.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
+        i.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
         startActivityForResult(i, Permission.GALERY_REQUEST)
     }
 

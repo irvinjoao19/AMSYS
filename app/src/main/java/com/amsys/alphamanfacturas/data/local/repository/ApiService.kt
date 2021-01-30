@@ -98,5 +98,12 @@ interface ApiService {
         @Body body: RequestBody
     ): Observable<ResponseModel>
 
+    @Headers("Cache-Control: no-cache")
+    @POST("principal/reporte")
+    fun getReporteGeneral(
+        @Header("Authorization") token: String,
+        @Body body: RequestBody
+    ): Observable<ResponseModel>
+
 
 }

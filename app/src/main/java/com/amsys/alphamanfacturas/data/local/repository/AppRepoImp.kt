@@ -458,4 +458,11 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
     override fun sendInspeccionData(token: String, body: RequestBody): Observable<ResponseModel> {
         return apiService.sendInspeccion(token, body)
     }
+
+    override fun getReporte(token: String, q: Query): Observable<ResponseModel> {
+        val json = Gson().toJson(q)
+        Log.i("TAG", json)
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return apiService.getReporteGeneral(token, body)
+    }
 }

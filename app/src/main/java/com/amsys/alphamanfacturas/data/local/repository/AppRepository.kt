@@ -93,4 +93,6 @@ interface AppRepository {
     fun sendInspeccionFile(token: String, body: RequestBody): Observable<ResponseModel>
     fun sendInspeccionData(token: String,  body: RequestBody): Observable<ResponseModel>
 
+    // Reporte
+    fun getReporte(token:String,q:Query) : Observable<ResponseModel>
 }
