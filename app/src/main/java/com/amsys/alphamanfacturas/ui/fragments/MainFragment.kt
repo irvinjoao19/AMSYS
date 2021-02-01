@@ -1,11 +1,13 @@
 package com.amsys.alphamanfacturas.ui.fragments
 
 import android.graphics.Color
+import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.amsys.alphamanfacturas.R
@@ -15,6 +17,7 @@ import com.amsys.alphamanfacturas.data.viewModel.ReporteViewModel
 import com.amsys.alphamanfacturas.data.viewModel.ViewModelFactory
 import com.amsys.alphamanfacturas.helper.PercentFormat
 import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.charts.Chart
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.PieData
@@ -72,13 +75,13 @@ class MainFragment : DaggerFragment(), OnChartValueSelectedListener,
 
         reporteViewModel.getReporte(token, q)
         reporteViewModel.avisos.observe(viewLifecycleOwner) {
-            if (it != null){
+            if (it != null) {
                 setData(anyAvisos, it)
             }
         }
 
         reporteViewModel.inspecciones.observe(viewLifecycleOwner) {
-            if (it != null){
+            if (it != null) {
                 setData(anyInspeccion, it)
             }
         }
@@ -120,21 +123,27 @@ class MainFragment : DaggerFragment(), OnChartValueSelectedListener,
     private fun setChartConfiguration(anyPie: PieChart) {
         anyPie.setUsePercentValues(true)
         anyPie.description.isEnabled = false
+        anyPie.description.textSize = 21f
+
         anyPie.setExtraOffsets(5f, 10f, 5f, 5f)
         anyPie.dragDecelerationFrictionCoef = 0.95f
-        anyPie.isDrawHoleEnabled = false
+
+        anyPie.isDrawHoleEnabled = true
         anyPie.setHoleColor(Color.WHITE)
         anyPie.setTransparentCircleColor(Color.WHITE)
         anyPie.setTransparentCircleAlpha(110)
-        anyPie.holeRadius = 0f
-        anyPie.transparentCircleRadius = 0f
+        anyPie.holeRadius = 48f
+        anyPie.transparentCircleRadius = 31f
+
         anyPie.setDrawCenterText(true)
-        anyPie.rotationAngle = 0f
-        anyPie.isRotationEnabled = false
+        anyPie.rotationAngle = 390f
+        anyPie.isRotationEnabled = true
         anyPie.isHighlightPerTapEnabled = true
         anyPie.setOnChartValueSelectedListener(this)
         anyPie.animateY(1400, Easing.EaseInOutQuad)
         anyPie.legend.isEnabled = false
+
+        anyPie.setEntryLabelColor(Color.BLACK)
     }
 
     private fun setData(anyPie: PieChart, list: List<Reporte>) {
@@ -152,19 +161,16 @@ class MainFragment : DaggerFragment(), OnChartValueSelectedListener,
 
         val dataSet = PieDataSet(entries, "Aviso")
         dataSet.setDrawIcons(false)
-        dataSet.sliceSpace = 3f
-        dataSet.iconsOffset = MPPointF(0f, 40f)
-        dataSet.selectionShift = 5f
 
-
+        dataSet.valueLinePart1OffsetPercentage = 85f
+        dataSet.valueTextColor = Color.BLACK
+        dataSet.xValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
         dataSet.colors = colors
+
         val data = PieData(dataSet)
         data.setValueFormatter(PercentFormat(total, anyPie))
         data.setValueTextSize(14f)
-        data.setValueTextColor(Color.WHITE)
-
         anyPie.data = data
-
         // undo all highlights
         anyPie.setUsePercentValues(true)
         anyPie.highlightValues(null)
