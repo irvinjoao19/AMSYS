@@ -62,4 +62,5 @@
     <string name="title_logo_alpha">AMSYS - Alphamanufacturas</string>
     <string name="title_avisos">Avisos</string>
     <string name="title_inspeccion">Inspección</string>
+    <string name="required">(*)</string>
 </resources>

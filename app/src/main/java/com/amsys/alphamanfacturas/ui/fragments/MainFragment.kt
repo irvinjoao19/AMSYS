@@ -1,13 +1,11 @@
 package com.amsys.alphamanfacturas.ui.fragments
 
 import android.graphics.Color
-import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.amsys.alphamanfacturas.R
@@ -17,15 +15,14 @@ import com.amsys.alphamanfacturas.data.viewModel.ReporteViewModel
 import com.amsys.alphamanfacturas.data.viewModel.ViewModelFactory
 import com.amsys.alphamanfacturas.helper.PercentFormat
 import com.github.mikephil.charting.animation.Easing
-import com.github.mikephil.charting.charts.Chart
 import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
-import com.github.mikephil.charting.utils.MPPointF
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_main.*
 import javax.inject.Inject
@@ -70,8 +67,8 @@ class MainFragment : DaggerFragment(), OnChartValueSelectedListener,
 
         q.userId = usuarioId
 
-        setChartConfiguration(anyAvisos)
-        setChartConfiguration(anyInspeccion)
+        setChartConfiguration(anyAvisos,"Avisos")
+        setChartConfiguration(anyInspeccion,"Inspección")
 
         reporteViewModel.getReporte(token, q)
         reporteViewModel.avisos.observe(viewLifecycleOwner) {
@@ -120,7 +117,7 @@ class MainFragment : DaggerFragment(), OnChartValueSelectedListener,
         Log.i("PieChart", "nothing selected")
     }
 
-    private fun setChartConfiguration(anyPie: PieChart) {
+    private fun setChartConfiguration(anyPie: PieChart, title: String) {
         anyPie.setUsePercentValues(true)
         anyPie.description.isEnabled = false
         anyPie.description.textSize = 21f
@@ -133,17 +130,28 @@ class MainFragment : DaggerFragment(), OnChartValueSelectedListener,
         anyPie.setTransparentCircleColor(Color.WHITE)
         anyPie.setTransparentCircleAlpha(110)
         anyPie.holeRadius = 48f
-        anyPie.transparentCircleRadius = 31f
+        anyPie.transparentCircleRadius = 50f
 
         anyPie.setDrawCenterText(true)
+        anyPie.centerText = title
         anyPie.rotationAngle = 390f
         anyPie.isRotationEnabled = true
         anyPie.isHighlightPerTapEnabled = true
         anyPie.setOnChartValueSelectedListener(this)
         anyPie.animateY(1400, Easing.EaseInOutQuad)
-        anyPie.legend.isEnabled = false
 
         anyPie.setEntryLabelColor(Color.BLACK)
+        anyPie.setDrawEntryLabels(false)
+
+        anyPie.legend.isEnabled = true
+        val l: Legend = anyPie.legend
+        l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+        l.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+        l.orientation = Legend.LegendOrientation.HORIZONTAL
+        l.setDrawInside(false)
+        l.xEntrySpace = 7f
+        l.yEntrySpace = 0f
+        l.yOffset = 0f
     }
 
     private fun setData(anyPie: PieChart, list: List<Reporte>) {
@@ -159,7 +167,7 @@ class MainFragment : DaggerFragment(), OnChartValueSelectedListener,
             }
         }
 
-        val dataSet = PieDataSet(entries, "Aviso")
+        val dataSet = PieDataSet(entries, "")
         dataSet.setDrawIcons(false)
 
         dataSet.valueLinePart1OffsetPercentage = 85f

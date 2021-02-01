@@ -2,6 +2,7 @@ package com.amsys.alphamanfacturas.ui.fragments
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -24,6 +25,7 @@ import com.amsys.alphamanfacturas.data.viewModel.ViewModelFactory
 import com.amsys.alphamanfacturas.ui.adapters.AspectoAdapter
 import com.amsys.alphamanfacturas.ui.adapters.ComboAdapter
 import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
+import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_inspeccion_3.*
@@ -69,8 +71,14 @@ class Inspeccion3Fragment : DaggerFragment() {
             AspectoAdapter(object : OnItemClickListener.AspectoListener {
                 override fun onItemClick(a: Aspecto, v: View, position: Int) {
                     when (v.id) {
-                        R.id.editText1 -> dialogFecha(a)
-                        R.id.editText2 -> spinnerDialog(a)
+                        R.id.editText1 -> {
+                            val input: TextInputEditText = v.findViewById(R.id.editText1)
+                            dialogFecha(a, input)
+                        }
+                        R.id.editText2 -> {
+                            val input: TextInputEditText = v.findViewById(R.id.editText2)
+                            spinnerDialog(a, input)
+                        }
                     }
                 }
 
@@ -106,7 +114,7 @@ class Inspeccion3Fragment : DaggerFragment() {
         }
     }
 
-    private fun spinnerDialog(a: Aspecto) {
+    private fun spinnerDialog(a: Aspecto, input: TextInputEditText) {
         val builder = AlertDialog.Builder(ContextThemeWrapper(context, R.style.AppTheme))
         @SuppressLint("InflateParams") val v =
             LayoutInflater.from(context).inflate(R.layout.dialog_combo, null)
@@ -133,6 +141,7 @@ class Inspeccion3Fragment : DaggerFragment() {
         val comboAdapter =
             ComboAdapter(object : OnItemClickListener.ComboListener {
                 override fun onItemClick(q: Query, v: View, position: Int) {
+                    input.setText(q.name)
                     a.valor = q.name
                     inspeccionViewModel.updateAspecto(a)
                     dialog.dismiss()
@@ -149,7 +158,7 @@ class Inspeccion3Fragment : DaggerFragment() {
     }
 
 
-    private fun dialogFecha(a: Aspecto) {
+    private fun dialogFecha(a: Aspecto, input: TextInputEditText) {
         val c = Calendar.getInstance()
         val mYear = c.get(Calendar.YEAR)
         val mMonth = c.get(Calendar.MONTH)
@@ -157,12 +166,23 @@ class Inspeccion3Fragment : DaggerFragment() {
         val datePickerDialog =
             DatePickerDialog(requireContext(), { _, year, monthOfYear, dayOfMonth ->
                 val month =
-                    if (((monthOfYear + 1) / 10) == 0) "0${monthOfYear + 1}" else "${monthOfYear + 1}"
+                    if (((monthOfYear + 1) / 10) == 0) "0" + (monthOfYear + 1).toString() else (monthOfYear + 1).toString()
                 val day =
-                    if (((dayOfMonth + 1) / 10) == 0) "0$dayOfMonth" else "$dayOfMonth"
+                    if (((dayOfMonth + 1) / 10) == 0) "0$dayOfMonth" else dayOfMonth.toString()
                 val fecha = "$day/$month/$year"
-                a.fechaMuestra = fecha
-                inspeccionViewModel.updateAspecto(a)
+                val d = Calendar.getInstance()
+                val mHour = d.get(Calendar.HOUR_OF_DAY)
+                val mMinute = d.get(Calendar.MINUTE)
+                val timePickerDialog =
+                    TimePickerDialog(context, { _, hourOfDay, minute ->
+                        val hour = if (hourOfDay < 10) "0$hourOfDay" else hourOfDay.toString()
+                        val minutes = if (minute < 10) "0$minute" else minute.toString()
+                        val result = String.format("%s %s:%s", fecha, hour, minutes)
+                        input.setText(result)
+                        a.fechaMuestra = result
+                        inspeccionViewModel.updateAspecto(a)
+                    }, mHour, mMinute, false)
+                timePickerDialog.show()
             }, mYear, mMonth, mDay)
         datePickerDialog.show()
     }

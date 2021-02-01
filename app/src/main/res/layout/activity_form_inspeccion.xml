@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryLight"
     tools:context=".ui.activities.FormInspeccionActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -31,19 +32,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:background="@color/colorPrimaryLight"
             android:entries="@array/form_inspeccciones"
             app:alignStatusWithCurrent="true"
             app:circleColor="@color/colorPrimary"
             app:circleColorCurrent="@color/colorPrimary"
             app:circleColorIncomplete="@color/colorWhite"
             app:circleColorType="fillStroke"
+            app:circleRadius="12dp"
             app:circleStrokeColor="@color/colorWhite"
             app:circleStrokeColorCurrent="@color/colorPrimary"
             app:circleStrokeColorIncomplete="@color/colorPrimary"
             app:circleStrokeWidth="2dp"
             app:completeDrawable="@drawable/ic_check"
             app:currentCount="4"
-            app:currentStepZoom="0.1"
+            app:currentStepZoom="0"
             app:drawLabels="true"
             app:lineColor="@color/colorAccent"
             app:lineColorCurrent="#91A8D0"
@@ -56,7 +59,7 @@
             app:textColorLabels="@android:color/white"
             app:textColorLabelsCurrent="@android:color/white"
             app:textColorLabelsIncomplete="@color/colorPrimary"
-            app:textSizeLabels="15sp" />
+            app:textSizeLabels="12sp" />
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPager"

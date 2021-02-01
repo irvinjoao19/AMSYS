@@ -1,50 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/refreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="55dp"
+    android:background="@color/colorPrimaryLight"
     tools:context=".ui.fragments.MainFragment">
-
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:elevation="15dp"
-            android:fontFamily="@font/roboto_regular"
-            android:gravity="center"
-            android:text="@string/title_avisos"
-            android:textColor="@color/colorPrimary"
-            android:textStyle="bold" />
-
-        <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/anyAvisos"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5" />
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="0.5"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="4dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:elevation="15dp"
-            android:fontFamily="@font/roboto_regular"
-            android:gravity="center"
-            android:text="@string/title_inspeccion"
-            android:textColor="@color/colorPrimary"
-            android:textStyle="bold" />
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/anyAvisos"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="-10dp"
+                android:layout_marginBottom="5dp" />
+        </com.google.android.material.card.MaterialCardView>
 
-        <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/anyInspeccion"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="55dp"
-            android:layout_weight="0.5" />
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="0.5"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="4dp">
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/anyInspeccion"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="-10dp"
+                android:layout_marginBottom="5dp" />
+        </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

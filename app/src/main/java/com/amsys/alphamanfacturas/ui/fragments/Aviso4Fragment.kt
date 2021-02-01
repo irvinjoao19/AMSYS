@@ -206,8 +206,8 @@ class Aviso4Fragment : DaggerFragment(), View.OnClickListener {
             val mMinute = d.get(Calendar.MINUTE)
             val timePickerDialog =
                 TimePickerDialog(context, { _, hourOfDay, minute ->
-                    val hourFormat = if (hourOfDay == 12 || hourOfDay == 0) 12 else hourOfDay % 12
-                    val hour = if (hourFormat < 10) "0$hourFormat" else hourFormat.toString()
+//                    val hourFormat = if (hourOfDay == 12 || hourOfDay == 0) 12 else hourOfDay % 12
+                    val hour = if (hourOfDay < 10) "0$hourOfDay" else hourOfDay.toString()
                     val minutes = if (minute < 10) "0$minute" else minute.toString()
                     val result = String.format("%s %s:%s", fecha, hour, minutes)
 

@@ -1,6 +1,7 @@
 package com.amsys.alphamanfacturas.ui.fragments
 
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import com.amsys.alphamanfacturas.data.viewModel.InspeccionViewModel
 import com.amsys.alphamanfacturas.data.viewModel.ViewModelFactory
 import com.amsys.alphamanfacturas.ui.adapters.ContadorAdapter
 import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
+import com.google.android.material.textfield.TextInputEditText
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_inspeccion_2.*
 import java.util.*
@@ -60,15 +62,18 @@ class Inspeccion2Fragment : DaggerFragment() {
             ContadorAdapter(object : OnItemClickListener.ContadorListener {
                 override fun onItemClick(c: Contador, v: View, position: Int) {
                     when (v.id) {
-                        R.id.editText1 -> dialogFecha(c)
+                        R.id.editText1 -> {
+                            val input: TextInputEditText = v.findViewById(R.id.editText1)
+                            dialogFecha(c, input)
+                        }
                     }
                 }
 
                 override fun onEditorAction(
                     c: Contador, t: TextView, p1: Int, p2: KeyEvent?
                 ): Boolean {
-                    when(t.id){
-                        R.id.editText2 ->{
+                    when (t.id) {
+                        R.id.editText2 -> {
                             if (t.text.isNotEmpty()) {
                                 c.valor = t.text.toString().toDouble()
                                 inspeccionViewModel.updateContador(c)
@@ -95,7 +100,7 @@ class Inspeccion2Fragment : DaggerFragment() {
         }
     }
 
-    private fun dialogFecha(n: Contador) {
+    private fun dialogFecha(n: Contador, input: TextInputEditText) {
         val c = Calendar.getInstance()
         val mYear = c.get(Calendar.YEAR)
         val mMonth = c.get(Calendar.MONTH)
@@ -103,12 +108,23 @@ class Inspeccion2Fragment : DaggerFragment() {
         val datePickerDialog =
             DatePickerDialog(requireContext(), { _, year, monthOfYear, dayOfMonth ->
                 val month =
-                    if (((monthOfYear + 1) / 10) == 0) "0${monthOfYear + 1}" else "${monthOfYear + 1}"
+                    if (((monthOfYear + 1) / 10) == 0) "0" + (monthOfYear + 1).toString() else (monthOfYear + 1).toString()
                 val day =
-                    if (((dayOfMonth + 1) / 10) == 0) "0$dayOfMonth" else "$dayOfMonth"
+                    if (((dayOfMonth + 1) / 10) == 0) "0$dayOfMonth" else dayOfMonth.toString()
                 val fecha = "$day/$month/$year"
-                n.fechaMuestra = fecha
-                inspeccionViewModel.updateContador(n)
+                val d = Calendar.getInstance()
+                val mHour = d.get(Calendar.HOUR_OF_DAY)
+                val mMinute = d.get(Calendar.MINUTE)
+                val timePickerDialog =
+                    TimePickerDialog(context, { _, hourOfDay, minute ->
+                        val hour = if (hourOfDay < 10) "0$hourOfDay" else hourOfDay.toString()
+                        val minutes = if (minute < 10) "0$minute" else minute.toString()
+                        val result = String.format("%s %s:%s", fecha, hour, minutes)
+                        input.setText(result)
+                        n.fechaMuestra = result
+                        inspeccionViewModel.updateContador(n)
+                    }, mHour, mMinute, false)
+                timePickerDialog.show()
             }, mYear, mMonth, mDay)
         datePickerDialog.show()
     }

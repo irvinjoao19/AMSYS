@@ -25,6 +25,13 @@
 
     <style name="NavigationView" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
         <item name="android:background">@color/colorAccent</item>
+        <item name="android:textSize">10sp</item>
+        <item name="fontFamily">@font/opensans_regular</item>
+    </style>
+
+    <style name="AppTheme.ToolbarFont" parent="AppTheme">
+        <item name="android:textSize">21sp</item>
+        <item name="android:fontFamily">@font/opensans_semibold</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

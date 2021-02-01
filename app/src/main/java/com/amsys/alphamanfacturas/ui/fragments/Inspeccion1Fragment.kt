@@ -1,6 +1,8 @@
 package com.amsys.alphamanfacturas.ui.fragments
 
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.content.Context
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -16,8 +18,8 @@ import com.amsys.alphamanfacturas.data.viewModel.InspeccionViewModel
 import com.amsys.alphamanfacturas.data.viewModel.ViewModelFactory
 import com.amsys.alphamanfacturas.ui.adapters.PuntoMedidaAdapter
 import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
+import com.google.android.material.textfield.TextInputEditText
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_aviso_1.*
 import kotlinx.android.synthetic.main.fragment_inspeccion_1.*
 import java.util.*
 import javax.inject.Inject
@@ -60,15 +62,18 @@ class Inspeccion1Fragment : DaggerFragment() {
             PuntoMedidaAdapter(object : OnItemClickListener.PuntoMedidaListener {
                 override fun onItemClick(p: PuntoMedida, v: View, position: Int) {
                     when (v.id) {
-                        R.id.editText1 -> dialogFecha(p)
+                        R.id.editText1 -> {
+                            val input: TextInputEditText = v.findViewById(R.id.editText1)
+                            dialogFecha(p, input)
+                        }
                     }
                 }
 
                 override fun onEditorAction(
                     c: PuntoMedida, t: TextView, p1: Int, p2: KeyEvent?
                 ): Boolean {
-                    when(t.id){
-                        R.id.editText2 ->{
+                    when (t.id) {
+                        R.id.editText2 -> {
                             if (t.text.isNotEmpty()) {
                                 c.valor = t.text.toString()
                                 inspeccionViewModel.updatePuntoMedida(c)
@@ -95,21 +100,30 @@ class Inspeccion1Fragment : DaggerFragment() {
         }
     }
 
-    private fun dialogFecha(p: PuntoMedida) {
+    private fun dialogFecha(p: PuntoMedida, input: TextInputEditText) {
         val c = Calendar.getInstance()
         val mYear = c.get(Calendar.YEAR)
         val mMonth = c.get(Calendar.MONTH)
         val mDay = c.get(Calendar.DAY_OF_MONTH)
-        val datePickerDialog =
-            DatePickerDialog(requireContext(), { _, year, monthOfYear, dayOfMonth ->
-                val month =
-                    if (((monthOfYear + 1) / 10) == 0) "0${monthOfYear + 1}" else "${monthOfYear + 1}"
-                val day =
-                    if (((dayOfMonth + 1) / 10) == 0) "0$dayOfMonth" else "$dayOfMonth"
-                val fecha = "$day/$month/$year"
-                p.fechaMuestra = fecha
-                inspeccionViewModel.updatePuntoMedida(p)
-            }, mYear, mMonth, mDay)
+        val datePickerDialog = DatePickerDialog(requireContext(), { _, year, monthOfYear, dayOfMonth ->
+            val month =
+                if (((monthOfYear + 1) / 10) == 0) "0" + (monthOfYear + 1).toString() else (monthOfYear + 1).toString()
+            val day = if (((dayOfMonth + 1) / 10) == 0) "0$dayOfMonth" else dayOfMonth.toString()
+            val fecha = "$day/$month/$year"
+            val d = Calendar.getInstance()
+            val mHour = d.get(Calendar.HOUR_OF_DAY)
+            val mMinute = d.get(Calendar.MINUTE)
+            val timePickerDialog =
+                TimePickerDialog(context, { _, hourOfDay, minute ->
+                    val hour = if (hourOfDay < 10) "0$hourOfDay" else hourOfDay.toString()
+                    val minutes = if (minute < 10) "0$minute" else minute.toString()
+                    val result = String.format("%s %s:%s", fecha, hour, minutes)
+                    input.setText(result)
+                    p.fechaMuestra = result
+                    inspeccionViewModel.updatePuntoMedida(p)
+                }, mHour, mMinute, false)
+            timePickerDialog.show()
+        }, mYear, mMonth, mDay)
         datePickerDialog.show()
     }
 
