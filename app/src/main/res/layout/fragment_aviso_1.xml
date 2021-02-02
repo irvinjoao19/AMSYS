@@ -14,7 +14,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="20dp"
+            android:layout_margin="10dp"
             app:cardCornerRadius="4dp"
             app:cardElevation="4dp">
 
@@ -65,7 +65,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="false"
-                        android:inputType="text" />
+                        android:inputType="text|textNoSuggestions" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
@@ -113,6 +113,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableEnd="@drawable/ic_down"
+                        android:inputType="textNoSuggestions"
                         android:focusable="false" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -160,7 +161,7 @@
                         android:id="@+id/editText3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text" />
+                        android:inputType="text|textNoSuggestions" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
@@ -208,6 +209,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableEnd="@drawable/ic_down"
+                        android:inputType="textNoSuggestions"
                         android:focusable="false" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -257,11 +259,10 @@
                         android:id="@+id/editText5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="textNoSuggestions"
                         android:focusable="false" />
                 </com.google.android.material.textfield.TextInputLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
-
-
     </androidx.core.widget.NestedScrollView>
 </FrameLayout>

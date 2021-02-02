@@ -14,7 +14,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="20dp"
+            android:layout_margin="10dp"
             app:cardCornerRadius="4dp"
             app:cardElevation="4dp">
             
@@ -52,6 +52,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableEnd="@drawable/ic_down"
+                        android:inputType="textNoSuggestions"
                         android:focusable="false" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -85,6 +86,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableEnd="@drawable/ic_down"
+                        android:inputType="textNoSuggestions"
                         android:focusable="false" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -117,7 +119,7 @@
                         android:id="@+id/editText3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text" />
+                        android:inputType="text|textNoSuggestions" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
@@ -151,6 +153,7 @@
                         android:layout_height="wrap_content"
                         android:drawableEnd="@drawable/ic_date"
                         android:focusable="false"
+                        android:inputType="textNoSuggestions"
                         android:hint="@string/hint_date" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -186,21 +189,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="top"
-                        android:inputType="text" />
+                        android:inputType="text|textNoSuggestions" />
                 </com.google.android.material.textfield.TextInputLayout>
-
-                <!--            <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-                <!--                android:id="@+id/fab3"-->
-                <!--                android:layout_width="wrap_content"-->
-                <!--                android:layout_height="wrap_content"-->
-                <!--                android:layout_gravity="end|bottom"-->
-                <!--                android:layout_margin="16dp"-->
-                <!--                app:backgroundTint="@color/colorPrimary"-->
-                <!--                app:layout_constraintBottom_toBottomOf="parent"-->
-                <!--                app:layout_constraintEnd_toEndOf="parent"-->
-                <!--                app:layout_constraintTop_toBottomOf="@+id/layout5"-->
-                <!--                app:srcCompat="@drawable/ic_save"-->
-                <!--                app:tint="@color/colorBlack" />-->
             </androidx.constraintlayout.widget.ConstraintLayout>            
         </com.google.android.material.card.MaterialCardView>     
     </androidx.core.widget.NestedScrollView>

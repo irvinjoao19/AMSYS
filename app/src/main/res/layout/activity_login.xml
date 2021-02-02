@@ -16,9 +16,10 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
         android:contentDescription="@string/img"
-        app:layout_constraintBottom_toTopOf="@+id/textViewVersion"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -29,12 +30,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="10dp"
         android:fontFamily="@font/opensans_semibold"
         android:text="@string/version"
         android:textAlignment="center"
         android:textSize="21sp"
-        app:layout_constraintBottom_toTopOf="@+id/layoutInformation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
@@ -43,7 +45,9 @@
         android:id="@+id/layoutInformation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewVersion">
 
         <TextView
@@ -76,7 +80,7 @@
                 android:id="@+id/editTextUser"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
+                android:inputType="text|textNoSuggestions"
                 android:maxLines="1"
                 android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -115,17 +119,20 @@
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonEnviar"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="30dp"
             android:backgroundTint="@color/colorPrimary"
             android:fontFamily="@font/opensans_regular"
+            android:padding="15dp"
             android:text="@string/singin"
             android:textAlignment="center"
             android:textColor="@color/colorWhite"
             android:textSize="15sp"
+            app:cornerRadius="15dp"
+            app:elevation="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -134,7 +141,7 @@
 
     <ImageView
         android:id="@+id/imageViewLogo"
-        android:layout_width="75dp"
+        android:layout_width="100dp"
         android:layout_height="75dp"
         android:layout_margin="5dp"
         android:contentDescription="@string/img"

@@ -172,6 +172,7 @@ class Aviso2Fragment : DaggerFragment(), View.OnClickListener {
 
         val equipoAdapter = EquipoAdapter(object : OnItemClickListener.EquipoListener {
             override fun onItemClick(e: Equipo, v: View, position: Int) {
+                clearInformation()
                 avisoViewModel.getInformacion(token, Query(usuarioId, e.equipoId))
                 dialog.dismiss()
             }
@@ -223,6 +224,36 @@ class Aviso2Fragment : DaggerFragment(), View.OnClickListener {
         comboAdapter.addItems(
             listOf(Query(1, "Codigo"), Query(2, "Nombre"))
         )
+    }
+
+    private fun clearInformation() {
+        r.ubicacionTecnicaId = 0
+        r.ubicacionTecnicaCodigo = ""
+        r.ubicacionTecnicaNombre = ""
+        r.emplazamientoId = 0
+        r.emplazamientoCodigo = ""
+        r.emplazamientoNombre = ""
+        r.equipoPadreId = 0
+        r.equipoPadreCodigo = ""
+        r.equipoPadreNombre = ""
+        r.componenteId = 0
+        r.componenteNombre = ""
+        r.equipoId = 0
+        r.equipoCodigo = ""
+        r.equipoNombre = ""
+        r.areaId = 0
+        r.areaNombre = ""
+        r.plantaId = 0
+        editText1.text = null
+        editText2.text = null
+        editText3.text = null
+        editText4.text = null
+        editText5.text = null
+        editText6.text = null
+        editText7.text = null
+        editText8.text = null
+        editText9.text = null
+        editText10.text = null
     }
 
     companion object {

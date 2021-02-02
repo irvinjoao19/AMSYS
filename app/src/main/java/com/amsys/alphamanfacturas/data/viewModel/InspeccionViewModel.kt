@@ -248,6 +248,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                 val b = MultipartBody.Builder()
                 b.setType(MultipartBody.FORM)
                 b.addFormDataPart("userId", user.toString())
+                b.addFormDataPart("inspeccionId", id.toString())
                 val file = File(Util.getFolder(context), a.url)
                 if (file.exists()) {
                     b.addFormDataPart(
