@@ -142,6 +142,7 @@ class MainFragment : DaggerFragment(), OnChartValueSelectedListener,
 
         anyPie.setEntryLabelColor(Color.BLACK)
         anyPie.setDrawEntryLabels(false)
+        anyPie.setNoDataText("Cargando...")
 
         anyPie.legend.isEnabled = true
         val l: Legend = anyPie.legend

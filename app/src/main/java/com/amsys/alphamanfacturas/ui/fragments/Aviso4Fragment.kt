@@ -221,8 +221,9 @@ class Aviso4Fragment : DaggerFragment(), View.OnClickListener {
                         avisoViewModel.validateAviso4(r)
                     }
 
-                }, mHour, mMinute, false)
+                }, mHour, mMinute, true)
             timePickerDialog.show()
+
 
 
         }, mYear, mMonth, mDay)

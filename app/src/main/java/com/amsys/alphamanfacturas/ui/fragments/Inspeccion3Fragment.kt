@@ -181,7 +181,7 @@ class Inspeccion3Fragment : DaggerFragment() {
                         input.setText(result)
                         a.fechaMuestra = result
                         inspeccionViewModel.updateAspecto(a)
-                    }, mHour, mMinute, false)
+                    }, mHour, mMinute, true)
                 timePickerDialog.show()
             }, mYear, mMonth, mDay)
         datePickerDialog.show()
