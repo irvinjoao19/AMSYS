@@ -16,4 +16,5 @@ open class PuntoMedida {
     var fechaMuestra: String = ""
     var valor: String = ""
     var comentario: String = ""
+    var orden:Int = 0
 }

@@ -19,7 +19,7 @@ interface InspeccionDao {
     @Delete
     fun deleteInspeccionTask(c: Inspeccion)
 
-    @Query("SELECT * FROM Inspeccion")
+    @Query("SELECT * FROM Inspeccion ORDER BY inspeccionId DESC ")
     fun getInspeccions(): LiveData<List<Inspeccion>>
 
     @Query("SELECT * FROM Inspeccion")

@@ -26,14 +26,7 @@ import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_aviso_1.*
-import kotlinx.android.synthetic.main.fragment_aviso_3.*
 import kotlinx.android.synthetic.main.fragment_aviso_5.*
-import kotlinx.android.synthetic.main.fragment_aviso_5.editText1
-import kotlinx.android.synthetic.main.fragment_aviso_5.editText2
-import kotlinx.android.synthetic.main.fragment_aviso_5.editText3
-import kotlinx.android.synthetic.main.fragment_aviso_5.editText4
-import kotlinx.android.synthetic.main.fragment_aviso_5.editText5
 import javax.inject.Inject
 
 private const val ARG_PARAM1 = "param1"
@@ -134,7 +127,7 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener,
                             editText1.setText(m.nombre)
                             r.modoFallaId = m.modoFallaId
                             r.modoFallaNombre = m.nombre
-                            avisoViewModel.validateAviso5(r)
+                            avisoViewModel.insertAviso(r)
                             dialog.dismiss()
                         }
                     })
@@ -151,7 +144,7 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener,
                             editText2.setText(d.nombre)
                             r.metodoDeteccionId = d.metodoDeteccionId
                             r.metodoDeteccionNombre = d.nombre
-                            avisoViewModel.validateAviso5(r)
+                            avisoViewModel.insertAviso(r)
                             dialog.dismiss()
                         }
                     })
@@ -175,7 +168,7 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener,
                             editText3.setText(m.nombre)
                             r.mecanismoFallaId = m.mecanismoFallaId
                             r.mecanismoFallaNombre = m.nombre
-                            avisoViewModel.validateAviso5(r)
+                            avisoViewModel.insertAviso(r)
                             dialog.dismiss()
                         }
                     })
@@ -199,7 +192,7 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener,
                             editText4.setText(m.nombre)
                             r.impactoId = m.impactoId
                             r.impactoNombre = m.nombre
-                            avisoViewModel.validateAviso5(r)
+                            avisoViewModel.insertAviso(r)
                             dialog.dismiss()
                         }
                     })
@@ -223,7 +216,7 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener,
                             editText5.setText(c.nombre)
                             r.causaId = c.causaFallaId
                             r.causaNombre = c.nombre
-                            avisoViewModel.validateAviso5(r)
+                            avisoViewModel.insertAviso(r)
                             dialog.dismiss()
                         }
                     })
@@ -255,7 +248,7 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener,
     override fun onEditorAction(t: TextView, p1: Int, p2: KeyEvent?): Boolean {
         if (t.text.isNotEmpty()) {
             r.comentario = editText6.text.toString()
-            avisoViewModel.validateAviso1(r)
+            avisoViewModel.insertAviso(r)
         }
         return false
     }

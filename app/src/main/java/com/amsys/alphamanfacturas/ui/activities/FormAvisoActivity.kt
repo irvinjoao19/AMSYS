@@ -1,6 +1,5 @@
 package com.amsys.alphamanfacturas.ui.activities
 
-import android.R.color
 import android.annotation.SuppressLint
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
@@ -25,7 +24,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_form_aviso.*
 import javax.inject.Inject
-
 
 class FormAvisoActivity : DaggerAppCompatActivity() {
 
@@ -108,12 +106,14 @@ class FormAvisoActivity : DaggerAppCompatActivity() {
         avisoViewModel.mensajeSuccess.observe(this) {
             closeLoad()
             Util.toastMensaje(this, it)
+            finish()
         }
         avisoViewModel.mensajeError.observe(this) {
             closeLoad()
             Util.toastMensaje(this, it)
         }
         avisoViewModel.mensajeLogout.observe(this) {
+            closeLoad()
             Util.dialogMensajeLogin(this)
         }
     }

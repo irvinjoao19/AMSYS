@@ -2,8 +2,6 @@ package com.amsys.alphamanfacturas.ui.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.text.InputFilter
-import android.text.InputFilter.LengthFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -115,8 +113,12 @@ class Aviso2Fragment : DaggerFragment(), View.OnClickListener {
                 r.areaId = it.areaId
                 r.areaNombre = it.areaNombre
                 r.plantaId = it.plantaId
-                avisoViewModel.validateAviso2(r)
+                avisoViewModel.insertAviso(r)
             }
+        }
+
+        avisoViewModel.mensajeError.observe(viewLifecycleOwner) {
+            Util.toastMensaje(requireContext(), it)
         }
 
         avisoViewModel.mensajeLogout.observe(viewLifecycleOwner) {

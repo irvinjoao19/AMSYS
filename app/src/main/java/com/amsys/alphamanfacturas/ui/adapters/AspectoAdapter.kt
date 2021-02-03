@@ -48,8 +48,6 @@ class AspectoAdapter(private val listener: OnItemClickListener.AspectoListener) 
                 textView4.text = a.aspecto
                 textView5.visibility = View.GONE
                 editText1.setText(a.fechaMuestra)
-
-
                 editText2.setText(a.valor)
 
                 when (a.tipoAspecto) {
@@ -57,7 +55,6 @@ class AspectoAdapter(private val listener: OnItemClickListener.AspectoListener) 
                         if (a.tipoValor == 2) {
                             editText2.inputType =
                                 InputType.TYPE_CLASS_NUMBER
-                            Util.editTextMaxLength(editText2, 1)
                         }
                     }
                     2 -> {

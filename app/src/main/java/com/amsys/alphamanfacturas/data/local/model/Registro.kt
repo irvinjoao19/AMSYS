@@ -27,7 +27,6 @@ open class Registro {
 
     var modoFallaOrigenId: Int = 0
     var metodoDeteccionOrigenId: Int = 0
-    var ordenTrabajoId: Int = 0
     var fecha: String = ""
     var comentarioRegistro: String = ""
 

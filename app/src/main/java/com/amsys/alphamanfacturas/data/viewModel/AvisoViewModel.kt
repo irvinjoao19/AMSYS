@@ -159,27 +159,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
         return roomRepository.getConsecuencia()
     }
 
-    fun validateAviso1(r: Registro) {
-        insertAviso(r)
-    }
-
-    fun validateAviso2(r: Registro) {
-        insertAviso(r)
-    }
-
-    fun validateAviso3(r: Registro) {
-        insertAviso(r)
-    }
-
-    fun validateAviso4(r: Registro) {
-        insertAviso(r)
-    }
-
-    fun validateAviso5(r: Registro) {
-        insertAviso(r)
-    }
-
-    private fun insertAviso(r: Registro) {
+    fun insertAviso(r: Registro) {
         roomRepository.insertAviso(r)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -209,9 +189,12 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                             override fun onSubscribe(d: Disposable) {}
                             override fun onComplete() {}
                             override fun onNext(t: ResponseModel) {
-                                insertEquipos(t.data)
+                                if (t.response.codigo == "0000") {
+                                    insertEquipos(t.data)
+                                }else{
+                                    mensajeError.value = "${t.response.descripcion} \n${t.response.comentario}"
+                                }
                             }
-
                             override fun onError(e: Throwable) {
                                 logout()
                             }
@@ -246,15 +229,19 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                 }
 
                 override fun onNext(t: ResponseModel) {
-                    val gson = Gson().toJson(t.data)
-                    Log.i("TAG", gson)
-                    val e: EquipoInformacion? = Gson().fromJson(
-                        gson, object : TypeToken<EquipoInformacion>() {}.type
-                    )
-                    if (e != null) {
-                        informacion.value = e
+                    if (t.response.codigo == "0000") {
+                        val gson = Gson().toJson(t.data)
+                        Log.i("TAG", gson)
+                        val e: EquipoInformacion? = Gson().fromJson(
+                            gson, object : TypeToken<EquipoInformacion>() {}.type
+                        )
+                        if (e != null) {
+                            informacion.value = e
+                        } else {
+                            informacion.value = null
+                        }
                     } else {
-                        informacion.value = null
+                        mensajeError.value = "${t.response.descripcion} \n${t.response.comentario}"
                     }
                 }
 
@@ -413,7 +400,6 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                 .addFormDataPart("parteId", a.parteId.toString())
                 .addFormDataPart("modoFallaOrigenId", a.modoFallaOrigenId.toString())
                 .addFormDataPart("metodoDeteccionOrigenId", a.metodoDeteccionOrigenId.toString())
-                .addFormDataPart("ordenTrabajoId", a.ordenTrabajoId.toString())
                 .addFormDataPart("fecha", a.fecha)
                 .addFormDataPart("comentarioRegistro", a.comentarioRegistro)
                 .addFormDataPart("inicioParada", a.inicioParada)

@@ -1,5 +1,6 @@
 package com.amsys.alphamanfacturas.ui.adapters
 
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,6 +56,9 @@ class PuntoMedidaAdapter(private val listener: OnItemClickListener.PuntoMedidaLi
                 editText1.setText(a.fechaMuestra)
                 editText2.setText(a.valor)
                 editText3.setText(a.comentario)
+
+                editText2.inputType =
+                    InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
 
                 editText1.setOnClickListener { v -> listener.onItemClick(a, v, adapterPosition) }
                 editText2.setOnEditorActionListener { editText, p1, p2 ->

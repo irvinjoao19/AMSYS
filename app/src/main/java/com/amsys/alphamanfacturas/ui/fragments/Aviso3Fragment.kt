@@ -92,12 +92,10 @@ class Aviso3Fragment : DaggerFragment(), View.OnClickListener,
                 r = it
                 editText1.setText(it.modoFallaOriginNombre)
                 editText2.setText(it.metodoDeteccionOrigenNombre)
-                editText3.setText(it.ordenTrabajoId.toString())
                 editText4.setText(it.fecha)
                 editText5.setText(it.comentarioRegistro)
             }
         }
-
 
         editText1.setOnClickListener(this)
         editText2.setOnClickListener(this)
@@ -138,7 +136,7 @@ class Aviso3Fragment : DaggerFragment(), View.OnClickListener,
                             editText1.setText(m.nombre)
                             r.modoFallaId = m.modoFallaId
                             r.modoFallaOriginNombre = m.nombre
-                            avisoViewModel.validateAviso3(r)
+                            avisoViewModel.insertAviso(r)
                             dialog.dismiss()
                         }
                     })
@@ -154,7 +152,7 @@ class Aviso3Fragment : DaggerFragment(), View.OnClickListener,
                             editText2.setText(d.nombre)
                             r.metodoDeteccionOrigenId = d.metodoDeteccionId
                             r.metodoDeteccionOrigenNombre = d.nombre
-                            avisoViewModel.validateAviso3(r)
+                            avisoViewModel.insertAviso(r)
                             dialog.dismiss()
                         }
                     })
@@ -180,7 +178,7 @@ class Aviso3Fragment : DaggerFragment(), View.OnClickListener,
                 val fecha = "$day/$month/$year"
                 editText4.setText(fecha)
                 r.fecha = fecha
-                avisoViewModel.validateAviso3(r)
+                avisoViewModel.insertAviso(r)
             }, mYear, mMonth, mDay)
         datePickerDialog.show()
     }
@@ -199,7 +197,7 @@ class Aviso3Fragment : DaggerFragment(), View.OnClickListener,
     override fun onEditorAction(t: TextView, p1: Int, p2: KeyEvent?): Boolean {
         if (t.text.isNotEmpty()) {
             r.comentarioRegistro = editText5.text.toString()
-            avisoViewModel.validateAviso3(r)
+            avisoViewModel.insertAviso(r)
         }
         return false
     }

@@ -15,4 +15,5 @@ open class Contador {
     var fechaMuestra: String = ""
     var valor: Double = 0.0
     var comentario: String = ""
+    var orden:Int = 0
 }

@@ -108,14 +108,18 @@ class FormInspeccionActivity : DaggerAppCompatActivity() {
         })
 
         inspeccionViewModel.mensajeSuccess.observe(this) {
-            closeLoad()
             Util.toastMensaje(this, it)
+            closeLoad()
+            if(it != "Datos Sincronizados"){
+                finish()
+            }
         }
         inspeccionViewModel.mensajeError.observe(this) {
             closeLoad()
             Util.toastMensaje(this, it)
         }
         inspeccionViewModel.mensajeLogout.observe(this) {
+            closeLoad()
             Util.dialogMensajeLogin(this)
         }
     }

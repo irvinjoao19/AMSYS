@@ -41,7 +41,7 @@
     <string name="title_impacto_funcion">Impacto en la Función:</string>
     <string name="title_mecanismo_falla">Mecanismo de Falla:</string>
     <string name="hint_nombre">Nombre</string>
-    <string name="hint_codigo">Codigo</string>
+    <string name="hint_codigo">Código</string>
     <string name="hint_search">Buscar</string>
     <string name="hint_equipo">Buscar Equipo</string>
     <string name="hint_time">dd/mm/yyyy hh:mm</string>

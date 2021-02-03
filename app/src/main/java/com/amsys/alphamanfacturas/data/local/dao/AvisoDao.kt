@@ -19,7 +19,7 @@ interface AvisoDao {
     @Delete
     fun deleteAvisoTask(c: Aviso)
 
-    @Query("SELECT * FROM Aviso")
+    @Query("SELECT * FROM Aviso ORDER BY avisoId DESC")
     fun getAvisos(): LiveData<List<Aviso>>
 
     @Query("SELECT * FROM Aviso")

@@ -19,7 +19,7 @@ interface AspectoDao {
     @Delete
     fun deleteAspectoTask(c: Aspecto)
 
-    @Query("SELECT * FROM Aspecto WHERE inspeccionId=:id")
+    @Query("SELECT * FROM Aspecto WHERE inspeccionId=:id ORDER BY orden,nroMuestra ASC")
     fun getAspectos(id: Int): LiveData<List<Aspecto>>
 
     @Query("SELECT * FROM Aspecto")

@@ -19,7 +19,7 @@ interface PuntoMedidaDao {
     @Delete
     fun deletePuntoMedidaTask(c: PuntoMedida)
 
-    @Query("SELECT * FROM PuntoMedida WHERE inspeccionId=:id")
+    @Query("SELECT * FROM PuntoMedida WHERE inspeccionId=:id ORDER BY orden,nroMuestra ASC")
     fun getPuntoMedidas(id: Int): LiveData<List<PuntoMedida>>
 
     @Query("SELECT * FROM PuntoMedida")

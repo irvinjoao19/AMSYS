@@ -136,7 +136,7 @@ class Aviso4Fragment : DaggerFragment(), View.OnClickListener {
                             editText3.setText(p.nombre)
                             r.claseParadaId = p.claseParadaId
                             r.claseParadaNombre = p.nombre
-                            avisoViewModel.validateAviso4(r)
+                            avisoViewModel.insertAviso(r)
 
                             val q = Query()
                             q.userId = usuarioId
@@ -158,7 +158,7 @@ class Aviso4Fragment : DaggerFragment(), View.OnClickListener {
                             editText4.setText(p.nombre)
                             r.tipoParadaId = p.tipoParadaId
                             r.tipoParadaNombre = p.nombre
-                            avisoViewModel.validateAviso4(r)
+                            avisoViewModel.insertAviso(r)
 
                             val q = Query()
                             q.userId = usuarioId
@@ -179,7 +179,7 @@ class Aviso4Fragment : DaggerFragment(), View.OnClickListener {
                             editText5.setText(p.nombre)
                             r.subTipoParadaId = p.subTipoParadaId
                             r.subTipoParadaNombre = p.nombre
-                            avisoViewModel.validateAviso4(r)
+                            avisoViewModel.insertAviso(r)
                             dialog.dismiss()
                         }
                     })
@@ -214,11 +214,11 @@ class Aviso4Fragment : DaggerFragment(), View.OnClickListener {
                     if (tipo == 1) {
                         editText1.setText(result)
                         r.inicioParada = result
-                        avisoViewModel.validateAviso4(r)
+                        avisoViewModel.insertAviso(r)
                     } else {
                         editText2.setText(result)
                         r.finParada = result
-                        avisoViewModel.validateAviso4(r)
+                        avisoViewModel.insertAviso(r)
                     }
 
                 }, mHour, mMinute, true)

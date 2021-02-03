@@ -19,4 +19,5 @@ open class Aspecto {
     var tipoAspecto: Int = 0
     var tipoValor: Int = 0
     var valores: Array<String> = emptyArray()
+    var orden:Int = 0
 }

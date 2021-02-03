@@ -46,7 +46,7 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener, TextView.OnEditor
     override fun onEditorAction(t: TextView, p1: Int, p2: KeyEvent?): Boolean {
         if (t.text.isNotEmpty()) {
             r.descripcion = editText3.text.toString()
-            avisoViewModel.validateAviso1(r)
+            avisoViewModel.insertAviso(r)
         }
         return false
     }
@@ -94,7 +94,7 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener, TextView.OnEditor
             else -> "Aviso de Parada"
         }
         editText1.setText(r.tipoAvisoNombre)
-        avisoViewModel.validateAviso1(r)
+        avisoViewModel.insertAviso(r)
 
         avisoViewModel.getRegistroById(registroId).observe(viewLifecycleOwner) {
             if (it != null) {
@@ -151,7 +151,7 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener, TextView.OnEditor
                             editText2.setText(c.nombre)
                             r.consecuenciaId = c.consecuenciaId
                             r.consecuenciaIdNombre = c.nombre
-                            avisoViewModel.validateAviso1(r)
+                            avisoViewModel.insertAviso(r)
                             dialog.dismiss()
                         }
                     })
@@ -174,7 +174,7 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener, TextView.OnEditor
                             editText4.setText(p.nombre)
                             r.prioridadId = p.prioridadId
                             r.prioridadIdNombre = p.nombre
-                            avisoViewModel.validateAviso1(r)
+                            avisoViewModel.insertAviso(r)
                             dialog.dismiss()
                         }
                     })
