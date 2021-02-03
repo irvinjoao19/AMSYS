@@ -13,7 +13,8 @@ class PercentFormat(private var total: Int, private var pieChart: PieChart) : Va
 
 
     override fun getFormattedValue(value: Float): String {
-        return mFormat.format(total * value / 100).toString() + " %"
+        return mFormat.format(value)
+//        return mFormat.format(total * value / 100).toString() + " %"
     }
 
     override fun getPieLabel(value: Float, pieEntry: PieEntry): String {

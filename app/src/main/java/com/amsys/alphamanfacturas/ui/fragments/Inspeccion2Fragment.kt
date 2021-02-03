@@ -3,6 +3,7 @@ package com.amsys.alphamanfacturas.ui.fragments
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.text.Editable
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View

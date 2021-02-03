@@ -318,11 +318,8 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
     override fun getRegistroByIdTask(id: Int): Observable<Registro> {
         return Observable.create {
             val r = dataBase.registroDao().getRegistroByIdTask(id)
-//            if (r == null){
-//                it.onError(Throwable(""))
-//                it.onComplete()
-//                return@create
-//            }
+            val json = Gson().toJson(r)
+            Log.i("TAG", json)
             it.onNext(r)
             it.onComplete()
         }

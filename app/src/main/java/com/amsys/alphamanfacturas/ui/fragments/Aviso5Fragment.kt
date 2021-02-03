@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,8 +31,7 @@ import javax.inject.Inject
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class Aviso5Fragment : DaggerFragment(), View.OnClickListener,
-    TextView.OnEditorActionListener {
+class Aviso5Fragment : DaggerFragment(), View.OnClickListener {
 
     override fun onClick(v: View) {
         when (v.id) {
@@ -50,6 +48,7 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener,
     lateinit var avisoViewModel: AvisoViewModel
 
     private var registroId: Int = 0
+    private var textChange: Boolean = true
     lateinit var r: Registro
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,7 +82,9 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener,
                 editText3.setText(it.mecanismoFallaNombre)
                 editText4.setText(it.impactoNombre)
                 editText5.setText(it.causaNombre)
-                editText6.setText(it.comentario)
+                if (textChange) {
+                    editText6.setText(it.comentario)
+                }
             }
         }
 
@@ -92,7 +93,15 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener,
         editText3.setOnClickListener(this)
         editText4.setOnClickListener(this)
         editText5.setOnClickListener(this)
-        editText6.setOnEditorActionListener(this)
+        editText6.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(c: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(c: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun afterTextChanged(editable: Editable) {
+                textChange = false
+                r.comentario = editable.toString()
+                avisoViewModel.insertAviso(r)
+            }
+        })
     }
 
     private fun spinnerDialog(tipo: Int, title: String) {
@@ -243,13 +252,5 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener,
                     putInt(ARG_PARAM1, param1)
                 }
             }
-    }
-
-    override fun onEditorAction(t: TextView, p1: Int, p2: KeyEvent?): Boolean {
-        if (t.text.isNotEmpty()) {
-            r.comentario = editText6.text.toString()
-            avisoViewModel.insertAviso(r)
-        }
-        return false
     }
 }

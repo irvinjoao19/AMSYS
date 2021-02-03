@@ -17,6 +17,7 @@ class ContadorAdapter(private val listener: OnItemClickListener.ContadorListener
     private var d = emptyList<Contador>()
     private var dList: ArrayList<Contador> = ArrayList()
 
+
     fun addItems(list: List<Contador>) {
         d = list
         dList = ArrayList(list)
@@ -66,5 +67,4 @@ class ContadorAdapter(private val listener: OnItemClickListener.ContadorListener
                 }
             }
     }
-
 }

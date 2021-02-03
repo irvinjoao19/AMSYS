@@ -2,7 +2,6 @@ package com.amsys.alphamanfacturas.ui.fragments
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Context
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -32,6 +31,7 @@ class Inspeccion1Fragment : DaggerFragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     lateinit var inspeccionViewModel: InspeccionViewModel
+    lateinit var puntoMedidaAdapter: PuntoMedidaAdapter
     private var inspeccionId: Int = 0
     private var usuarioId: Int = 0
 
@@ -58,7 +58,7 @@ class Inspeccion1Fragment : DaggerFragment() {
         inspeccionViewModel =
             ViewModelProvider(this, viewModelFactory).get(InspeccionViewModel::class.java)
 
-        val puntoMedidaAdapter =
+        puntoMedidaAdapter =
             PuntoMedidaAdapter(object : OnItemClickListener.PuntoMedidaListener {
                 override fun onItemClick(p: PuntoMedida, v: View, position: Int) {
                     when (v.id) {
@@ -105,25 +105,27 @@ class Inspeccion1Fragment : DaggerFragment() {
         val mYear = c.get(Calendar.YEAR)
         val mMonth = c.get(Calendar.MONTH)
         val mDay = c.get(Calendar.DAY_OF_MONTH)
-        val datePickerDialog = DatePickerDialog(requireContext(), { _, year, monthOfYear, dayOfMonth ->
-            val month =
-                if (((monthOfYear + 1) / 10) == 0) "0" + (monthOfYear + 1).toString() else (monthOfYear + 1).toString()
-            val day = if (((dayOfMonth + 1) / 10) == 0) "0$dayOfMonth" else dayOfMonth.toString()
-            val fecha = "$day/$month/$year"
-            val d = Calendar.getInstance()
-            val mHour = d.get(Calendar.HOUR_OF_DAY)
-            val mMinute = d.get(Calendar.MINUTE)
-            val timePickerDialog =
-                TimePickerDialog(context, { _, hourOfDay, minute ->
-                    val hour = if (hourOfDay < 10) "0$hourOfDay" else hourOfDay.toString()
-                    val minutes = if (minute < 10) "0$minute" else minute.toString()
-                    val result = String.format("%s %s:%s", fecha, hour, minutes)
-                    input.setText(result)
-                    p.fechaMuestra = result
-                    inspeccionViewModel.updatePuntoMedida(p)
-                }, mHour, mMinute, true)
-            timePickerDialog.show()
-        }, mYear, mMonth, mDay)
+        val datePickerDialog =
+            DatePickerDialog(requireContext(), { _, year, monthOfYear, dayOfMonth ->
+                val month =
+                    if (((monthOfYear + 1) / 10) == 0) "0" + (monthOfYear + 1).toString() else (monthOfYear + 1).toString()
+                val day =
+                    if (((dayOfMonth + 1) / 10) == 0) "0$dayOfMonth" else dayOfMonth.toString()
+                val fecha = "$day/$month/$year"
+                val d = Calendar.getInstance()
+                val mHour = d.get(Calendar.HOUR_OF_DAY)
+                val mMinute = d.get(Calendar.MINUTE)
+                val timePickerDialog =
+                    TimePickerDialog(context, { _, hourOfDay, minute ->
+                        val hour = if (hourOfDay < 10) "0$hourOfDay" else hourOfDay.toString()
+                        val minutes = if (minute < 10) "0$minute" else minute.toString()
+                        val result = String.format("%s %s:%s", fecha, hour, minutes)
+                        input.setText(result)
+                        p.fechaMuestra = result
+                        inspeccionViewModel.updatePuntoMedida(p)
+                    }, mHour, mMinute, true)
+                timePickerDialog.show()
+            }, mYear, mMonth, mDay)
         datePickerDialog.show()
     }
 
@@ -136,5 +138,17 @@ class Inspeccion1Fragment : DaggerFragment() {
                     putInt(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onStop() {
+        super.onStop()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 }

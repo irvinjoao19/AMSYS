@@ -99,7 +99,6 @@ class Inspeccion3Fragment : DaggerFragment() {
                             }
                         }
                     }
-
                     return false
                 }
             })

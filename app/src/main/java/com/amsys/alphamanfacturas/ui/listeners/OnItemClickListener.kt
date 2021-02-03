@@ -1,5 +1,6 @@
 package com.amsys.alphamanfacturas.ui.listeners
 
+import android.text.Editable
 import android.view.KeyEvent
 import android.view.View
 import android.widget.TextView

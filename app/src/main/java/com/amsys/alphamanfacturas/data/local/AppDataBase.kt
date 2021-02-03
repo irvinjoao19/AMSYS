@@ -30,7 +30,7 @@ import com.amsys.alphamanfacturas.data.local.model.*
         Contador::class,
         InspeccionFile::class
     ],
-    version = 15, // version 1 en play store
+    version = 17, // version 1 en play store
     exportSchema = false
 )
 @TypeConverters(Converts::class)

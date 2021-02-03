@@ -181,7 +181,7 @@ class MainFragment : DaggerFragment(), OnChartValueSelectedListener,
         data.setValueTextSize(14f)
         anyPie.data = data
         // undo all highlights
-        anyPie.setUsePercentValues(true)
+        anyPie.setUsePercentValues(false)
         anyPie.highlightValues(null)
         anyPie.invalidate()
     }

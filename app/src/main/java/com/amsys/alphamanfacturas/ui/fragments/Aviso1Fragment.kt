@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,21 +33,13 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 private const val ARG_PARAM3 = "param3"
 
-class Aviso1Fragment : DaggerFragment(), View.OnClickListener, TextView.OnEditorActionListener {
+class Aviso1Fragment : DaggerFragment(), View.OnClickListener {
 
     override fun onClick(v: View) {
         when (v.id) {
             R.id.editText2 -> spinnerDialog(1, "Consecuencias relativas")
             R.id.editText4 -> spinnerDialog(2, "Prioridad")
         }
-    }
-
-    override fun onEditorAction(t: TextView, p1: Int, p2: KeyEvent?): Boolean {
-        if (t.text.isNotEmpty()) {
-            r.descripcion = editText3.text.toString()
-            avisoViewModel.insertAviso(r)
-        }
-        return false
     }
 
     @Inject
@@ -60,6 +51,7 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener, TextView.OnEditor
     private var usuarioId: Int = 0
 
     lateinit var r: Registro
+    private var textChange: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,7 +93,9 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener, TextView.OnEditor
                 r = it
                 editText1.setText(it.tipoAvisoNombre)
                 editText2.setText(it.consecuenciaIdNombre)
-                editText3.setText(it.descripcion)
+                if (textChange) {
+                    editText3.setText(it.descripcion)
+                }
                 editText4.setText(it.prioridadIdNombre)
             }
         }
@@ -115,7 +109,15 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener, TextView.OnEditor
 
         editText2.setOnClickListener(this)
         editText4.setOnClickListener(this)
-        editText3.setOnEditorActionListener(this)
+        editText3.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(c: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(c: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun afterTextChanged(editable: Editable) {
+                textChange = false
+                r.descripcion = editable.toString()
+                avisoViewModel.insertAviso(r)
+            }
+        })
         editText5.setText(String.format("Emitido"))
     }
 

@@ -3,7 +3,8 @@ package com.amsys.alphamanfacturas.ui.fragments
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.view.KeyEvent
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,8 +35,7 @@ import javax.inject.Inject
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class Aviso3Fragment : DaggerFragment(), View.OnClickListener,
-    TextView.OnEditorActionListener {
+class Aviso3Fragment : DaggerFragment(), View.OnClickListener {
 
     override fun onClick(v: View) {
         when (v.id) {
@@ -51,6 +51,7 @@ class Aviso3Fragment : DaggerFragment(), View.OnClickListener,
 
     private var registroId: Int = 0
     private var tipoAviso: Int = 0
+    private var textChange: Boolean = true
     lateinit var r: Registro
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,7 +78,6 @@ class Aviso3Fragment : DaggerFragment(), View.OnClickListener,
         avisoViewModel =
             ViewModelProvider(this, viewModelFactory).get(AvisoViewModel::class.java)
 
-
         if (tipoAviso == 4) {
             txt1.visibility = View.GONE
             layout1.visibility = View.GONE
@@ -93,15 +93,24 @@ class Aviso3Fragment : DaggerFragment(), View.OnClickListener,
                 editText1.setText(it.modoFallaOriginNombre)
                 editText2.setText(it.metodoDeteccionOrigenNombre)
                 editText4.setText(it.fecha)
-                editText5.setText(it.comentarioRegistro)
+                if (textChange) {
+                    editText5.setText(it.comentarioRegistro)
+                }
             }
         }
 
         editText1.setOnClickListener(this)
         editText2.setOnClickListener(this)
         editText4.setOnClickListener(this)
-
-        editText5.setOnEditorActionListener(this)
+        editText5.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(c: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(c: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun afterTextChanged(editable: Editable) {
+                textChange = false
+                r.comentarioRegistro = editable.toString()
+                avisoViewModel.insertAviso(r)
+            }
+        })
 //        fab3.setOnClickListener(this)
     }
 
@@ -192,13 +201,5 @@ class Aviso3Fragment : DaggerFragment(), View.OnClickListener,
                     putInt(ARG_PARAM2, param2)
                 }
             }
-    }
-
-    override fun onEditorAction(t: TextView, p1: Int, p2: KeyEvent?): Boolean {
-        if (t.text.isNotEmpty()) {
-            r.comentarioRegistro = editText5.text.toString()
-            avisoViewModel.insertAviso(r)
-        }
-        return false
     }
 }

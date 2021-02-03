@@ -1,6 +1,5 @@
 package com.amsys.alphamanfacturas.ui.adapters
 
-import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,7 @@ import com.amsys.alphamanfacturas.R
 import com.amsys.alphamanfacturas.data.local.model.PuntoMedida
 import com.amsys.alphamanfacturas.helper.Util
 import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
-import kotlinx.android.synthetic.main.cardview_form_inspecciones.view.*
+import kotlinx.android.synthetic.main.cardview_form_1_inspecciones.view.*
 
 class PuntoMedidaAdapter(private val listener: OnItemClickListener.PuntoMedidaListener) :
     RecyclerView.Adapter<PuntoMedidaAdapter.ViewHolder>() {
@@ -26,7 +25,7 @@ class PuntoMedidaAdapter(private val listener: OnItemClickListener.PuntoMedidaLi
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.cardview_form_inspecciones, parent, false)
+                .inflate(R.layout.cardview_form_1_inspecciones, parent, false)
         return ViewHolder(view)
     }
 
@@ -56,9 +55,6 @@ class PuntoMedidaAdapter(private val listener: OnItemClickListener.PuntoMedidaLi
                 editText1.setText(a.fechaMuestra)
                 editText2.setText(a.valor)
                 editText3.setText(a.comentario)
-
-                editText2.inputType =
-                    InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
 
                 editText1.setOnClickListener { v -> listener.onItemClick(a, v, adapterPosition) }
                 editText2.setOnEditorActionListener { editText, p1, p2 ->
