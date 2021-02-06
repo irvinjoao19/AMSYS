@@ -47,12 +47,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
             android:layout_marginTop="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="10dp"
             android:fontFamily="@font/opensans_semibold"
             android:text="@string/title_codigo"
             android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView1" />
 
@@ -105,6 +105,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="2dp"
             android:layout_marginEnd="10dp"
+            app:endIconMode="clear_text"
             app:hintEnabled="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -116,8 +117,8 @@
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/ic_date"
                 android:focusable="false"
-                android:inputType="textNoSuggestions"
-                android:hint="@string/hint_time" />
+                android:hint="@string/hint_time"
+                android:inputType="textNoSuggestions" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -141,8 +142,9 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="2dp"
             android:layout_marginEnd="10dp"
+            app:endIconMode="clear_text"
             app:hintEnabled="false"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView8">
 
@@ -175,6 +177,7 @@
             android:layout_marginTop="2dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
+            app:endIconMode="clear_text"
             app:hintEnabled="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

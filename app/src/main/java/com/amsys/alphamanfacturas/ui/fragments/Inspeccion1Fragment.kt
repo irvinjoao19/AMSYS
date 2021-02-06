@@ -66,23 +66,35 @@ class Inspeccion1Fragment : DaggerFragment() {
                             val input: TextInputEditText = v.findViewById(R.id.editText1)
                             dialogFecha(p, input)
                         }
+                        R.id.textView7 -> {
+                            p.fechaMuestra = ""
+                            inspeccionViewModel.updatePuntoMedida(p)
+                        }
+                        R.id.textView9 -> {
+                            p.valor =  ""
+                            inspeccionViewModel.updatePuntoMedida(p)
+                        }
+                        R.id.textView11 -> {
+                            p.comentario =  ""
+                            inspeccionViewModel.updatePuntoMedida(p)
+                        }
                     }
                 }
 
                 override fun onEditorAction(
-                    c: PuntoMedida, t: TextView, p1: Int, p2: KeyEvent?
+                    p: PuntoMedida, t: TextView, p1: Int, p2: KeyEvent?
                 ): Boolean {
                     when (t.id) {
                         R.id.editText2 -> {
                             if (t.text.isNotEmpty()) {
-                                c.valor = t.text.toString()
-                                inspeccionViewModel.updatePuntoMedida(c)
+                                p.valor = t.text.toString()
+                                inspeccionViewModel.updatePuntoMedida(p)
                             }
                         }
                         R.id.editText3 -> {
                             if (t.text.isNotEmpty()) {
-                                c.comentario = t.text.toString()
-                                inspeccionViewModel.updatePuntoMedida(c)
+                                p.comentario = t.text.toString()
+                                inspeccionViewModel.updatePuntoMedida(p)
                             }
                         }
                     }
@@ -97,6 +109,7 @@ class Inspeccion1Fragment : DaggerFragment() {
 
         inspeccionViewModel.getPuntoMedidaById(inspeccionId).observe(viewLifecycleOwner) {
             puntoMedidaAdapter.addItems(it)
+            recyclerView.invalidate()
         }
     }
 
@@ -138,17 +151,5 @@ class Inspeccion1Fragment : DaggerFragment() {
                     putInt(ARG_PARAM2, param2)
                 }
             }
-    }
-
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onStop() {
-        super.onStop()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 }

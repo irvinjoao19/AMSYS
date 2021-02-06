@@ -73,6 +73,16 @@ class AspectoAdapter(private val listener: OnItemClickListener.AspectoListener) 
                 editText3.setOnEditorActionListener { editText, p1, p2 ->
                     listener.onEditorAction(a, editText, p1, p2)
                 }
+
+                textView7.setEndIconOnClickListener {
+                    listener.onItemClick(a, textView7, adapterPosition)
+                }
+                textView9.setEndIconOnClickListener {
+                    listener.onItemClick(a, textView9, adapterPosition)
+                }
+                textView11.setEndIconOnClickListener {
+                    listener.onItemClick(a, textView11, adapterPosition)
+                }
             }
     }
 }

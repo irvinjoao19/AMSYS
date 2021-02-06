@@ -21,7 +21,9 @@ import com.amsys.alphamanfacturas.ui.adapters.ContadorAdapter
 import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
 import com.google.android.material.textfield.TextInputEditText
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.fragment_inspeccion_1.*
 import kotlinx.android.synthetic.main.fragment_inspeccion_2.*
+import kotlinx.android.synthetic.main.fragment_inspeccion_2.recyclerView
 import java.util.*
 import javax.inject.Inject
 
@@ -67,6 +69,18 @@ class Inspeccion2Fragment : DaggerFragment() {
                             val input: TextInputEditText = v.findViewById(R.id.editText1)
                             dialogFecha(c, input)
                         }
+                        R.id.textView7 -> {
+                            c.fechaMuestra = ""
+                            inspeccionViewModel.updateContador(c)
+                        }
+                        R.id.textView9 -> {
+                            c.valor =  0.0
+                            inspeccionViewModel.updateContador(c)
+                        }
+                        R.id.textView11 -> {
+                            c.comentario =  ""
+                            inspeccionViewModel.updateContador(c)
+                        }
                     }
                 }
 
@@ -98,6 +112,7 @@ class Inspeccion2Fragment : DaggerFragment() {
 
         inspeccionViewModel.getContadorById(inspeccionId).observe(viewLifecycleOwner) {
             contadorAdapter.addItems(it)
+            recyclerView.invalidate()
         }
     }
 

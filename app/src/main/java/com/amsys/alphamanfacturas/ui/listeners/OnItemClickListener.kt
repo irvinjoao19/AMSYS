@@ -1,6 +1,5 @@
 package com.amsys.alphamanfacturas.ui.listeners
 
-import android.text.Editable
 import android.view.KeyEvent
 import android.view.View
 import android.widget.TextView
@@ -65,7 +64,7 @@ interface OnItemClickListener {
 
     interface PuntoMedidaListener {
         fun onItemClick(p: PuntoMedida, v: View, position: Int)
-        fun onEditorAction(c: PuntoMedida, t: TextView, p1: Int, p2: KeyEvent?): Boolean
+        fun onEditorAction(p: PuntoMedida, t: TextView, p1: Int, p2: KeyEvent?): Boolean
     }
 
     interface ContadorListener {
@@ -84,5 +83,13 @@ interface OnItemClickListener {
 
     interface TalleResponsableListener {
         fun onItemClick(t: TalleResponsable, v: View, position: Int)
+    }
+
+    interface DrawableClickListener {
+        enum class DrawablePosition {
+            TOP, BOTTOM, LEFT, RIGHT
+        }
+
+        fun onClick(target: DrawablePosition?)
     }
 }
