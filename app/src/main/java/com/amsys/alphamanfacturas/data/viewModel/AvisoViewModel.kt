@@ -28,6 +28,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
     ViewModel() {
 
     val mensajeError = MutableLiveData<String>()
+    val response = MutableLiveData<Response>()
     val mensajeSuccess = MutableLiveData<String>()
     val mensajeSync = MutableLiveData<Int>()
     val mensajeLogout = MutableLiveData<String>()
@@ -191,10 +192,12 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                             override fun onNext(t: ResponseModel) {
                                 if (t.response.codigo == "0000") {
                                     insertEquipos(t.data)
-                                }else{
-                                    mensajeError.value = "${t.response.descripcion} \n${t.response.comentario}"
+                                } else {
+                                    mensajeError.value =
+                                        "${t.response.descripcion} \n${t.response.comentario}"
                                 }
                             }
+
                             override fun onError(e: Throwable) {
                                 logout()
                             }
@@ -415,6 +418,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                 .addFormDataPart("comentario", a.comentario)
                 .addFormDataPart("userId", a.userId.toString())
                 .addFormDataPart("plantaId", a.plantaId.toString())
+                .addFormDataPart("tallerResponsableId", a.tallerResponsableId.toString())
                 .build()
             Observable.zip(
                 Observable.just(a),
@@ -428,7 +432,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                     if (t.response.codigo == "0000") {
                         mensajeSuccess.value = t.response.descripcion
                     } else {
-                        mensajeError.value = "${t.response.descripcion} \n${t.response.comentario}"
+                        response.value = t.response
                     }
                 }
 
@@ -450,5 +454,9 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                     mensajeLogout.value = "Close"
                 }
             })
+    }
+
+    fun getTalleResponsable(): LiveData<List<TalleResponsable>> {
+        return roomRepository.getTalleResponsable()
     }
 }

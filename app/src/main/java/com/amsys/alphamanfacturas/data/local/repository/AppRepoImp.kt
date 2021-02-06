@@ -134,6 +134,10 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
             if (v7 != null) {
                 dataBase.causaFallaDao().insertCausaFallaListTask(v7)
             }
+            val v8: List<TalleResponsable>? = l.talleresResponsable
+            if (v8 != null) {
+                dataBase.talleResponsableDao().insertTalleResponsableListTask(v8)
+            }
         }
     }
 
@@ -155,6 +159,10 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
 
     override fun getPrioridad(): LiveData<List<Prioridad>> {
         return dataBase.prioridadDao().getPrioridad()
+    }
+
+    override fun getTalleResponsable(): LiveData<List<TalleResponsable>> {
+        return dataBase.talleResponsableDao().getTalleResponsable()
     }
 
     override fun getConsecuencia(): LiveData<List<Consecuencia>> {

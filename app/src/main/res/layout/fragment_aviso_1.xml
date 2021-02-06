@@ -113,8 +113,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableEnd="@drawable/ic_down"
-                        android:inputType="textNoSuggestions"
-                        android:focusable="false" />
+                        android:focusable="false"
+                        android:inputType="textNoSuggestions" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
@@ -209,8 +209,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableEnd="@drawable/ic_down"
-                        android:inputType="textNoSuggestions"
-                        android:focusable="false" />
+                        android:focusable="false"
+                        android:inputType="textNoSuggestions" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
@@ -220,24 +220,10 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/opensans_semibold"
-                    android:text="@string/title_estado"
+                    android:text="@string/title_taller_responsable"
                     android:textColor="@color/colorPrimary"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/layout4" />
-
-                <TextView
-                    android:id="@+id/txtr5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="10dp"
-                    android:fontFamily="@font/opensans_semibold"
-                    android:text="@string/required"
-                    android:textColor="@color/colorRed"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/layout4" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -250,7 +236,6 @@
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="10dp"
                     app:hintEnabled="false"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txt5">
@@ -259,8 +244,59 @@
                         android:id="@+id/editText5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textNoSuggestions"
-                        android:focusable="false" />
+                        android:drawableEnd="@drawable/ic_down"
+                        android:focusable="false"
+                        android:inputType="textNoSuggestions" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/txt6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="@string/title_estado"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layout5" />
+
+                <TextView
+                    android:id="@+id/txtr6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="@string/required"
+                    android:textColor="@color/colorRed"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layout5" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout6"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:hintEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt6">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editText6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:inputType="textNoSuggestions" />
                 </com.google.android.material.textfield.TextInputLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>

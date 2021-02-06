@@ -39,6 +39,7 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener {
         when (v.id) {
             R.id.editText2 -> spinnerDialog(1, "Consecuencias relativas")
             R.id.editText4 -> spinnerDialog(2, "Prioridad")
+            R.id.editText5 -> spinnerDialog(3, "Taller Responsable")
         }
     }
 
@@ -118,7 +119,8 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener {
                 avisoViewModel.insertAviso(r)
             }
         })
-        editText5.setText(String.format("Emitido"))
+        editText5.setOnClickListener(this)
+        editText6.setText(String.format("Emitido"))
     }
 
     private fun spinnerDialog(tipo: Int, title: String) {
@@ -189,6 +191,29 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener {
                     override fun onTextChanged(c: CharSequence, i: Int, i1: Int, i2: Int) {}
                     override fun afterTextChanged(editable: Editable) {
                         prioridadAdapter.getFilter().filter(editable)
+                    }
+                })
+            }
+            3 -> {
+                val tallerAdapter =
+                    TalleResponsableAdapter(object : OnItemClickListener.TalleResponsableListener {
+                        override fun onItemClick(t: TalleResponsable, v: View, position: Int) {
+                            editText5.setText(t.nombre)
+                            r.tallerResponsableId = t.tallerResponsableId
+                            r.tallerResponsableIdNombre = t.nombre
+                            avisoViewModel.insertAviso(r)
+                            dialog.dismiss()
+                        }
+                    })
+                recyclerView.adapter = tallerAdapter
+                avisoViewModel.getTalleResponsable().observe(viewLifecycleOwner) {
+                    tallerAdapter.addItems(it)
+                }
+                editTextSearch.addTextChangedListener(object : TextWatcher {
+                    override fun beforeTextChanged(c: CharSequence, i: Int, i1: Int, i2: Int) {}
+                    override fun onTextChanged(c: CharSequence, i: Int, i1: Int, i2: Int) {}
+                    override fun afterTextChanged(editable: Editable) {
+                        tallerAdapter.getFilter().filter(editable)
                     }
                 })
             }

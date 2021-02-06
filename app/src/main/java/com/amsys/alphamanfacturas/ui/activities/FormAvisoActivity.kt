@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.amsys.alphamanfacturas.R
+import com.amsys.alphamanfacturas.data.local.model.Response
 import com.amsys.alphamanfacturas.data.viewModel.AvisoViewModel
 import com.amsys.alphamanfacturas.data.viewModel.ViewModelFactory
 import com.amsys.alphamanfacturas.helper.Util
@@ -108,9 +109,11 @@ class FormAvisoActivity : DaggerAppCompatActivity() {
             Util.toastMensaje(this, it)
             finish()
         }
-        avisoViewModel.mensajeError.observe(this) {
-            closeLoad()
-            Util.toastMensaje(this, it)
+        avisoViewModel.response.observe(this) {
+            if (it != null){
+                closeLoad()
+                dialogError(it)
+            }
         }
         avisoViewModel.mensajeLogout.observe(this) {
             closeLoad()
@@ -131,6 +134,21 @@ class FormAvisoActivity : DaggerAppCompatActivity() {
                 d.cancel()
             }.show()
     }
+
+    private fun dialogError(r:Response) {
+        val lista = r.comentario.split(",")
+        var descripcion = ""
+        lista.forEach{
+            descripcion += "- $it.\n"
+        }
+        MaterialAlertDialogBuilder(ContextThemeWrapper(this, R.style.AppTheme))
+            .setTitle(r.descripcion)
+            .setMessage(descripcion)
+            .setPositiveButton("Entendido") { d, _ ->
+                d.dismiss()
+            }.show()
+    }
+
 
     private fun load() {
         builder = AlertDialog.Builder(ContextThemeWrapper(this, R.style.AppTheme))

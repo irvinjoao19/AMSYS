@@ -8,4 +8,5 @@ open class SyncAviso {
     var mecanismosFalla: List<MecanismoFalla> = ArrayList()
     var impactos: List<Impacto> = ArrayList()
     var causasFalla: List<CausaFalla> = ArrayList()
+    var talleresResponsable: List<TalleResponsable> = ArrayList()
 }

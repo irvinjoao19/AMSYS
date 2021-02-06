@@ -33,6 +33,7 @@ interface AppRepository {
     fun getImpacto(): LiveData<List<Impacto>>
     fun getCausaFalla(): LiveData<List<CausaFalla>>
     fun getPrioridad(): LiveData<List<Prioridad>>
+    fun getTalleResponsable(): LiveData<List<TalleResponsable>>
     fun getConsecuencia(): LiveData<List<Consecuencia>>
     fun getParada(): LiveData<List<Parada>>
     fun getTipoParada(): LiveData<List<TipoParada>>
@@ -95,4 +96,5 @@ interface AppRepository {
 
     // Reporte
     fun getReporte(token:String,q:Query) : Observable<ResponseModel>
+
 }

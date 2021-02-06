@@ -63,4 +63,5 @@
     <string name="title_avisos">Avisos</string>
     <string name="title_inspeccion">Inspección</string>
     <string name="required">(*)</string>
+    <string name="title_taller_responsable">Taller Responsable</string>
 </resources>

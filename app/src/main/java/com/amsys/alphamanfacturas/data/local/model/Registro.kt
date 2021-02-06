@@ -12,6 +12,7 @@ open class Registro {
     var consecuenciaId: Int = 0
     var descripcion: String = ""
     var prioridadId: Int = 0
+    var tallerResponsableId: Int = 0
 
     var ubicacionTecnicaId: Int = 0
     var emplazamientoId: Int = 0
@@ -48,6 +49,7 @@ open class Registro {
     var tipoAvisoNombre: String = ""
     var consecuenciaIdNombre: String = ""
     var prioridadIdNombre: String = ""
+    var tallerResponsableIdNombre: String = ""
 
     //form2
 

@@ -81,4 +81,8 @@ interface OnItemClickListener {
     interface InspeccionFileListener {
         fun onItemClick(f: InspeccionFile, v: View, position: Int)
     }
+
+    interface TalleResponsableListener {
+        fun onItemClick(t: TalleResponsable, v: View, position: Int)
+    }
 }

@@ -120,6 +120,11 @@ class DataBaseModule {
     }
 
     @Provides
+    internal fun provideTalleResponsableDao(appDataBase: AppDataBase): TalleResponsableDao {
+        return appDataBase.talleResponsableDao()
+    }
+
+    @Provides
     internal fun provideInspeccionFileDao(appDataBase: AppDataBase): InspeccionFileDao {
         return appDataBase.inspeccionFileDao()
     }
