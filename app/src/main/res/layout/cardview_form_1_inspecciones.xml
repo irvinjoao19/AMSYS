@@ -152,6 +152,7 @@
                 android:id="@+id/editText2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
                 android:inputType="numberDecimal" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -188,6 +189,7 @@
                 android:id="@+id/editText3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:imeOptions="actionDone"
                 android:gravity="top"
                 android:inputType="text|textNoSuggestions" />
         </com.google.android.material.textfield.TextInputLayout>
