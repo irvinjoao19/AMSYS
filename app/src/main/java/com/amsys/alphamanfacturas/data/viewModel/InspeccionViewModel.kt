@@ -201,7 +201,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
     }
 
     fun getFolderAdjunto(user: Int, id: Int, context: Context, data: Intent) {
-        Util.getFolderAdjunto(user, id, context, data)
+        Util.getFolderInspeccionAdjunto(user, id, context, data)
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : Observer<InspeccionFile> {

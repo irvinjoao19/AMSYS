@@ -1,5 +1,7 @@
 package com.amsys.alphamanfacturas.data.viewModel
 
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,6 +10,7 @@ import com.amsys.alphamanfacturas.data.local.model.*
 import com.amsys.alphamanfacturas.data.local.repository.ApiError
 import com.amsys.alphamanfacturas.data.local.repository.AppRepository
 import com.amsys.alphamanfacturas.helper.Mensaje
+import com.amsys.alphamanfacturas.helper.Util
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.reactivex.CompletableObserver
@@ -498,5 +501,41 @@ internal constructor(private val roomRepository: AppRepository, private val retr
 
     fun getTalleResponsable(): LiveData<List<TalleResponsable>> {
         return roomRepository.getTalleResponsable()
+    }
+
+    fun getFolderAdjunto(user: Int, id: Int, context: Context, data: Intent) {
+        Util.getFolderAvisoAdjunto(user, id, context, data)
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<AvisoFile> {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onComplete() {}
+                override fun onNext(t: AvisoFile) {
+                    insertAvisoFile(t)
+                }
+
+                override fun onError(e: Throwable) {
+                    mensajeError.value = e.toString()
+                }
+            })
+    }
+
+    private fun insertAvisoFile(t: AvisoFile) {
+        roomRepository.insertAvisoFile(t)
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : CompletableObserver {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onError(e: Throwable) {}
+                override fun onComplete() {}
+            })
+    }
+
+    fun getAvisoFiles(registroId: Int): LiveData<List<AvisoFile>> {
+        return roomRepository.getAvisoFiles(registroId)
+    }
+
+    fun deleteFile(a: AvisoFile, requireContext: Context) {
+        roomRepository.deleteFile(a, requireContext)
     }
 }

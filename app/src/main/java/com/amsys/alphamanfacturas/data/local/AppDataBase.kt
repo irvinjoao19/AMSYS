@@ -20,6 +20,7 @@ import com.amsys.alphamanfacturas.data.local.model.*
         Impacto::class,
         CausaFalla::class,
         Registro::class,
+        AvisoFile::class,
         Equipo::class,
         ModoFalla::class,
         TipoParada::class,
@@ -31,7 +32,7 @@ import com.amsys.alphamanfacturas.data.local.model.*
         InspeccionFile::class,
         TalleResponsable::class
     ],
-    version = 19, // version 1 en play store
+    version = 20, // version 1 en play store
     exportSchema = false
 )
 @TypeConverters(Converts::class)
@@ -47,6 +48,7 @@ abstract class AppDataBase : RoomDatabase() {
     abstract fun impactoDao(): ImpactoDao
     abstract fun causaFallaDao(): CausaFallaDao
     abstract fun registroDao(): RegistroDao
+    abstract fun avisoFileDao(): AvisoFileDao
     abstract fun equipoDao(): EquipoDao
     abstract fun modoFallaDao(): ModoFallaDao
     abstract fun tipoParadaDao(): TipoParadaDao

@@ -89,7 +89,7 @@ class FormAvisoActivity : DaggerAppCompatActivity() {
         }
 
         val formAdapter =
-            ViewPagerAdapter.FormAvisos(supportFragmentManager, 5, id, tipo, token, user)
+            ViewPagerAdapter.FormAvisos(supportFragmentManager, 6, id, tipo, token, user)
         viewPager.adapter = formAdapter
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(p: Int, pos: Float, posp: Int) {}

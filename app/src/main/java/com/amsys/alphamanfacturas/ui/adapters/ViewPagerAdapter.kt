@@ -20,6 +20,7 @@ abstract class ViewPagerAdapter {
                 2 -> Aviso3Fragment.newInstance(id, tipo)
                 3 -> Aviso4Fragment.newInstance(id, token, user,tipo)
                 4 -> Aviso5Fragment.newInstance(id)
+                5 -> Aviso6Fragment.newInstance(id,user)
                 else -> Fragment()
             }
         }

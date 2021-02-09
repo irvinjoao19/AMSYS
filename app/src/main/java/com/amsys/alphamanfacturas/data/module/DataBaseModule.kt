@@ -80,6 +80,12 @@ class DataBaseModule {
     }
 
     @Provides
+    internal fun provideAvisoFileDao(appDataBase: AppDataBase): AvisoFileDao {
+        return appDataBase.avisoFileDao()
+    }
+
+
+    @Provides
     internal fun provideEquipoDao(appDataBase: AppDataBase): EquipoDao {
         return appDataBase.equipoDao()
     }

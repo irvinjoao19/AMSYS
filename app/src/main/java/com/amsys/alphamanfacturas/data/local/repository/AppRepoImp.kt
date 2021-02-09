@@ -95,6 +95,10 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
         return dataBase.avisoDao().getAvisos()
     }
 
+    override fun getAvisoFiles(registroId: Int): LiveData<List<AvisoFile>> {
+        return dataBase.avisoFileDao().getAvisoFiles(registroId)
+    }
+
     override fun getParametros(token: String): Observable<ResponseModel> {
         return apiService.getParametros(token)
     }
@@ -198,6 +202,19 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
 
     override fun getRegistroById(id: Int): LiveData<Registro> {
         return dataBase.registroDao().getRegistroById(id)
+    }
+
+    override fun insertAvisoFile(t: AvisoFile): Completable {
+        return Completable.fromAction {
+            dataBase.avisoFileDao().insertAvisoFileTask(t)
+        }
+    }
+
+    override fun deleteFile(a: AvisoFile, context: Context): Completable {
+        return Completable.fromAction {
+            Util.deleteFile(a.url, context)
+            dataBase.avisoFileDao().deleteAvisoFileTask(a)
+        }
     }
 
     override fun deleteEquipo(): Completable {

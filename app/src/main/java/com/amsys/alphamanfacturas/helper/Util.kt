@@ -30,6 +30,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.exifinterface.media.ExifInterface
 import com.amsys.alphamanfacturas.R
+import com.amsys.alphamanfacturas.data.local.model.AvisoFile
 import com.amsys.alphamanfacturas.data.local.model.InspeccionFile
 import com.amsys.alphamanfacturas.ui.activities.LoginActivity
 import com.google.android.gms.maps.model.BitmapDescriptor
@@ -1031,7 +1032,7 @@ object Util {
         }
     }
 
-    fun getFolderAdjunto(
+    fun getFolderInspeccionAdjunto(
         user: Int, id: Int, context: Context, data: Intent
     ): Observable<InspeccionFile> {
         return Observable.create {
@@ -1060,6 +1061,40 @@ object Util {
             out.close()
 
             file.inspeccionId = id
+            file.usuarioId = user
+            file.url = format
+            it.onNext(file)
+            it.onComplete()
+        }
+    }
+
+    fun getFolderAvisoAdjunto(user:Int,id: Int, context: Context, data: Intent): Observable<AvisoFile> {
+        return Observable.create {
+            val file = AvisoFile()
+            data.data?.let { returnUri ->
+                file.type = context.contentResolver.getType(returnUri)!!
+                context.contentResolver.query(returnUri, null, null, null, null)
+            }?.use { cursor ->
+                val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+                cursor.moveToFirst()
+                file.name = cursor.getString(nameIndex)
+                file.size = cursor.getLong(sizeIndex)
+            }
+
+            val type = file.name.substring(file.name.lastIndexOf("."))
+            val format = getFechaFile(user, id, type)
+            val f = File(getFolder(context), format)
+
+            val input = context.contentResolver.openInputStream(data.data!!) as FileInputStream
+            val out = FileOutputStream(f)
+            val inChannel = input.channel
+            val outChannel = out.channel
+            inChannel.transferTo(0, inChannel.size(), outChannel)
+            input.close()
+            out.close()
+
+            file.avisoId = id
             file.usuarioId = user
             file.url = format
             it.onNext(file)

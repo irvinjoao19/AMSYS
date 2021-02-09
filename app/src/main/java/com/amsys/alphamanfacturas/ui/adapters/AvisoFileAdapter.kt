@@ -5,17 +5,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.amsys.alphamanfacturas.R
-import com.amsys.alphamanfacturas.data.local.model.InspeccionFile
+import com.amsys.alphamanfacturas.data.local.model.AvisoFile
 import com.amsys.alphamanfacturas.helper.Util
 import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
 import kotlinx.android.synthetic.main.cardview_file.view.*
 
-class InspeccionFileAdapter(private val listener: OnItemClickListener.InspeccionFileListener) :
-    RecyclerView.Adapter<InspeccionFileAdapter.ViewHolder>() {
+class AvisoFileAdapter(private val listener: OnItemClickListener.AvisoFileListener) :
+    RecyclerView.Adapter<AvisoFileAdapter.ViewHolder>() {
 
-    private var d = emptyList<InspeccionFile>()
+    private var d = emptyList<AvisoFile>()
 
-    fun addItems(list: List<InspeccionFile>) {
+    fun addItems(list: List<AvisoFile>) {
         d = list
         notifyDataSetChanged()
     }
@@ -37,7 +37,7 @@ class InspeccionFileAdapter(private val listener: OnItemClickListener.Inspeccion
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(a: InspeccionFile, listener: OnItemClickListener.InspeccionFileListener) =
+        fun bind(a: AvisoFile, listener: OnItemClickListener.AvisoFileListener) =
             with(itemView) {
                 textView1.text = a.name
                 textView2.text = a.type

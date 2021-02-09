@@ -22,6 +22,7 @@ interface AppRepository {
     fun paginationAviso(token: String, body: RequestBody): Flowable<ResponseModel>
     fun insertLista(r: Any): Completable
     fun getAvisos(): LiveData<List<Aviso>>
+    fun getAvisoFiles(registroId: Int): LiveData<List<AvisoFile>>
 
     // Parametros
     fun getParametros(token: String): Observable<ResponseModel>
@@ -43,6 +44,8 @@ interface AppRepository {
     fun getIdentity(): LiveData<Int>
     fun insertAviso(r: Registro): Completable
     fun getRegistroById(id: Int): LiveData<Registro>
+    fun insertAvisoFile(t: AvisoFile): Completable
+    fun deleteFile(a: AvisoFile, context: Context): Completable
 
     //Equipo
     fun deleteEquipo(): Completable
