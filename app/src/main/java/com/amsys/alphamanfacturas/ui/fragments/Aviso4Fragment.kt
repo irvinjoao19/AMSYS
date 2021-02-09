@@ -35,6 +35,7 @@ import javax.inject.Inject
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 private const val ARG_PARAM3 = "param3"
+private const val ARG_PARAM4 = "param4"
 
 class Aviso4Fragment : DaggerFragment(), View.OnClickListener {
 
@@ -56,14 +57,16 @@ class Aviso4Fragment : DaggerFragment(), View.OnClickListener {
     private var registroId: Int = 0
     private var token: String = ""
     private var usuarioId: Int = 0
+    private var tipoAviso: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         r = Registro()
         arguments?.let {
             registroId = it.getInt(ARG_PARAM1)
-            token = it.getString(ARG_PARAM2)!!
+            token = it.getString(ARG_PARAM2, "")
             usuarioId = it.getInt(ARG_PARAM3)
+            tipoAviso = it.getInt(ARG_PARAM4)
         }
     }
 
@@ -81,6 +84,14 @@ class Aviso4Fragment : DaggerFragment(), View.OnClickListener {
     private fun bindUI() {
         avisoViewModel =
             ViewModelProvider(this, viewModelFactory).get(AvisoViewModel::class.java)
+
+        if (tipoAviso == 4) {
+            txtr1.visibility = View.VISIBLE
+            txtr2.visibility = View.VISIBLE
+            txtr3.visibility = View.VISIBLE
+            txtr4.visibility = View.VISIBLE
+            txtr5.visibility = View.VISIBLE
+        }
 
         avisoViewModel.getRegistroById(registroId).observe(viewLifecycleOwner) {
             if (it != null) {
@@ -199,7 +210,7 @@ class Aviso4Fragment : DaggerFragment(), View.OnClickListener {
         val datePickerDialog = DatePickerDialog(context, { _, year, monthOfYear, dayOfMonth ->
             val month =
                 if (((monthOfYear + 1) / 10) == 0) "0" + (monthOfYear + 1).toString() else (monthOfYear + 1).toString()
-            val day = if (((dayOfMonth + 1) / 10) == 0) "0$dayOfMonth" else dayOfMonth.toString()
+            val day = String.format("%02d", dayOfMonth)
             val fecha = "$day/$month/$year"
             val d = Calendar.getInstance()
             val mHour = d.get(Calendar.HOUR_OF_DAY)
@@ -225,19 +236,19 @@ class Aviso4Fragment : DaggerFragment(), View.OnClickListener {
             timePickerDialog.show()
 
 
-
         }, mYear, mMonth, mDay)
         datePickerDialog.show()
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(param1: Int, param2: String, param3: Int) =
+        fun newInstance(param1: Int, param2: String, param3: Int, param4: Int) =
             Aviso4Fragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
                     putInt(ARG_PARAM3, param3)
+                    putInt(ARG_PARAM4, param4)
                 }
             }
     }

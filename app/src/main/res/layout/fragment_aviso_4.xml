@@ -17,7 +17,7 @@
             android:layout_margin="10dp"
             app:cardCornerRadius="4dp"
             app:cardElevation="4dp">
-            
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -27,11 +27,25 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
+                    android:fontFamily="@font/opensans_semibold"
                     android:text="@string/title_inicio_parada"
                     android:textColor="@color/colorPrimary"
                     android:textSize="12sp"
-                    android:fontFamily="@font/opensans_semibold"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txtr1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="@string/required"
+                    android:textColor="@color/colorRed"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -53,20 +67,36 @@
                         android:layout_height="wrap_content"
                         android:drawableEnd="@drawable/ic_date"
                         android:focusable="false"
-                        android:inputType="textNoSuggestions"
-                        android:hint="@string/hint_time" />
+                        android:hint="@string/hint_time"
+                        android:inputType="textNoSuggestions" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:id="@+id/txt2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/opensans_semibold"
                     android:text="@string/title_fin_parada"
                     android:textColor="@color/colorPrimary"
                     android:textSize="12sp"
-                    android:fontFamily="@font/opensans_semibold"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layout1" />
+
+                <TextView
+                    android:id="@+id/txtr2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="@string/required"
+                    android:textColor="@color/colorRed"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/layout1" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -88,20 +118,36 @@
                         android:layout_height="wrap_content"
                         android:drawableEnd="@drawable/ic_date"
                         android:focusable="false"
-                        android:inputType="textNoSuggestions"
-                        android:hint="@string/hint_time" />
+                        android:hint="@string/hint_time"
+                        android:inputType="textNoSuggestions" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:id="@+id/txt3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/opensans_semibold"
                     android:text="@string/title_clase_parada"
                     android:textColor="@color/colorPrimary"
                     android:textSize="12sp"
-                    android:fontFamily="@font/opensans_semibold"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layout2" />
+
+                <TextView
+                    android:id="@+id/txtr3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="@string/required"
+                    android:textColor="@color/colorRed"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/layout2" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -122,20 +168,36 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableEnd="@drawable/ic_down"
-                        android:inputType="textNoSuggestions"
-                        android:focusable="false" />
+                        android:focusable="false"
+                        android:inputType="textNoSuggestions" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:id="@+id/txt4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/opensans_semibold"
                     android:text="@string/title_tipo_parada"
                     android:textColor="@color/colorPrimary"
                     android:textSize="12sp"
-                    android:fontFamily="@font/opensans_semibold"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layout3" />
+
+                <TextView
+                    android:id="@+id/txtr4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="@string/required"
+                    android:textColor="@color/colorRed"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/layout3" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -156,20 +218,36 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableEnd="@drawable/ic_down"
-                        android:inputType="textNoSuggestions"
-                        android:focusable="false" />
+                        android:focusable="false"
+                        android:inputType="textNoSuggestions" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:id="@+id/txt5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/opensans_semibold"
                     android:text="@string/title_sub_tipo_parada"
                     android:textColor="@color/colorPrimary"
                     android:textSize="12sp"
-                    android:fontFamily="@font/opensans_semibold"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layout4" />
+
+                <TextView
+                    android:id="@+id/txtr5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="@string/required"
+                    android:textColor="@color/colorRed"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/layout4" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -192,8 +270,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableEnd="@drawable/ic_down"
-                        android:inputType="textNoSuggestions"
-                        android:focusable="false" />
+                        android:focusable="false"
+                        android:inputType="textNoSuggestions" />
                 </com.google.android.material.textfield.TextInputLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>

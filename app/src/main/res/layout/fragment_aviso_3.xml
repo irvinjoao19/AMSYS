@@ -60,13 +60,31 @@
                     android:id="@+id/txt2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
                     android:text="@string/title_metodo_deteccion"
                     android:textColor="@color/colorPrimary"
                     android:textSize="12sp"
                     android:fontFamily="@font/opensans_semibold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/layout1" />
+
+                <TextView
+                    android:id="@+id/txtr2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="@string/required"
+                    android:textColor="@color/colorRed"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layout1" />
+
+
+
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layout2"
@@ -94,12 +112,27 @@
                     android:id="@+id/txt4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
                     android:text="@string/title_fecha"
                     android:textColor="@color/colorPrimary"
                     android:textSize="12sp"
                     android:fontFamily="@font/opensans_semibold"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layout2" />
+
+                <TextView
+                    android:id="@+id/txtr3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="@string/required"
+                    android:textColor="@color/colorRed"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/layout2" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -129,7 +162,8 @@
                     android:id="@+id/txt5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
                     android:text="@string/title_comentario"
                     android:textColor="@color/colorPrimary"
                     android:textSize="12sp"

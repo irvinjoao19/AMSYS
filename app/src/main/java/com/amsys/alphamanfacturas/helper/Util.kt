@@ -603,7 +603,7 @@ object Util {
         val datePickerDialog = DatePickerDialog(context, { _, year, monthOfYear, dayOfMonth ->
             val month =
                 if (((monthOfYear + 1) / 10) == 0) "0" + (monthOfYear + 1).toString() else (monthOfYear + 1).toString()
-            val day = if (((dayOfMonth + 1) / 10) == 0) "0$dayOfMonth" else dayOfMonth.toString()
+            val day = String.format("%02d", dayOfMonth)
             val fecha = "$day/$month/$year"
             text.text = fecha
         }, mYear, mMonth, mDay)
@@ -617,8 +617,8 @@ object Util {
         val mDay = c.get(Calendar.DAY_OF_MONTH)
         val datePickerDialog = DatePickerDialog(context, { _, year, monthOfYear, dayOfMonth ->
             val month =
-                if (((monthOfYear + 1) / 10) == 0) "0" + (monthOfYear + 1).toString() else (monthOfYear + 1).toString()
-            val day = if (((dayOfMonth + 1) / 10) == 0) "0$dayOfMonth" else dayOfMonth.toString()
+                if (((monthOfYear + 1) / 10) == 0) "0${monthOfYear + 1}" else "${monthOfYear + 1}"
+            val day = String.format("%02d", dayOfMonth)
             val fecha = "$day/$month/$year"
 //            input.setText(fecha)
 
@@ -650,7 +650,7 @@ object Util {
         val datePickerDialog = DatePickerDialog(context, { _, year, monthOfYear, dayOfMonth ->
             val month =
                 if (((monthOfYear + 1) / 10) == 0) "0" + (monthOfYear + 1).toString() else (monthOfYear + 1).toString()
-            val day = if (((dayOfMonth + 1) / 10) == 0) "0$dayOfMonth" else dayOfMonth.toString()
+            val day = String.format("%02d", dayOfMonth)
             val fecha = "$day/$month/$year"
             input.setText(fecha)
         }, mYear, mMonth, mDay)
@@ -671,7 +671,7 @@ object Util {
         timePickerDialog.show()
     }
 
-    fun getCompareFecha(fechaInicial: String, fechaFinal: String): Boolean {
+    private fun getCompareFecha(fechaInicial: String, fechaFinal: String): Boolean {
         @SuppressLint("SimpleDateFormat") val format = SimpleDateFormat("dd/MM/yyyy")
         var date1 = Date()
         try {

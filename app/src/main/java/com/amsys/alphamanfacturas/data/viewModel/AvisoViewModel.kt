@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.amsys.alphamanfacturas.data.local.model.*
 import com.amsys.alphamanfacturas.data.local.repository.ApiError
 import com.amsys.alphamanfacturas.data.local.repository.AppRepository
+import com.amsys.alphamanfacturas.helper.Mensaje
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.reactivex.CompletableObserver
@@ -36,7 +37,6 @@ internal constructor(private val roomRepository: AppRepository, private val retr
     val compositeDisposable = CompositeDisposable()
     val paginator = PublishProcessor.create<Int>()
     val pageNumber: MutableLiveData<Int> = MutableLiveData()
-    val informacion: MutableLiveData<EquipoInformacion> = MutableLiveData()
 //    val lista: MutableLiveData<List<Aviso>> = MutableLiveData()
 
     fun setError(s: String) {
@@ -51,11 +51,13 @@ internal constructor(private val roomRepository: AppRepository, private val retr
         loading.value = load
     }
 
-    fun paginationAviso(token: String, q: Query) {
+    fun paginationAviso(token: String, usuarioId: Int) {
         val disposable = paginator
             .onBackpressureDrop()
             .delay(1000, TimeUnit.MILLISECONDS)
             .concatMap { page ->
+                val q = Query()
+                q.userId = usuarioId
                 q.pageNumber = page
                 q.pageSize = 10
                 val json = Gson().toJson(q)
@@ -221,7 +223,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
         return roomRepository.getEquipos()
     }
 
-    fun getInformacion(token: String, q: Query) {
+    fun getInformacion(token: String, q: Query, r: Registro) {
         roomRepository.getInformacion(token, q)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -239,9 +241,43 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                             gson, object : TypeToken<EquipoInformacion>() {}.type
                         )
                         if (e != null) {
-                            informacion.value = e
+                            r.ubicacionTecnicaId = e.ubicacionTecnicaId
+                            r.ubicacionTecnicaCodigo = e.ubicacionTecnicaCodigo
+                            r.ubicacionTecnicaNombre = e.ubicacionTecnicaNombre
+                            r.emplazamientoId = e.emplazamientoId
+                            r.emplazamientoCodigo = e.emplazamientoCodigo
+                            r.emplazamientoNombre = e.emplazamientoNombre
+                            r.equipoPadreId = e.equipoPadreId
+                            r.equipoPadreCodigo = e.equipoPadreCodigo
+                            r.equipoPadreNombre = e.equipoPadreNombre
+                            r.componenteId = e.componenteId
+                            r.componenteNombre = e.componenteNombre
+                            r.equipoId = e.equipoId
+                            r.equipoCodigo = e.equipoCodigo
+                            r.equipoNombre = e.equipoNombre
+                            r.areaId = e.areaId
+                            r.areaNombre = e.areaNombre
+                            r.plantaId = e.plantaId
+                            insertAviso(r)
                         } else {
-                            informacion.value = null
+                            r.ubicacionTecnicaId = 0
+                            r.ubicacionTecnicaCodigo = ""
+                            r.ubicacionTecnicaNombre = ""
+                            r.emplazamientoId = 0
+                            r.emplazamientoCodigo = ""
+                            r.emplazamientoNombre = ""
+                            r.equipoPadreId = 0
+                            r.equipoPadreCodigo = ""
+                            r.equipoPadreNombre = ""
+                            r.componenteId = 0
+                            r.componenteNombre = ""
+                            r.equipoId = 0
+                            r.equipoCodigo = ""
+                            r.equipoNombre = ""
+                            r.areaId = 0
+                            r.areaNombre = ""
+                            r.plantaId = 0
+                            insertAviso(r)
                         }
                     } else {
                         mensajeError.value = "${t.response.descripcion} \n${t.response.comentario}"
@@ -430,7 +466,11 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                 override fun onComplete() {}
                 override fun onNext(t: ResponseModel) {
                     if (t.response.codigo == "0000") {
-                        mensajeSuccess.value = t.response.descripcion
+                        val gson = Gson().toJson(t.data)
+                        val e: Mensaje? = Gson().fromJson(
+                            gson, object : TypeToken<Mensaje>() {}.type
+                        )
+                        mensajeSuccess.value = e?.mensaje
                     } else {
                         response.value = t.response
                     }

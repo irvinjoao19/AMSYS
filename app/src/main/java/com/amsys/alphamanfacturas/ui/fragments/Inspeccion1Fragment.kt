@@ -109,7 +109,6 @@ class Inspeccion1Fragment : DaggerFragment() {
 
         inspeccionViewModel.getPuntoMedidaById(inspeccionId).observe(viewLifecycleOwner) {
             puntoMedidaAdapter.addItems(it)
-            recyclerView.invalidate()
         }
     }
 

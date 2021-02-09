@@ -94,29 +94,6 @@ class Aviso2Fragment : DaggerFragment(), View.OnClickListener {
             }
         }
 
-        avisoViewModel.informacion.observe(viewLifecycleOwner) {
-            if (it != null) {
-                r.ubicacionTecnicaId = it.ubicacionTecnicaId
-                r.ubicacionTecnicaCodigo = it.ubicacionTecnicaCodigo
-                r.ubicacionTecnicaNombre = it.ubicacionTecnicaNombre
-                r.emplazamientoId = it.emplazamientoId
-                r.emplazamientoCodigo = it.emplazamientoCodigo
-                r.emplazamientoNombre = it.emplazamientoNombre
-                r.equipoPadreId = it.equipoPadreId
-                r.equipoPadreCodigo = it.equipoPadreCodigo
-                r.equipoPadreNombre = it.equipoPadreNombre
-                r.componenteId = it.componenteId
-                r.componenteNombre = it.componenteNombre
-                r.equipoId = it.equipoId
-                r.equipoCodigo = it.equipoCodigo
-                r.equipoNombre = it.equipoNombre
-                r.areaId = it.areaId
-                r.areaNombre = it.areaNombre
-                r.plantaId = it.plantaId
-                avisoViewModel.insertAviso(r)
-            }
-        }
-
         avisoViewModel.mensajeError.observe(viewLifecycleOwner) {
             Util.toastMensaje(requireContext(), it)
         }
@@ -175,7 +152,7 @@ class Aviso2Fragment : DaggerFragment(), View.OnClickListener {
         val equipoAdapter = EquipoAdapter(object : OnItemClickListener.EquipoListener {
             override fun onItemClick(e: Equipo, v: View, position: Int) {
                 clearInformation()
-                avisoViewModel.getInformacion(token, Query(usuarioId, e.equipoId))
+                avisoViewModel.getInformacion(token, Query(usuarioId, e.equipoId),r)
                 dialog.dismiss()
             }
         })
@@ -229,23 +206,6 @@ class Aviso2Fragment : DaggerFragment(), View.OnClickListener {
     }
 
     private fun clearInformation() {
-        r.ubicacionTecnicaId = 0
-        r.ubicacionTecnicaCodigo = ""
-        r.ubicacionTecnicaNombre = ""
-        r.emplazamientoId = 0
-        r.emplazamientoCodigo = ""
-        r.emplazamientoNombre = ""
-        r.equipoPadreId = 0
-        r.equipoPadreCodigo = ""
-        r.equipoPadreNombre = ""
-        r.componenteId = 0
-        r.componenteNombre = ""
-        r.equipoId = 0
-        r.equipoCodigo = ""
-        r.equipoNombre = ""
-        r.areaId = 0
-        r.areaNombre = ""
-        r.plantaId = 0
         editText1.text = null
         editText2.text = null
         editText3.text = null

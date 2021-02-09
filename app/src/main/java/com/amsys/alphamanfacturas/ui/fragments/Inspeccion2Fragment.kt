@@ -112,7 +112,6 @@ class Inspeccion2Fragment : DaggerFragment() {
 
         inspeccionViewModel.getContadorById(inspeccionId).observe(viewLifecycleOwner) {
             contadorAdapter.addItems(it)
-            recyclerView.invalidate()
         }
     }
 

@@ -125,7 +125,6 @@ class Inspeccion3Fragment : DaggerFragment() {
 
         inspeccionViewModel.getAspectoById(inspeccionId).observe(viewLifecycleOwner) {
             aspectoAdapter.addItems(it)
-            recyclerView.invalidate()
         }
     }
 

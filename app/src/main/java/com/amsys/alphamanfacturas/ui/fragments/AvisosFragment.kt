@@ -50,14 +50,12 @@ class AvisosFragment : DaggerFragment(), View.OnClickListener {
     private var totalItemCount: Int = 0
     private var visibleItemCount: Int = 0
     private var registroId: Int = 0
-    lateinit var q: Query
 
     lateinit var builder: AlertDialog.Builder
     private var dialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        q = Query()
         arguments?.let {
             token = it.getString(ARG_PARAM1)!!
             usuarioId = it.getInt(ARG_PARAM2)
@@ -107,9 +105,9 @@ class AvisosFragment : DaggerFragment(), View.OnClickListener {
                 }
             }
         })
-        avisoViewModel.getPageNumber(pageNumber)
-        q.userId = usuarioId
-        avisoViewModel.paginationAviso(token, q)
+//        avisoViewModel.getPageNumber(pageNumber)
+//        q.userId = usuarioId
+//        avisoViewModel.paginationAviso(token, q)
 
         avisoViewModel.getAvisos().observe(viewLifecycleOwner) {
             avisoAdapter.addItems(it)
@@ -219,5 +217,12 @@ class AvisosFragment : DaggerFragment(), View.OnClickListener {
                     putInt(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        avisoViewModel.setLoading(true)
+        avisoViewModel.getPageNumber(pageNumber)
+        avisoViewModel.paginationAviso(token, usuarioId)
     }
 }

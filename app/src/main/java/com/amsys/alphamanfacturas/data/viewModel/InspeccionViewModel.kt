@@ -9,8 +9,10 @@ import androidx.lifecycle.ViewModel
 import com.amsys.alphamanfacturas.data.local.model.*
 import com.amsys.alphamanfacturas.data.local.repository.ApiError
 import com.amsys.alphamanfacturas.data.local.repository.AppRepository
+import com.amsys.alphamanfacturas.helper.Mensaje
 import com.amsys.alphamanfacturas.helper.Util
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import io.reactivex.CompletableObserver
 import io.reactivex.Observable
 import io.reactivex.Observer
@@ -299,7 +301,11 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                 override fun onComplete() {}
                 override fun onNext(t: ResponseModel) {
                     if (t.response.codigo == "0000") {
-                        mensajeSuccess.value = t.response.descripcion
+                        val gson = Gson().toJson(t.data)
+                        val e: Mensaje? = Gson().fromJson(
+                            gson, object : TypeToken<Mensaje>() {}.type
+                        )
+                        mensajeSuccess.value = e?.mensaje
                     } else {
                         mensajeError.value = "${t.response.descripcion} \n${t.response.comentario}"
                     }

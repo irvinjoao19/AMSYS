@@ -85,6 +85,14 @@ class Aviso3Fragment : DaggerFragment(), View.OnClickListener {
             layout2.visibility = View.GONE
             txt4.visibility = View.GONE
             layout4.visibility = View.GONE
+
+            txtr2.visibility = View.GONE
+            txtr3.visibility = View.GONE
+        }
+
+        if (tipoAviso == 1){
+            txtr2.visibility = View.GONE
+            txtr3.visibility = View.GONE
         }
 
         avisoViewModel.getRegistroById(registroId).observe(viewLifecycleOwner) {
@@ -182,8 +190,7 @@ class Aviso3Fragment : DaggerFragment(), View.OnClickListener {
             DatePickerDialog(requireContext(), { _, year, monthOfYear, dayOfMonth ->
                 val month =
                     if (((monthOfYear + 1) / 10) == 0) "0${monthOfYear + 1}" else "${monthOfYear + 1}"
-                val day =
-                    if (((dayOfMonth + 1) / 10) == 0) "0$dayOfMonth" else "$dayOfMonth"
+                val day = String.format("%02d", dayOfMonth)
                 val fecha = "$day/$month/$year"
                 editText4.setText(fecha)
                 r.fecha = fecha
