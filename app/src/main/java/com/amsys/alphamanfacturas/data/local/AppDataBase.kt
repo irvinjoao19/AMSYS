@@ -32,7 +32,7 @@ import com.amsys.alphamanfacturas.data.local.model.*
         InspeccionFile::class,
         TalleResponsable::class
     ],
-    version = 2, // version 1 en play store
+    version = 3, // version 1 en play store
     exportSchema = false
 )
 @TypeConverters(Converts::class)

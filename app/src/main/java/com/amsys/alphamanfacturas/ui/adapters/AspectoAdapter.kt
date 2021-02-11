@@ -49,39 +49,50 @@ class AspectoAdapter(private val listener: OnItemClickListener.AspectoListener) 
                 editText1.setText(a.fechaMuestra)
                 editText2.setText(a.valor)
 
-                when (a.tipoAspecto) {
-                    1 -> {
-                        if (a.tipoValor == 2) {
-                            editText2.inputType =
-                                InputType.TYPE_CLASS_NUMBER
+                if (a.editable) {
+                    when (a.tipoAspecto) {
+                        1 -> {
+                            if (a.tipoValor == 2) {
+                                editText2.inputType =
+                                    InputType.TYPE_CLASS_NUMBER
+                            }
+                        }
+                        2 -> {
+                            editText2.isFocusable = false
+                            editText2.setOnClickListener { v ->
+                                listener.onItemClick(a, v, adapterPosition)
+                            }
                         }
                     }
-                    2 -> {
-                        editText2.isFocusable = false
-                        editText2.setOnClickListener { v ->
-                            listener.onItemClick(a, v, adapterPosition)
-                        }
+
+                    editText3.setText(a.comentario)
+                    editText1.setOnClickListener { v ->
+                        listener.onItemClick(
+                            a,
+                            v,
+                            adapterPosition
+                        )
                     }
-                }
+                    editText2.setOnEditorActionListener { editText, p1, p2 ->
+                        listener.onEditorAction(a, editText, p1, p2)
+                    }
+                    editText3.setOnEditorActionListener { editText, p1, p2 ->
+                        listener.onEditorAction(a, editText, p1, p2)
+                    }
 
-                editText3.setText(a.comentario)
-
-                editText1.setOnClickListener { v -> listener.onItemClick(a, v, adapterPosition) }
-                editText2.setOnEditorActionListener { editText, p1, p2 ->
-                    listener.onEditorAction(a, editText, p1, p2)
-                }
-                editText3.setOnEditorActionListener { editText, p1, p2 ->
-                    listener.onEditorAction(a, editText, p1, p2)
-                }
-
-                textView7.setEndIconOnClickListener {
-                    listener.onItemClick(a, textView7, adapterPosition)
-                }
-                textView9.setEndIconOnClickListener {
-                    listener.onItemClick(a, textView9, adapterPosition)
-                }
-                textView11.setEndIconOnClickListener {
-                    listener.onItemClick(a, textView11, adapterPosition)
+                    textView7.setEndIconOnClickListener {
+                        listener.onItemClick(a, textView7, adapterPosition)
+                    }
+                    textView9.setEndIconOnClickListener {
+                        listener.onItemClick(a, textView9, adapterPosition)
+                    }
+                    textView11.setEndIconOnClickListener {
+                        listener.onItemClick(a, textView11, adapterPosition)
+                    }
+                } else {
+                    editText1.isEnabled = false
+                    editText2.isEnabled = false
+                    editText3.isEnabled = false
                 }
             }
     }

@@ -16,4 +16,5 @@ open class Contador {
     var valor: Double = 0.0
     var comentario: String = ""
     var orden:Int = 0
+    var editable : Boolean = false
 }

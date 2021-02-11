@@ -52,28 +52,35 @@ class ContadorAdapter(private val listener: OnItemClickListener.ContadorListener
                     textView4
                 )
                 textView5.visibility = View.GONE
-                editText1.setText(a.fechaMuestra)
-                editText2.setText(a.valor.toString())
-                editText2.inputType =
-                    InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
-                editText3.setText(a.comentario)
 
-                editText1.setOnClickListener { v -> listener.onItemClick(a, v, adapterPosition) }
-                editText2.setOnEditorActionListener { editText, p1, p2 ->
-                    listener.onEditorAction(a, editText, p1, p2)
-                }
-                editText3.setOnEditorActionListener { editText, p1, p2 ->
-                    listener.onEditorAction(a, editText, p1, p2)
-                }
+                if (a.editable) {
+                    editText1.setText(a.fechaMuestra)
+                    editText2.setText(a.valor.toString())
+                    editText2.inputType =
+                        InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+                    editText3.setText(a.comentario)
 
-                textView7.setEndIconOnClickListener {
-                    listener.onItemClick(a, textView7, adapterPosition)
-                }
-                textView9.setEndIconOnClickListener {
-                    listener.onItemClick(a, textView9, adapterPosition)
-                }
-                textView11.setEndIconOnClickListener {
-                    listener.onItemClick(a, textView11, adapterPosition)
+                    editText1.setOnClickListener { v -> listener.onItemClick(a, v, adapterPosition) }
+                    editText2.setOnEditorActionListener { editText, p1, p2 ->
+                        listener.onEditorAction(a, editText, p1, p2)
+                    }
+                    editText3.setOnEditorActionListener { editText, p1, p2 ->
+                        listener.onEditorAction(a, editText, p1, p2)
+                    }
+
+                    textView7.setEndIconOnClickListener {
+                        listener.onItemClick(a, textView7, adapterPosition)
+                    }
+                    textView9.setEndIconOnClickListener {
+                        listener.onItemClick(a, textView9, adapterPosition)
+                    }
+                    textView11.setEndIconOnClickListener {
+                        listener.onItemClick(a, textView11, adapterPosition)
+                    }
+                }else{
+                    editText1.isEnabled = false
+                    editText2.isEnabled = false
+                    editText3.isEnabled = false
                 }
             }
     }

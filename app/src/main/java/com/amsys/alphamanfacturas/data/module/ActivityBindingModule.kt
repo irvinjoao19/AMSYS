@@ -8,6 +8,9 @@ import dagger.android.ContributesAndroidInjector
 abstract class ActivityBindingModule {
 
     @ContributesAndroidInjector
+    internal abstract fun bindSplashActivity(): SplashActivity
+
+    @ContributesAndroidInjector
     internal abstract fun bindLoginActivity(): LoginActivity
 
     @ContributesAndroidInjector(modules = [FragmentBindingModule.Main::class])

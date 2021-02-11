@@ -20,4 +20,5 @@ open class Aspecto {
     var tipoValor: Int = 0
     var valores: Array<String> = emptyArray()
     var orden:Int = 0
+    var editable : Boolean = false
 }

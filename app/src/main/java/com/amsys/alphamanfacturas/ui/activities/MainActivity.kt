@@ -126,7 +126,7 @@ class MainActivity : DaggerAppCompatActivity() {
         usuarioViewModel.mensajeSuccess.observe(this) {
             closeLoad()
             if (it == "Close") {
-                val intent = Intent(this@MainActivity, LoginActivity::class.java)
+                val intent = Intent(this@MainActivity, SplashActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
             } else {
@@ -177,7 +177,7 @@ class MainActivity : DaggerAppCompatActivity() {
 
     private fun goLogin() {
         if (logout == "off") {
-            val intent = Intent(this, LoginActivity::class.java)
+            val intent = Intent(this, SplashActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
             finish()

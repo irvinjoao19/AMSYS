@@ -9,6 +9,18 @@ import com.amsys.alphamanfacturas.data.local.model.PuntoMedida
 import com.amsys.alphamanfacturas.helper.Util
 import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
 import kotlinx.android.synthetic.main.cardview_form_1_inspecciones.view.*
+import kotlinx.android.synthetic.main.cardview_form_1_inspecciones.view.editText1
+import kotlinx.android.synthetic.main.cardview_form_1_inspecciones.view.editText2
+import kotlinx.android.synthetic.main.cardview_form_1_inspecciones.view.editText3
+import kotlinx.android.synthetic.main.cardview_form_1_inspecciones.view.textView1
+import kotlinx.android.synthetic.main.cardview_form_1_inspecciones.view.textView11
+import kotlinx.android.synthetic.main.cardview_form_1_inspecciones.view.textView2
+import kotlinx.android.synthetic.main.cardview_form_1_inspecciones.view.textView3
+import kotlinx.android.synthetic.main.cardview_form_1_inspecciones.view.textView4
+import kotlinx.android.synthetic.main.cardview_form_1_inspecciones.view.textView5
+import kotlinx.android.synthetic.main.cardview_form_1_inspecciones.view.textView7
+import kotlinx.android.synthetic.main.cardview_form_1_inspecciones.view.textView9
+import kotlinx.android.synthetic.main.cardview_form_inspecciones.view.*
 
 class PuntoMedidaAdapter(private val listener: OnItemClickListener.PuntoMedidaListener) :
     RecyclerView.Adapter<PuntoMedidaAdapter.ViewHolder>() {
@@ -52,26 +64,36 @@ class PuntoMedidaAdapter(private val listener: OnItemClickListener.PuntoMedidaLi
                     "<font style='color:#29A2E6'>PM:</font> ${a.puntoMedida}",
                     textView5
                 )
-                editText1.setText(a.fechaMuestra)
-                editText2.setText(a.valor)
-                editText3.setText(a.comentario)
+                if (a.editable) {
+                    editText1.setText(a.fechaMuestra)
+                    editText2.setText(a.valor)
+                    editText3.setText(a.comentario)
 
-                editText1.setOnClickListener { v -> listener.onItemClick(a, v, adapterPosition) }
-                editText2.setOnEditorActionListener { editText, p1, p2 ->
-                    listener.onEditorAction(a, editText, p1, p2)
-                }
-                editText3.setOnEditorActionListener { editText, p1, p2 ->
-                    listener.onEditorAction(a, editText, p1, p2)
-                }
+                    editText1.setOnClickListener { v ->
+                        listener.onItemClick(
+                            a, v, adapterPosition
+                        )
+                    }
+                    editText2.setOnEditorActionListener { editText, p1, p2 ->
+                        listener.onEditorAction(a, editText, p1, p2)
+                    }
+                    editText3.setOnEditorActionListener { editText, p1, p2 ->
+                        listener.onEditorAction(a, editText, p1, p2)
+                    }
 
-                textView7.setEndIconOnClickListener {
-                    listener.onItemClick(a, textView7, adapterPosition)
-                }
-                textView9.setEndIconOnClickListener {
-                    listener.onItemClick(a, textView9, adapterPosition)
-                }
-                textView11.setEndIconOnClickListener {
-                    listener.onItemClick(a, textView11, adapterPosition)
+                    textView7.setEndIconOnClickListener {
+                        listener.onItemClick(a, textView7, adapterPosition)
+                    }
+                    textView9.setEndIconOnClickListener {
+                        listener.onItemClick(a, textView9, adapterPosition)
+                    }
+                    textView11.setEndIconOnClickListener {
+                        listener.onItemClick(a, textView11, adapterPosition)
+                    }
+                } else {
+                    editText1.isEnabled = false
+                    editText2.isEnabled = false
+                    editText3.isEnabled = false
                 }
             }
     }

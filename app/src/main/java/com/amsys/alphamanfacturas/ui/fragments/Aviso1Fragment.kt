@@ -82,9 +82,9 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener {
         r.tipoAviso = tipoAviso
         r.userId = usuarioId
         r.tipoAvisoNombre = when (tipoAviso) {
-            1 -> "Solicitud de Trabajo"
-            2 -> "Aviso de Falla"
-            else -> "Aviso de Parada"
+            1 -> "SOLICITUD DE TRABAJO"
+            2 -> "AVISO DE FALLA"
+            else -> "AVISO DE PARADA"
         }
         editText1.setText(r.tipoAvisoNombre)
         avisoViewModel.insertAviso(r)
@@ -120,7 +120,7 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener {
             }
         })
         editText5.setOnClickListener(this)
-        editText6.setText(String.format("Emitido"))
+        editText6.setText(String.format("EMITIDO"))
     }
 
     private fun spinnerDialog(tipo: Int, title: String) {

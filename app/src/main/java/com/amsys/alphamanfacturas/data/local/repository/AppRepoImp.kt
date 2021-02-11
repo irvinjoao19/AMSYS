@@ -501,9 +501,9 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
     override fun getInspeccionData(id: Int): Observable<SyncInspeccion> {
         return Observable.create {
             val sync = SyncInspeccion()
-            sync.aspectos = dataBase.aspectoDao().getAspectosTask(id)
-            sync.contadores = dataBase.contadorDao().getContadoresTask(id)
-            sync.puntosMedida = dataBase.puntoMedidaDao().getPuntoMedidasTask(id)
+            sync.aspectos = dataBase.aspectoDao().getAspectosTask(id,true)
+            sync.contadores = dataBase.contadorDao().getContadoresTask(id,true)
+            sync.puntosMedida = dataBase.puntoMedidaDao().getPuntoMedidasTask(id,true)
             it.onNext(sync)
             it.onComplete()
         }

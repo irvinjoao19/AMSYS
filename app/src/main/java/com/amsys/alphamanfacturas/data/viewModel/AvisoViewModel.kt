@@ -447,9 +447,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                     Observable.just(a), roomRepository.sendAvisoFile(token, body),
                     { _, t ->
                         t
-//                        insertAdjuntoRegistro(t.data, id)
                     })
-
             }
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

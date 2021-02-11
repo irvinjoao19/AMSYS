@@ -17,4 +17,5 @@ open class PuntoMedida {
     var valor: String = ""
     var comentario: String = ""
     var orden:Int = 0
+    var editable : Boolean = false
 }
