@@ -1,14 +1,10 @@
 package com.amsys.alphamanfacturas.ui.fragments
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.view.ContextThemeWrapper
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,11 +39,9 @@ class InspeccionFragment : DaggerFragment() {
     private var lastVisibleItem: Int = 0
     private var totalItemCount: Int = 0
     private var visibleItemCount: Int = 0
-    lateinit var q: Query
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        q = Query()
         arguments?.let {
             token = it.getString(ARG_PARAM1)!!
             usuarioId = it.getInt(ARG_PARAM2)
@@ -71,6 +65,7 @@ class InspeccionFragment : DaggerFragment() {
 
         val inspeccionAdapter = InspeccionAdapter(object : OnItemClickListener.InspeccionListener {
             override fun onItemClick(p: Inspeccion, v: View, position: Int) {
+                inspeccionViewModel.clear()
                 startActivity(
                     Intent(requireContext(), FormInspeccionActivity::class.java)
                         .putExtra("token", token)
@@ -102,9 +97,6 @@ class InspeccionFragment : DaggerFragment() {
                 }
             }
         })
-        inspeccionViewModel.getPageNumber(pageNumber)
-        q.userId = usuarioId
-        inspeccionViewModel.paginationInspeccion(token, q)
 
         inspeccionViewModel.getInspecciones().observe(viewLifecycleOwner) {
             inspeccionAdapter.addItems(it)
@@ -133,5 +125,12 @@ class InspeccionFragment : DaggerFragment() {
                     putInt(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        inspeccionViewModel.setLoading(true)
+        inspeccionViewModel.getPageNumber(1)
+        inspeccionViewModel.paginationInspeccion(token, usuarioId)
     }
 }

@@ -61,6 +61,13 @@ interface ApiService {
     ): Observable<ResponseModel>
 
     @Headers("Cache-Control: no-cache")
+    @POST("aviso/guardaarchivo")
+    fun sendAvisoFile(
+        @Header("Authorization") token: String,
+        @Body body: RequestBody
+    ): Observable<ResponseModel>
+
+    @Headers("Cache-Control: no-cache")
     @POST("aviso/guardar")
     fun sendRegistro(
         @Header("Authorization") token: String,

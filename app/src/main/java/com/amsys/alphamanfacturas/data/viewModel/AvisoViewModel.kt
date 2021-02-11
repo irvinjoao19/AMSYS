@@ -19,11 +19,14 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Consumer
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import java.io.File
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -64,7 +67,6 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                 q.pageNumber = page
                 q.pageSize = 10
                 val json = Gson().toJson(q)
-                Log.i("TAG", json)
                 val body =
                     RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
                 roomRepository.paginationAviso(token, body)
@@ -424,41 +426,71 @@ internal constructor(private val roomRepository: AppRepository, private val retr
         return roomRepository.getIdentity()
     }
 
-    fun sendRegistro(token: String, id: Int) {
+    fun sendAvisoFile(token: String, id: Int, user: Int, context: Context) {
+        val files = roomRepository.getAvisoTaskFile(id)
+        files.flatMap { observable ->
+            Observable.fromIterable(observable).flatMap { a ->
+                val b = MultipartBody.Builder()
+                b.setType(MultipartBody.FORM)
+                b.addFormDataPart("userId", user.toString())
+                val file = File(Util.getFolder(context), a.url)
+                if (file.exists()) {
+                    b.addFormDataPart(
+                        "adjunto", file.name,
+                        RequestBody.create(
+                            MediaType.parse("multipart/form-data"), file
+                        )
+                    )
+                }
+                val body = b.build()
+                Observable.zip(
+                    Observable.just(a), roomRepository.sendAvisoFile(token, body),
+                    { _, t ->
+                        t
+//                        insertAdjuntoRegistro(t.data, id)
+                    })
+
+            }
+        }.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<ResponseModel> {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onComplete() {
+                    sendRegistro(token, id)
+                }
+
+                override fun onNext(t: ResponseModel) {
+                    if (t.response.codigo != "0000") {
+                        mensajeError.value = "${t.response.descripcion} \n${t.response.comentario}"
+                        return
+                    } else {
+                        insertAdjuntoRegistro(t.data, id)
+                    }
+                }
+
+                override fun onError(t: Throwable) {
+                    logout()
+                }
+            })
+    }
+
+    private fun insertAdjuntoRegistro(t: Any, id: Int) {
+        roomRepository.insertAdjuntoRegistro(t, id)
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : CompletableObserver {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onError(e: Throwable) {}
+                override fun onComplete() {}
+            })
+    }
+
+    private fun sendRegistro(token: String, id: Int) {
         val register: Observable<Registro> = roomRepository.getRegistroByIdTask(id)
         register.flatMap { a ->
-            val body = MultipartBody.Builder().setType(MultipartBody.FORM)
-                .addFormDataPart("tipoAviso", a.tipoAviso.toString())
-                .addFormDataPart("consecuenciaId", a.consecuenciaId.toString())
-                .addFormDataPart("descripcion", a.descripcion)
-                .addFormDataPart("prioridadId", a.prioridadId.toString())
-                .addFormDataPart("ubicacionTecnicaId", a.ubicacionTecnicaId.toString())
-                .addFormDataPart("emplazamientoId", a.emplazamientoId.toString())
-                .addFormDataPart("equipoSuperiorId", a.equipoSuperiorId.toString())
-                .addFormDataPart("componenteId", a.componenteId.toString())
-                .addFormDataPart("equipoId", a.equipoId.toString())
-                .addFormDataPart("areaId", a.areaId.toString())
-                .addFormDataPart("sistemaId", a.sistemaId.toString())
-                .addFormDataPart("parteId", a.parteId.toString())
-                .addFormDataPart("modoFallaOrigenId", a.modoFallaOrigenId.toString())
-                .addFormDataPart("metodoDeteccionOrigenId", a.metodoDeteccionOrigenId.toString())
-                .addFormDataPart("fecha", a.fecha)
-                .addFormDataPart("comentarioRegistro", a.comentarioRegistro)
-                .addFormDataPart("inicioParada", a.inicioParada)
-                .addFormDataPart("finParada", a.finParada)
-                .addFormDataPart("claseParadaId", a.claseParadaId.toString())
-                .addFormDataPart("tipoParadaId", a.tipoParadaId.toString())
-                .addFormDataPart("subTipoParadaId", a.subTipoParadaId.toString())
-                .addFormDataPart("modoFallaId", a.modoFallaId.toString())
-                .addFormDataPart("metodoDeteccionId", a.metodoDeteccionId.toString())
-                .addFormDataPart("mecanismoFallaId", a.mecanismoFallaId.toString())
-                .addFormDataPart("impactoId", a.impactoId.toString())
-                .addFormDataPart("causaId", a.causaId.toString())
-                .addFormDataPart("comentario", a.comentario)
-                .addFormDataPart("userId", a.userId.toString())
-                .addFormDataPart("plantaId", a.plantaId.toString())
-                .addFormDataPart("tallerResponsableId", a.tallerResponsableId.toString())
-                .build()
+            val json = Gson().toJson(a)
+            Log.i("TAG", json)
+            val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
             Observable.zip(
                 Observable.just(a),
                 roomRepository.sendRegistro(token, body), { _, m -> m })
@@ -468,6 +500,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                 override fun onSubscribe(d: Disposable) {}
                 override fun onComplete() {}
                 override fun onNext(t: ResponseModel) {
+                    closeAvisoFile(id)
                     if (t.response.codigo == "0000") {
                         val gson = Gson().toJson(t.data)
                         val e: Mensaje? = Gson().fromJson(
@@ -482,6 +515,17 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                 override fun onError(t: Throwable) {
                     logout()
                 }
+            })
+    }
+
+    private fun closeAvisoFile(id: Int) {
+        roomRepository.closeAvisoFile(id)
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : CompletableObserver {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onError(e: Throwable) {}
+                override fun onComplete() {}
             })
     }
 
@@ -537,5 +581,12 @@ internal constructor(private val roomRepository: AppRepository, private val retr
 
     fun deleteFile(a: AvisoFile, requireContext: Context) {
         roomRepository.deleteFile(a, requireContext)
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : CompletableObserver {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onError(e: Throwable) {}
+                override fun onComplete() {}
+            })
     }
 }

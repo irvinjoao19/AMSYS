@@ -105,9 +105,6 @@ class AvisosFragment : DaggerFragment(), View.OnClickListener {
                 }
             }
         })
-//        avisoViewModel.getPageNumber(pageNumber)
-//        q.userId = usuarioId
-//        avisoViewModel.paginationAviso(token, q)
 
         avisoViewModel.getAvisos().observe(viewLifecycleOwner) {
             avisoAdapter.addItems(it)
@@ -171,6 +168,7 @@ class AvisosFragment : DaggerFragment(), View.OnClickListener {
     }
 
     private fun goActivity(tipo: Int) {
+        avisoViewModel.clear()
         startActivity(
             Intent(requireContext(), FormAvisoActivity::class.java)
                 .putExtra("id", registroId)
@@ -222,7 +220,7 @@ class AvisosFragment : DaggerFragment(), View.OnClickListener {
     override fun onStart() {
         super.onStart()
         avisoViewModel.setLoading(true)
-        avisoViewModel.getPageNumber(pageNumber)
+        avisoViewModel.getPageNumber(1)
         avisoViewModel.paginationAviso(token, usuarioId)
     }
 }

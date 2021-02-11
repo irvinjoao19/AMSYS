@@ -123,7 +123,7 @@ class Aviso2Fragment : DaggerFragment(), View.OnClickListener {
         val q = Query()
         q.userId = usuarioId
 
-        editTextTipo.setOnClickListener { spinnerDialog(editTextTipo, q, editTextSearch) }
+        editTextTipo.setOnClickListener { spinnerDialog(editTextTipo, q) }
         editTextSearch.setOnEditorActionListener { tv, _, _ ->
             if (q.tipo == 0) {
                 Util.toastMensaje(requireContext(), "Seleccione Tipo")
@@ -163,7 +163,7 @@ class Aviso2Fragment : DaggerFragment(), View.OnClickListener {
         }
     }
 
-    private fun spinnerDialog(input: TextInputEditText, t: Query, input2: TextInputEditText) {
+    private fun spinnerDialog(input: TextInputEditText, t: Query) {
         val builder = AlertDialog.Builder(ContextThemeWrapper(context, R.style.AppTheme))
         @SuppressLint("InflateParams") val v =
             LayoutInflater.from(context).inflate(R.layout.dialog_combo, null)
@@ -191,11 +191,11 @@ class Aviso2Fragment : DaggerFragment(), View.OnClickListener {
                 override fun onItemClick(q: Query, v: View, position: Int) {
                     t.tipo = q.tipo
                     input.setText(q.name)
-                    if (q.tipo == 1) {
-                        Util.editTextMaxLength(input2, 3)
-                    } else {
-                        Util.editTextMaxLength(input2, 4)
-                    }
+//                    if (q.tipo == 1) {
+//                        Util.editTextMaxLength(input2, 3)
+//                    } else {
+//                        Util.editTextMaxLength(input2, 4)
+//                    }
                     dialog.dismiss()
                 }
             })

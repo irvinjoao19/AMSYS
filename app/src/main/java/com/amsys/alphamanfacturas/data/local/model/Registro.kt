@@ -1,5 +1,6 @@
 package com.amsys.alphamanfacturas.data.local.model
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -66,19 +67,21 @@ open class Registro {
     var areaNombre: String = ""
 
     //form3
-    var modoFallaOriginNombre : String = ""
-    var metodoDeteccionOrigenNombre : String = ""
+    var modoFallaOriginNombre: String = ""
+    var metodoDeteccionOrigenNombre: String = ""
 
     //form4
-    var claseParadaNombre : String = ""
-    var tipoParadaNombre : String = ""
-    var subTipoParadaNombre : String = ""
+    var claseParadaNombre: String = ""
+    var tipoParadaNombre: String = ""
+    var subTipoParadaNombre: String = ""
 
     //form5
-    var modoFallaNombre:String = ""
-    var metodoDeteccionNombre:String = ""
-    var mecanismoFallaNombre:String = ""
+    var modoFallaNombre: String = ""
+    var metodoDeteccionNombre: String = ""
+    var mecanismoFallaNombre: String = ""
     var impactoNombre: String = ""
-    var causaNombre : String = ""
+    var causaNombre: String = ""
+
+    var adjuntos: Array<Int> = emptyArray()
 
 }

@@ -20,13 +20,14 @@ import com.amsys.alphamanfacturas.helper.Util
 import com.amsys.alphamanfacturas.ui.adapters.AvisoFileAdapter
 import com.amsys.alphamanfacturas.ui.adapters.InspeccionFileAdapter
 import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_inspeccion_4.*
 import javax.inject.Inject
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class Aviso6Fragment : Fragment(), View.OnClickListener {
+class Aviso6Fragment : DaggerFragment(), View.OnClickListener {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory

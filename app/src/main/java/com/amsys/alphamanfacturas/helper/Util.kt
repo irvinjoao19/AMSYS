@@ -1148,4 +1148,10 @@ object Util {
             else -> ""
         }
     }
+
+    fun append(arr: Array<Int>, element: Int): Array<Int> {
+        val list: MutableList<Int> = arr.toMutableList()
+        list.add(element)
+        return list.toTypedArray()
+    }
 }

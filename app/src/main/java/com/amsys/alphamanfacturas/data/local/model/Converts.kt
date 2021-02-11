@@ -2,11 +2,26 @@ package com.amsys.alphamanfacturas.data.local.model
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+
 
 open class Converts {
     @TypeConverter
-    fun listToJson(value: Array<String>): String = Gson().toJson(value)
+    fun listStringJson(value: Array<String>): String = Gson().toJson(value)
 
     @TypeConverter
-    fun jsonToList(value: String) = Gson().fromJson(value, Array<String>::class.java)
+    fun jsonStringList(value: String) = Gson().fromJson(value, Array<String>::class.java)
+
+//    @TypeConverter
+//    fun listIntJson(value: List<Int>): String = Gson().toJson(value)
+//
+//    @TypeConverter
+//    fun jsonIntList(value: String): List<Int> =
+//        Gson().fromJson(value, object : TypeToken<List<Int>>() {}.type)
+
+    @TypeConverter
+    fun listIntJson(value: Array<Int>): String = Gson().toJson(value)
+
+    @TypeConverter
+    fun jsonIntList(value: String) = Gson().fromJson(value, Array<Int>::class.java)
 }

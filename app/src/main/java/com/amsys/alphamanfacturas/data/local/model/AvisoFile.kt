@@ -14,5 +14,6 @@ open class AvisoFile {
     var url: String = ""
     var type: String = ""
     var size: Long = 0
+    var estado: Int = 0 //1 enviado
 
 }

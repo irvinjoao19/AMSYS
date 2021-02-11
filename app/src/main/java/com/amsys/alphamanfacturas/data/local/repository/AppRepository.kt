@@ -69,8 +69,12 @@ interface AppRepository {
     fun insertSubTipoParada(t: Any): Completable
 
     //Save Registro
+    fun sendAvisoFile(token: String, body: RequestBody): Observable<ResponseModel>
     fun sendRegistro(token: String, body: RequestBody): Observable<ResponseModel>
     fun getRegistroByIdTask(id: Int): Observable<Registro>
+    fun getAvisoTaskFile(id: Int): Observable<List<AvisoFile>>
+    fun insertAdjuntoRegistro(t: Any, id: Int): Completable
+    fun closeAvisoFile(id: Int): Completable
 
     //Inspecciones
     fun paginationInspeccion(token: String, body: RequestBody): Flowable<ResponseModel>
@@ -99,5 +103,4 @@ interface AppRepository {
 
     // Reporte
     fun getReporte(token:String,q:Query) : Observable<ResponseModel>
-
 }

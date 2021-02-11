@@ -52,15 +52,16 @@ internal constructor(private val roomRepository: AppRepository, private val retr
         loading.value = load
     }
 
-    fun paginationInspeccion(token: String, q: Query) {
+    fun paginationInspeccion(token: String, usuarioId: Int) {
         val disposable = paginator
             .onBackpressureDrop()
             .delay(1000, TimeUnit.MILLISECONDS)
             .concatMap { page ->
+                val q = Query()
+                q.userId = usuarioId
                 q.pageNumber = page
                 q.pageSize = 10
                 val json = Gson().toJson(q)
-                Log.i("TAG", json)
                 val body =
                     RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
                 roomRepository.paginationInspeccion(token, body)

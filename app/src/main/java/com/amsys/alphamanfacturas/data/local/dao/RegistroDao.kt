@@ -2,6 +2,7 @@ package com.amsys.alphamanfacturas.data.local.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.amsys.alphamanfacturas.data.local.model.Converts
 import com.amsys.alphamanfacturas.data.local.model.Registro
 
 @Dao
@@ -37,4 +38,8 @@ interface RegistroDao {
 
     @Query("SELECT registroId FROM Registro ORDER BY registroId DESC LIMIT 1")
     fun getIdentity(): LiveData<Int>
+
+    @TypeConverters(Converts::class)
+    @Query("UPDATE Registro SET adjuntos =:i WHERE registroId=:id")
+    fun updateRegistroAdjuntos(i: String, id: Int)
 }

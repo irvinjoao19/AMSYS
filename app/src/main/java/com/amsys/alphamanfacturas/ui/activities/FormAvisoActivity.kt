@@ -36,7 +36,7 @@ class FormAvisoActivity : DaggerAppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.save -> {
-                confirmation(token, id)
+                confirmation(token, id,user)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -51,15 +51,17 @@ class FormAvisoActivity : DaggerAppCompatActivity() {
 
     private var token: String = ""
     private var id: Int = 0
+    private var user: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form_aviso)
         val b = intent.extras
         if (b != null) {
-            token = b.getString("token")!!
+            token = b.getString("token", "")
             id = b.getInt("id")
-            bindUI(b.getInt("id"), b.getInt("tipo"), b.getString("token")!!, b.getInt("user"))
+            user = b.getInt("user")
+            bindUI(b.getInt("id"), b.getInt("tipo"), b.getString("token", ""), b.getInt("user"))
         }
     }
 
@@ -110,7 +112,7 @@ class FormAvisoActivity : DaggerAppCompatActivity() {
             finish()
         }
         avisoViewModel.response.observe(this) {
-            if (it != null){
+            if (it != null) {
                 closeLoad()
                 dialogError(it)
             }
@@ -121,13 +123,13 @@ class FormAvisoActivity : DaggerAppCompatActivity() {
         }
     }
 
-    private fun confirmation(token: String, id: Int) {
+    private fun confirmation(token: String, id: Int, user: Int) {
         MaterialAlertDialogBuilder(ContextThemeWrapper(this, R.style.AppTheme))
             .setTitle("Mensaje")
             .setMessage("Deseas enviar registro ?")
             .setPositiveButton("Enviar") { d, _ ->
                 load()
-                avisoViewModel.sendRegistro(token, id)
+                avisoViewModel.sendAvisoFile(token, id, user, this)
                 d.dismiss()
             }
             .setNegativeButton("No") { d, _ ->
@@ -135,10 +137,10 @@ class FormAvisoActivity : DaggerAppCompatActivity() {
             }.show()
     }
 
-    private fun dialogError(r:Response) {
+    private fun dialogError(r: Response) {
         val lista = r.comentario.split(",")
         var descripcion = ""
-        lista.forEach{
+        lista.forEach {
             descripcion += "- $it.\n"
         }
         MaterialAlertDialogBuilder(ContextThemeWrapper(this, R.style.AppTheme))

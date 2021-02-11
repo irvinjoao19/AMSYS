@@ -28,6 +28,9 @@ interface AvisoFileDao {
     @Query("DELETE FROM AvisoFile")
     fun deleteAll()
 
-    @Query("SELECT * FROM AvisoFile WHERE avisoId=:id")
+    @Query("SELECT * FROM AvisoFile WHERE avisoId=:id AND estado = 0")
     fun getAvisoFilesTask(id: Int): List<AvisoFile>
+
+    @Query("UPDATE AvisoFile SET estado = 1 WHERE avisoId=:id")
+    fun updateEnableAvisoFile(id: Int)
 }

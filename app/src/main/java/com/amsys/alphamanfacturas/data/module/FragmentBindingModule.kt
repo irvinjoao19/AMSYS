@@ -34,6 +34,9 @@ abstract class FragmentBindingModule {
 
         @ContributesAndroidInjector
         internal abstract fun providAviso5Fragment(): Aviso5Fragment
+
+        @ContributesAndroidInjector
+        internal abstract fun providAviso6Fragment(): Aviso6Fragment
     }
 
     @Module

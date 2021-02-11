@@ -3,8 +3,9 @@ package com.amsys.alphamanfacturas.data.local.repository
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
-import com.amsys.alphamanfacturas.data.local.model.*
 import com.amsys.alphamanfacturas.data.local.AppDataBase
+import com.amsys.alphamanfacturas.data.local.model.*
+import com.amsys.alphamanfacturas.helper.Mensaje
 import com.amsys.alphamanfacturas.helper.Util
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -13,6 +14,9 @@ import io.reactivex.Flowable
 import io.reactivex.Observable
 import okhttp3.MediaType
 import okhttp3.RequestBody
+import java.util.*
+import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 
 class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDataBase) :
     AppRepository {
@@ -80,7 +84,6 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
                 gson, object : TypeToken<Lista>() {}.type
             )
             val gson2 = Gson().toJson(l.lista)
-            Log.i("TAG", gson2)
             val l2: List<Aviso>? = Gson().fromJson(
                 gson2, object : TypeToken<List<Aviso>>() {}.type
             )
@@ -336,17 +339,50 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
         }
     }
 
+    override fun sendAvisoFile(token: String, body: RequestBody): Observable<ResponseModel> {
+        return apiService.sendAvisoFile(token, body)
+    }
+
     override fun sendRegistro(token: String, body: RequestBody): Observable<ResponseModel> {
         return apiService.sendRegistro(token, body)
     }
 
     override fun getRegistroByIdTask(id: Int): Observable<Registro> {
+        return Observable.timer(2000,TimeUnit.MILLISECONDS)
+            .flatMap {
+                return@flatMap  Observable.create {
+                    val r = dataBase.registroDao().getRegistroByIdTask(id)
+                    it.onNext(r)
+                    it.onComplete()
+                }
+            }
+    }
+
+    override fun getAvisoTaskFile(id: Int): Observable<List<AvisoFile>> {
         return Observable.create {
-            val r = dataBase.registroDao().getRegistroByIdTask(id)
-            val json = Gson().toJson(r)
-            Log.i("TAG", json)
-            it.onNext(r)
+            val list = dataBase.avisoFileDao().getAvisoFilesTask(id)
+            it.onNext(list)
             it.onComplete()
+        }
+    }
+
+    override fun insertAdjuntoRegistro(t: Any, id: Int): Completable {
+        return Completable.fromAction {
+            val gson = Gson().toJson(t)
+            Log.i("TAG", gson)
+            val m: Mensaje = Gson().fromJson(
+                gson, object : TypeToken<Mensaje>() {}.type
+            )
+            val r = dataBase.registroDao().getRegistroByIdTask(id)
+            r.adjuntos = r.adjuntos + listOf(m.id)
+            dataBase.registroDao().updateRegistroTask(r)
+
+        }
+    }
+
+    override fun closeAvisoFile(id: Int): Completable {
+        return Completable.fromAction {
+            dataBase.avisoFileDao().updateEnableAvisoFile(id)
         }
     }
 
