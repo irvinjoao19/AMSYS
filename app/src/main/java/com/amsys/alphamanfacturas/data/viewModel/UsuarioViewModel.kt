@@ -51,7 +51,10 @@ internal constructor(private val roomRepository: AppRepository, private val retr
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : Observer<ResponseModel> {
                 override fun onSubscribe(d: Disposable) {}
-                override fun onError(t: Throwable) {}
+                override fun onError(t: Throwable) {
+                    mensajeError.value = t.message
+                }
+
                 override fun onComplete() {}
                 override fun onNext(t: ResponseModel) {
                     if (t.response.codigo == "0000") {

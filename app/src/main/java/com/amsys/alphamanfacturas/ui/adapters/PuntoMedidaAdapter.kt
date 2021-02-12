@@ -8,19 +8,8 @@ import com.amsys.alphamanfacturas.R
 import com.amsys.alphamanfacturas.data.local.model.PuntoMedida
 import com.amsys.alphamanfacturas.helper.Util
 import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.cardview_form_1_inspecciones.view.*
-import kotlinx.android.synthetic.main.cardview_form_1_inspecciones.view.editText1
-import kotlinx.android.synthetic.main.cardview_form_1_inspecciones.view.editText2
-import kotlinx.android.synthetic.main.cardview_form_1_inspecciones.view.editText3
-import kotlinx.android.synthetic.main.cardview_form_1_inspecciones.view.textView1
-import kotlinx.android.synthetic.main.cardview_form_1_inspecciones.view.textView11
-import kotlinx.android.synthetic.main.cardview_form_1_inspecciones.view.textView2
-import kotlinx.android.synthetic.main.cardview_form_1_inspecciones.view.textView3
-import kotlinx.android.synthetic.main.cardview_form_1_inspecciones.view.textView4
-import kotlinx.android.synthetic.main.cardview_form_1_inspecciones.view.textView5
-import kotlinx.android.synthetic.main.cardview_form_1_inspecciones.view.textView7
-import kotlinx.android.synthetic.main.cardview_form_1_inspecciones.view.textView9
-import kotlinx.android.synthetic.main.cardview_form_inspecciones.view.*
 
 class PuntoMedidaAdapter(private val listener: OnItemClickListener.PuntoMedidaListener) :
     RecyclerView.Adapter<PuntoMedidaAdapter.ViewHolder>() {
@@ -64,15 +53,14 @@ class PuntoMedidaAdapter(private val listener: OnItemClickListener.PuntoMedidaLi
                     "<font style='color:#29A2E6'>PM:</font> ${a.puntoMedida}",
                     textView5
                 )
-                if (a.editable) {
-                    editText1.setText(a.fechaMuestra)
-                    editText2.setText(a.valor)
-                    editText3.setText(a.comentario)
 
+                editText1.setText(a.fechaMuestra)
+                editText2.setText(a.valor)
+                editText3.setText(a.comentario)
+
+                if (a.editable) {
                     editText1.setOnClickListener { v ->
-                        listener.onItemClick(
-                            a, v, adapterPosition
-                        )
+                        listener.onItemClick(a, v, adapterPosition)
                     }
                     editText2.setOnEditorActionListener { editText, p1, p2 ->
                         listener.onEditorAction(a, editText, p1, p2)
@@ -80,6 +68,13 @@ class PuntoMedidaAdapter(private val listener: OnItemClickListener.PuntoMedidaLi
                     editText3.setOnEditorActionListener { editText, p1, p2 ->
                         listener.onEditorAction(a, editText, p1, p2)
                     }
+
+                    textView7.endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
+                    textView7.isEndIconVisible = true
+                    textView9.endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
+                    textView9.isEndIconVisible = true
+                    textView11.endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
+                    textView11.isEndIconVisible = true
 
                     textView7.setEndIconOnClickListener {
                         listener.onItemClick(a, textView7, adapterPosition)
@@ -91,9 +86,13 @@ class PuntoMedidaAdapter(private val listener: OnItemClickListener.PuntoMedidaLi
                         listener.onItemClick(a, textView11, adapterPosition)
                     }
                 } else {
+                    view.visibility = View.VISIBLE
                     editText1.isEnabled = false
                     editText2.isEnabled = false
                     editText3.isEnabled = false
+                    textView7.isEndIconVisible = false
+                    textView9.isEndIconVisible = false
+                    textView11.isEndIconVisible = false
                 }
             }
     }

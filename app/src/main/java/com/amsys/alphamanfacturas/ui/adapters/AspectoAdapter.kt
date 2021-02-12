@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.amsys.alphamanfacturas.R
 import com.amsys.alphamanfacturas.data.local.model.Aspecto
 import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.cardview_form_inspecciones.view.*
 
 class AspectoAdapter(private val listener: OnItemClickListener.AspectoListener) :
@@ -49,28 +50,29 @@ class AspectoAdapter(private val listener: OnItemClickListener.AspectoListener) 
                 editText1.setText(a.fechaMuestra)
                 editText2.setText(a.valor)
 
-                if (a.editable) {
-                    when (a.tipoAspecto) {
-                        1 -> {
-                            if (a.tipoValor == 2) {
-                                editText2.inputType =
-                                    InputType.TYPE_CLASS_NUMBER
-                            }
-                        }
-                        2 -> {
-                            editText2.isFocusable = false
-                            editText2.setOnClickListener { v ->
-                                listener.onItemClick(a, v, adapterPosition)
-                            }
+                when (a.tipoAspecto) {
+                    1 -> {
+                        if (a.tipoValor == 2) {
+                            editText2.inputType =
+                                InputType.TYPE_CLASS_NUMBER
                         }
                     }
+                    2 -> {
+                        editText2.isFocusable = false
+                        editText2.setOnClickListener { v ->
+                            listener.onItemClick(
+                                a, v, adapterPosition
+                            )
+                        }
+                    }
+                }
 
-                    editText3.setText(a.comentario)
+                editText3.setText(a.comentario)
+
+                if (a.editable) {
                     editText1.setOnClickListener { v ->
                         listener.onItemClick(
-                            a,
-                            v,
-                            adapterPosition
+                            a, v, adapterPosition
                         )
                     }
                     editText2.setOnEditorActionListener { editText, p1, p2 ->
@@ -79,6 +81,13 @@ class AspectoAdapter(private val listener: OnItemClickListener.AspectoListener) 
                     editText3.setOnEditorActionListener { editText, p1, p2 ->
                         listener.onEditorAction(a, editText, p1, p2)
                     }
+
+                    textView7.endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
+                    textView7.isEndIconVisible = true
+                    textView9.endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
+                    textView9.isEndIconVisible = true
+                    textView11.endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
+                    textView11.isEndIconVisible = true
 
                     textView7.setEndIconOnClickListener {
                         listener.onItemClick(a, textView7, adapterPosition)
@@ -90,9 +99,13 @@ class AspectoAdapter(private val listener: OnItemClickListener.AspectoListener) 
                         listener.onItemClick(a, textView11, adapterPosition)
                     }
                 } else {
+                    view.visibility = View.VISIBLE
                     editText1.isEnabled = false
                     editText2.isEnabled = false
                     editText3.isEnabled = false
+                    textView7.isEndIconVisible = false
+                    textView9.isEndIconVisible = false
+                    textView11.isEndIconVisible = false
                 }
             }
     }
