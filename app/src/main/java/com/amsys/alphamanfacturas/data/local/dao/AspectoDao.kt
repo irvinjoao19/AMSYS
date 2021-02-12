@@ -28,6 +28,6 @@ interface AspectoDao {
     @Query("DELETE FROM Aspecto")
     fun deleteAll()
 
-    @Query("SELECT * FROM Aspecto WHERE inspeccionId=:id AND editable =:b")
-    fun getAspectosTask(id: Int,b:Boolean): List<Aspecto>
+    @Query("SELECT * FROM Aspecto WHERE inspeccionId=:id AND editable =:b AND (fechaMuestra !=:f OR valor !=:v OR comentario !=:c) ")
+    fun getAspectosTask(id: Int,b:Boolean,f:String,v:String,c:String): List<Aspecto>
 }

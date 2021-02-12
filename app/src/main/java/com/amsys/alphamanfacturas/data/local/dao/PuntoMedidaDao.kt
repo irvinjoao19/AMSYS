@@ -28,6 +28,6 @@ interface PuntoMedidaDao {
     @Query("DELETE FROM PuntoMedida")
     fun deleteAll()
 
-    @Query("SELECT * FROM PuntoMedida WHERE inspeccionId=:id AND editable=:b")
-    fun getPuntoMedidasTask(id: Int, b: Boolean): List<PuntoMedida>
+    @Query("SELECT * FROM PuntoMedida WHERE inspeccionId=:id AND editable=:b AND (fechaMuestra !=:f OR valor !=:v OR comentario !=:c) ")
+    fun getPuntoMedidasTask(id: Int, b: Boolean,f:String,v:String,c:String): List<PuntoMedida>
 }

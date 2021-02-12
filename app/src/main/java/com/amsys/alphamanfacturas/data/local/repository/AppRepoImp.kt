@@ -348,9 +348,9 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
     }
 
     override fun getRegistroByIdTask(id: Int): Observable<Registro> {
-        return Observable.timer(2000,TimeUnit.MILLISECONDS)
+        return Observable.timer(2000, TimeUnit.MILLISECONDS)
             .flatMap {
-                return@flatMap  Observable.create {
+                return@flatMap Observable.create {
                     val r = dataBase.registroDao().getRegistroByIdTask(id)
                     it.onNext(r)
                     it.onComplete()
@@ -501,9 +501,9 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
     override fun getInspeccionData(id: Int): Observable<SyncInspeccion> {
         return Observable.create {
             val sync = SyncInspeccion()
-            sync.aspectos = dataBase.aspectoDao().getAspectosTask(id,true)
-            sync.contadores = dataBase.contadorDao().getContadoresTask(id,true)
-            sync.puntosMedida = dataBase.puntoMedidaDao().getPuntoMedidasTask(id,true)
+            sync.aspectos = dataBase.aspectoDao().getAspectosTask(id, true, "", "", "")
+            sync.contadores = dataBase.contadorDao().getContadoresTask(id, true, "", "")
+            sync.puntosMedida = dataBase.puntoMedidaDao().getPuntoMedidasTask(id, true, "", "", "")
             it.onNext(sync)
             it.onComplete()
         }

@@ -28,6 +28,6 @@ interface ContadorDao {
     @Query("DELETE FROM Contador")
     fun deleteAll()
 
-    @Query("SELECT * FROM Contador WHERE inspeccionId=:id AND editable =:b")
-    fun getContadoresTask(id: Int,b:Boolean): List<Contador>
+    @Query("SELECT * FROM Contador WHERE inspeccionId=:id AND editable =:b AND (fechaMuestra !=:f OR comentario !=:c) ")
+    fun getContadoresTask(id: Int,b:Boolean,f:String,c:String): List<Contador>
 }
