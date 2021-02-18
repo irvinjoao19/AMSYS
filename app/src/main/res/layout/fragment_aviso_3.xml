@@ -52,7 +52,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableEnd="@drawable/ic_down"
-                        android:inputType="textNoSuggestions"
+                        android:inputType="textFilter"
                         android:focusable="false" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -104,7 +104,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableEnd="@drawable/ic_down"
-                        android:inputType="textNoSuggestions"
+                        android:inputType="textFilter"
                         android:focusable="false" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -154,7 +154,7 @@
                         android:layout_height="wrap_content"
                         android:drawableEnd="@drawable/ic_date"
                         android:focusable="false"
-                        android:inputType="textNoSuggestions"
+                        android:inputType="textFilter"
                         android:hint="@string/hint_date" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -191,7 +191,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="top"
-                        android:inputType="textMultiLine|textNoSuggestions" />
+                        android:inputType="textMultiLine|textFilter" />
                 </com.google.android.material.textfield.TextInputLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>            
         </com.google.android.material.card.MaterialCardView>     

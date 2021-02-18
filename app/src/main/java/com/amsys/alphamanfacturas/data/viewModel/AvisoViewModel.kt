@@ -200,8 +200,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                                 if (t.response.codigo == "0000") {
                                     insertEquipos(t.data)
                                 } else {
-                                    mensajeError.value =
-                                        "${t.response.descripcion} \n${t.response.comentario}"
+                                    mensajeError.value = t.response.comentario
                                 }
                             }
 
@@ -285,7 +284,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                             insertAviso(r)
                         }
                     } else {
-                        mensajeError.value = "${t.response.descripcion} \n${t.response.comentario}"
+                        mensajeError.value = t.response.comentario
                     }
                 }
 
