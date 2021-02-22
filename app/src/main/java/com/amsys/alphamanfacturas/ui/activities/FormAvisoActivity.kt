@@ -36,7 +36,7 @@ class FormAvisoActivity : DaggerAppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.save -> {
-                confirmation(token, id,user)
+                confirmation(token, id, user)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -86,12 +86,22 @@ class FormAvisoActivity : DaggerAppCompatActivity() {
         }
         toolbar.setNavigationOnClickListener { finish() }
 
+        val cantidad = when (tipo) {
+            1 -> 5
+            else -> 6
+        }
+
         statusViewScroller.statusView.run {
             currentCount = 1
+            when (tipo) {
+                1 -> setStatusList(resources.getStringArray(R.array.form_avisos_1).toList())
+                else -> setStatusList(resources.getStringArray(R.array.form_avisos_2).toList())
+            }
+            stepCount = cantidad
         }
 
         val formAdapter =
-            ViewPagerAdapter.FormAvisos(supportFragmentManager, 6, id, tipo, token, user)
+            ViewPagerAdapter.FormAvisos(supportFragmentManager, cantidad, id, tipo, token, user)
         viewPager.adapter = formAdapter
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(p: Int, pos: Float, posp: Int) {}

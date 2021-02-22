@@ -18,4 +18,5 @@ open class EquipoInformacion {
     var areaId: Int = 0
     var areaNombre: String = ""
     var plantaId: Int = 0
+    var partes: List<Partes> = ArrayList()
 }

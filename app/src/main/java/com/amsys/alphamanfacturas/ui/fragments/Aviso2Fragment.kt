@@ -2,6 +2,8 @@ package com.amsys.alphamanfacturas.ui.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,19 +17,23 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amsys.alphamanfacturas.R
-import com.amsys.alphamanfacturas.data.local.model.Equipo
-import com.amsys.alphamanfacturas.data.local.model.Query
-import com.amsys.alphamanfacturas.data.local.model.Registro
+import com.amsys.alphamanfacturas.data.local.model.*
 import com.amsys.alphamanfacturas.data.viewModel.AvisoViewModel
 import com.amsys.alphamanfacturas.data.viewModel.ViewModelFactory
 import com.amsys.alphamanfacturas.helper.Util
-import com.amsys.alphamanfacturas.ui.adapters.ComboAdapter
-import com.amsys.alphamanfacturas.ui.adapters.EquipoAdapter
+import com.amsys.alphamanfacturas.ui.adapters.*
 import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.fragment_aviso_1.*
 import kotlinx.android.synthetic.main.fragment_aviso_2.*
+import kotlinx.android.synthetic.main.fragment_aviso_2.editText1
+import kotlinx.android.synthetic.main.fragment_aviso_2.editText2
+import kotlinx.android.synthetic.main.fragment_aviso_2.editText3
+import kotlinx.android.synthetic.main.fragment_aviso_2.editText4
+import kotlinx.android.synthetic.main.fragment_aviso_2.editText5
+import kotlinx.android.synthetic.main.fragment_aviso_2.editText6
 import javax.inject.Inject
 
 
@@ -40,6 +46,7 @@ class Aviso2Fragment : DaggerFragment(), View.OnClickListener {
     override fun onClick(v: View) {
         when (v.id) {
             R.id.editText8 -> dialogEquipo()
+            R.id.editText11 -> spinnerParte()
         }
     }
 
@@ -103,6 +110,7 @@ class Aviso2Fragment : DaggerFragment(), View.OnClickListener {
         }
 
         editText8.setOnClickListener(this)
+        editText11.setOnClickListener(this)
     }
 
     private fun dialogEquipo() {
@@ -152,7 +160,7 @@ class Aviso2Fragment : DaggerFragment(), View.OnClickListener {
         val equipoAdapter = EquipoAdapter(object : OnItemClickListener.EquipoListener {
             override fun onItemClick(e: Equipo, v: View, position: Int) {
                 clearInformation()
-                avisoViewModel.getInformacion(token, Query(usuarioId, e.equipoId),r)
+                avisoViewModel.getInformacion(token, Query(usuarioId, e.equipoId), r)
                 dialog.dismiss()
             }
         })
@@ -170,10 +178,8 @@ class Aviso2Fragment : DaggerFragment(), View.OnClickListener {
         val progressBar: ProgressBar = v.findViewById(R.id.progressBar)
         val textViewTitulo: TextView = v.findViewById(R.id.textViewTitulo)
         val recyclerView: RecyclerView = v.findViewById(R.id.recyclerView)
-        val layoutSearch: TextInputLayout = v.findViewById(R.id.layoutSearch)
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context)
         progressBar.visibility = View.GONE
-        layoutSearch.visibility = View.GONE
         builder.setView(v)
         val dialog = builder.create()
         dialog.show()
@@ -216,6 +222,51 @@ class Aviso2Fragment : DaggerFragment(), View.OnClickListener {
         editText8.text = null
         editText9.text = null
         editText10.text = null
+        editText11.text = null
+        editText12.text = null
+    }
+
+    private fun spinnerParte() {
+        val builder = AlertDialog.Builder(ContextThemeWrapper(context, R.style.AppTheme))
+        @SuppressLint("InflateParams") val v =
+            LayoutInflater.from(context).inflate(R.layout.dialog_combo, null)
+        val progressBar: ProgressBar = v.findViewById(R.id.progressBar)
+        val textViewTitulo: TextView = v.findViewById(R.id.textViewTitulo)
+        val recyclerView: RecyclerView = v.findViewById(R.id.recyclerView)
+        val layoutSearch: TextInputLayout = v.findViewById(R.id.layoutSearch)
+        val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context)
+        progressBar.visibility = View.GONE
+        layoutSearch.visibility = View.GONE
+        builder.setView(v)
+        val dialog = builder.create()
+        dialog.show()
+        recyclerView.itemAnimator = DefaultItemAnimator()
+        recyclerView.layoutManager = layoutManager
+        recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                recyclerView.context, DividerItemDecoration.VERTICAL
+            )
+        )
+        textViewTitulo.text = String.format("Parte / Repuesto")
+
+
+        val partesAdapter =
+            PartesAdapter(object : OnItemClickListener.PartesListener {
+                override fun onItemClick(p: Partes, v: View, position: Int) {
+                    r.sistemaId = p.sistemaId
+                    r.parteId = p.parteId
+                    r.sistemaIdNombre = p.sistema
+                    r.parteIdNombre = p.nombre
+                    editText11.setText(p.nombre)
+                    editText12.setText(p.sistema)
+                    avisoViewModel.insertAviso(r)
+                    dialog.dismiss()
+                }
+            })
+        recyclerView.adapter = partesAdapter
+        avisoViewModel.partes.observe(viewLifecycleOwner) {
+            partesAdapter.addItems(it)
+        }
     }
 
     companion object {

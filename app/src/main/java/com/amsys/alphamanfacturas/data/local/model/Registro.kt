@@ -24,6 +24,9 @@ open class Registro {
     var sistemaId: Int = 0
     var parteId: Int = 0
 
+    var sistemaIdNombre :String = ""
+    var parteIdNombre :String = ""
+
     var userId: Int = 0
     var plantaId: Int = 0
 

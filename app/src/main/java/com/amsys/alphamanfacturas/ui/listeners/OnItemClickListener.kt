@@ -96,4 +96,8 @@ interface OnItemClickListener {
 
         fun onClick(target: DrawablePosition?)
     }
+
+    interface PartesListener {
+        fun onItemClick(p: Partes, v: View, position: Int)
+    }
 }

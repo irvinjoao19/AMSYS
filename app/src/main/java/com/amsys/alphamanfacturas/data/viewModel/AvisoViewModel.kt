@@ -43,6 +43,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
     val compositeDisposable = CompositeDisposable()
     val paginator = PublishProcessor.create<Int>()
     val pageNumber: MutableLiveData<Int> = MutableLiveData()
+    val partes : MutableLiveData<List<Partes>> = MutableLiveData()
 //    val lista: MutableLiveData<List<Aviso>> = MutableLiveData()
 
     fun setError(s: String) {
@@ -262,6 +263,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                             r.areaId = e.areaId
                             r.areaNombre = e.areaNombre
                             r.plantaId = e.plantaId
+                            partes.value = e.partes
                             insertAviso(r)
                         } else {
                             r.ubicacionTecnicaId = 0
@@ -281,6 +283,11 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                             r.areaId = 0
                             r.areaNombre = ""
                             r.plantaId = 0
+                            r.parteId = 0
+                            r.sistemaId = 0
+                            r.parteIdNombre = ""
+                            r.sistemaIdNombre = ""
+                            partes.value = null
                             insertAviso(r)
                         }
                     } else {

@@ -366,7 +366,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/opensans_semibold"
-                    android:text="@string/title_sistema"
+                    android:text="@string/title_parte_repuesto"
                     android:textColor="@color/colorPrimary"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -401,7 +401,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/opensans_semibold"
-                    android:text="@string/title_parte_repuesto"
+                    android:text="@string/title_sistema"
                     android:textColor="@color/colorPrimary"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -427,7 +427,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textFilter"
-                        android:drawableEnd="@drawable/ic_down"
                         android:focusable="false" />
                 </com.google.android.material.textfield.TextInputLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>

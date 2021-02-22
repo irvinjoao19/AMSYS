@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="form_avisos">
+    <string-array name="form_avisos_1">
+        <item>General</item>
+        <item>Objeto Técnico</item>
+        <item>Registro de Evento</item>
+        <item>Datos de Parada</item>
+        <item>Adjuntos</item>
+    </string-array>
+
+    <string-array name="form_avisos_2">
         <item>General</item>
         <item>Objeto Técnico</item>
         <item>Registro de Evento</item>
