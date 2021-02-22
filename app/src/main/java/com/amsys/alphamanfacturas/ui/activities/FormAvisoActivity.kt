@@ -87,8 +87,8 @@ class FormAvisoActivity : DaggerAppCompatActivity() {
         toolbar.setNavigationOnClickListener { finish() }
 
         val cantidad = when (tipo) {
-            1 -> 5
-            else -> 6
+            1 -> 4
+            else -> 5
         }
 
         statusViewScroller.statusView.run {

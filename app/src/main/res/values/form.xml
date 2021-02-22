@@ -4,7 +4,7 @@
         <item>General</item>
         <item>Objeto Técnico</item>
         <item>Registro de Evento</item>
-        <item>Datos de Parada</item>
+<!--        <item>Datos de Parada</item>-->
         <item>Adjuntos</item>
     </string-array>
 
@@ -13,7 +13,7 @@
         <item>Objeto Técnico</item>
         <item>Registro de Evento</item>
         <item>Datos de Parada</item>
-        <item>Datos de Contabilidad</item>
+<!--        <item>Datos de Contabilidad</item>-->
         <item>Adjuntos</item>
     </string-array>
 
