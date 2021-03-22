@@ -33,6 +33,9 @@ interface RegistroDao {
     fun getRegistroByIdTask(id: Int): Registro
 
     @Query("SELECT * FROM Registro WHERE registroId=:id")
+    fun getRegistroExistByIdTask(id: Int): Registro?
+
+    @Query("SELECT * FROM Registro WHERE registroId=:id")
     fun getRegistroById(id: Int): LiveData<Registro>
 
 

@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.amsys.alphamanfacturas.R
+import com.amsys.alphamanfacturas.data.local.model.Registro
 import com.amsys.alphamanfacturas.data.local.model.Response
 import com.amsys.alphamanfacturas.data.viewModel.AvisoViewModel
 import com.amsys.alphamanfacturas.data.viewModel.ViewModelFactory
@@ -85,6 +86,17 @@ class FormAvisoActivity : DaggerAppCompatActivity() {
             )
         }
         toolbar.setNavigationOnClickListener { finish() }
+
+        val r = Registro()
+        r.tipoAviso = tipo
+        r.userId = user
+        r.registroId = id
+        r.tipoAvisoNombre = when (tipo) {
+            1 -> "SOLICITUD DE TRABAJO"
+            2 -> "AVISO DE FALLA"
+            else -> "REGISTRO DE PARADA"
+        }
+        avisoViewModel.insertAviso(r)
 
         val cantidad = when (tipo) {
             1 -> 4

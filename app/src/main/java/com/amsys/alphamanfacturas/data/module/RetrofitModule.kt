@@ -62,5 +62,6 @@ class RetrofitModule {
 
     companion object {
         private val BASE_URL = "http://alphaman-001-site8.ftempurl.com/api/"
+//        private val BASE_URL = "http://10.20.2.41/api/"
     }
 }

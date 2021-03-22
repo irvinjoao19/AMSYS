@@ -20,4 +20,8 @@ open class Aviso {
     var comentarioRegistro: String = ""
     var estado: String = ""
     var fechaRegistro: String = ""
+
+    var inicioParada:String =""
+    var finParada :String = ""
+    var editable : Boolean = false
 }

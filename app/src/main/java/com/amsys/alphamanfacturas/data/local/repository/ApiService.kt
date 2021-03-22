@@ -112,5 +112,10 @@ interface ApiService {
         @Body body: RequestBody
     ): Observable<ResponseModel>
 
-
+    @Headers("Cache-Control: no-cache")
+    @POST("aviso/actualizarfecha")
+    fun actualizarFecha(
+        @Header("Authorization") token: String,
+        @Body body: RequestBody
+    ): Observable<ResponseModel>
 }

@@ -11,12 +11,8 @@ import android.graphics.*
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
-import android.net.Uri
 import android.os.Build
-import android.provider.MediaStore
 import android.provider.OpenableColumns
-import android.provider.Settings
-import android.telephony.TelephonyManager
 import android.text.Html
 import android.text.InputFilter
 import android.text.Spanned
@@ -194,19 +190,6 @@ object Util {
         }
         source?.close()
         destination.close()
-    }
-
-    private fun getRealPathFromURI(context: Context, contentUri: Uri): String {
-        var result = ""
-        val proj = arrayOf(MediaStore.Video.Media.DATA)
-        @SuppressLint("Recycle") val cursor =
-            context.contentResolver.query(contentUri, proj, null, null, null)
-        if (cursor != null) {
-            val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-            cursor.moveToFirst()
-            result = cursor.getString(columnIndex)
-        }
-        return result
     }
 
     fun getFolder(context: Context): File {
@@ -524,24 +507,6 @@ object Util {
         return pInfo.versionName
     }
 
-    @SuppressLint("HardwareIds", "MissingPermission")
-    fun getImei(context: Context): String {
-        val deviceUniqueIdentifier: String
-        val telephonyManager: TelephonyManager? =
-            context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-        deviceUniqueIdentifier = if (telephonyManager != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                telephonyManager.imei
-            } else {
-                @Suppress("DEPRECATION")
-                telephonyManager.deviceId
-            }
-        } else {
-            Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
-        }
-        return deviceUniqueIdentifier
-    }
-
     fun getToken(context: Context): String? {
         return context.getSharedPreferences("TOKEN", MODE_PRIVATE).getString("token", "empty")
     }
@@ -618,22 +583,21 @@ object Util {
         val mDay = c.get(Calendar.DAY_OF_MONTH)
         val datePickerDialog = DatePickerDialog(context, { _, year, monthOfYear, dayOfMonth ->
             val month =
-                if (((monthOfYear + 1) / 10) == 0) "0${monthOfYear + 1}" else "${monthOfYear + 1}"
+                if (((monthOfYear + 1) / 10) == 0) "0" + (monthOfYear + 1).toString() else (monthOfYear + 1).toString()
             val day = String.format("%02d", dayOfMonth)
             val fecha = "$day/$month/$year"
-//            input.setText(fecha)
-
-
             val d = Calendar.getInstance()
             val mHour = d.get(Calendar.HOUR_OF_DAY)
             val mMinute = d.get(Calendar.MINUTE)
             val timePickerDialog =
                 TimePickerDialog(context, { _, hourOfDay, minute ->
+//                    val hourFormat = if (hourOfDay == 12 || hourOfDay == 0) 12 else hourOfDay % 12
                     val hour = if (hourOfDay < 10) "0$hourOfDay" else hourOfDay.toString()
                     val minutes = if (minute < 10) "0$minute" else minute.toString()
-                    val dayH = if (hourOfDay < 12) "a.m." else "p.m."
-                    input.setText(String.format("%s %s:%s %s", fecha, hour, minutes, dayH))
-                }, mHour, mMinute, false)
+                    val result = String.format("%s %s:%s", fecha, hour, minutes)
+                    input.setText(result)
+
+                }, mHour, mMinute, true)
             timePickerDialog.show()
 
 
@@ -1068,7 +1032,12 @@ object Util {
         }
     }
 
-    fun getFolderAvisoAdjunto(user:Int,id: Int, context: Context, data: Intent): Observable<AvisoFile> {
+    fun getFolderAvisoAdjunto(
+        user: Int,
+        id: Int,
+        context: Context,
+        data: Intent
+    ): Observable<AvisoFile> {
         return Observable.create {
             val file = AvisoFile()
             data.data?.let { returnUri ->
@@ -1133,7 +1102,7 @@ object Util {
         dialog.show()
     }
 
-    fun getStringSizeLengthFile(size: Long): String? {
+    fun getStringSizeLengthFile(size: Long): String {
         val df = DecimalFormat("0.00")
         val sizeKb = 1024.0f
         val sizeMb = sizeKb * sizeKb

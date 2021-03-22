@@ -11,7 +11,7 @@
     <string name="login">Iniciando Sesión</string>
     <string name="trabajo">Solicitud de Trabajo</string>
     <string name="falla">Aviso de Falla</string>
-    <string name="parada">Aviso de Parada</string>
+    <string name="parada">Registro de Parada</string>
 
 
     <string name="title_area">Área:</string>
@@ -64,4 +64,7 @@
     <string name="title_inspeccion">Inspección</string>
     <string name="required">(*)</string>
     <string name="title_disciplina">Disciplina:</string>
+    <string name="notificar_parada">Notificar Fecha Fin de la Parada</string>
+    <string name="no">NO</string>
+    <string name="si">SI</string>
 </resources>

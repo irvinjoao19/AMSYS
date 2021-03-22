@@ -79,16 +79,6 @@ class Aviso1Fragment : DaggerFragment(), View.OnClickListener {
         avisoViewModel =
             ViewModelProvider(this, viewModelFactory).get(AvisoViewModel::class.java)
 
-        r.tipoAviso = tipoAviso
-        r.userId = usuarioId
-        r.tipoAvisoNombre = when (tipoAviso) {
-            1 -> "SOLICITUD DE TRABAJO"
-            2 -> "AVISO DE FALLA"
-            else -> "AVISO DE PARADA"
-        }
-        editText1.setText(r.tipoAvisoNombre)
-        avisoViewModel.insertAviso(r)
-
         avisoViewModel.getRegistroById(registroId).observe(viewLifecycleOwner) {
             if (it != null) {
                 r = it

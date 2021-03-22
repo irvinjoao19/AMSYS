@@ -43,7 +43,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
     val compositeDisposable = CompositeDisposable()
     val paginator = PublishProcessor.create<Int>()
     val pageNumber: MutableLiveData<Int> = MutableLiveData()
-    val partes : MutableLiveData<List<Partes>> = MutableLiveData()
+    val partes: MutableLiveData<List<Partes>> = MutableLiveData()
 //    val lista: MutableLiveData<List<Aviso>> = MutableLiveData()
 
     fun setError(s: String) {
@@ -239,6 +239,9 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                 }
 
                 override fun onNext(t: ResponseModel) {
+                    val json = Gson().toJson(t)
+                    Log.i("ResponseModel", json)
+
                     if (t.response.codigo == "0000") {
                         val gson = Gson().toJson(t.data)
                         Log.i("TAG", gson)
@@ -591,6 +594,40 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                 override fun onSubscribe(d: Disposable) {}
                 override fun onError(e: Throwable) {}
                 override fun onComplete() {}
+            })
+    }
+
+    fun actualizarfecha(token:String,q: Query) {
+        roomRepository.actualizarFecha(token,q)
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<ResponseModel> {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onComplete() {}
+                override fun onNext(t: ResponseModel) {
+                    if (t.response.codigo == "0000") {
+                        updateFechaFinParadaAviso(q)
+                    } else {
+                        mensajeError.value = t.response.descripcion
+                    }
+                }
+
+                override fun onError(e: Throwable) {
+                    mensajeError.value = e.toString()
+                }
+            })
+    }
+
+    private fun updateFechaFinParadaAviso(q:Query){
+        roomRepository.updateFechaFinParadaAviso(q)
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : CompletableObserver {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onError(e: Throwable) {}
+                override fun onComplete() {
+                    mensajeError.value = "Actualizado"
+                }
             })
     }
 }

@@ -103,4 +103,6 @@ interface AppRepository {
 
     // Reporte
     fun getReporte(token:String,q:Query) : Observable<ResponseModel>
+    fun actualizarFecha(token:String,q: Query) : Observable<ResponseModel>
+    fun updateFechaFinParadaAviso(q: Query): Completable
 }

@@ -87,7 +87,6 @@ class Aviso4Fragment : DaggerFragment(), View.OnClickListener {
 
         if (tipoAviso == 4) {
             txtr1.visibility = View.VISIBLE
-            txtr2.visibility = View.VISIBLE
             txtr3.visibility = View.VISIBLE
             txtr4.visibility = View.VISIBLE
             txtr5.visibility = View.VISIBLE

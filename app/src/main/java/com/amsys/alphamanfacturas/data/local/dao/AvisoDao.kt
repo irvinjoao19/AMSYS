@@ -27,4 +27,7 @@ interface AvisoDao {
 
     @Query("DELETE FROM Aviso")
     fun deleteAll()
+
+    @Query("UPDATE Aviso SET finParada=:f, editable =:e WHERE avisoId=:id")
+    fun updateFechaFinParadaAviso(id: Int, f: String, e: Boolean)
 }

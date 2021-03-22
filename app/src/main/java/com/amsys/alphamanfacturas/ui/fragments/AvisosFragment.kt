@@ -24,6 +24,8 @@ import com.amsys.alphamanfacturas.helper.Util
 import com.amsys.alphamanfacturas.ui.activities.FormAvisoActivity
 import com.amsys.alphamanfacturas.ui.adapters.AvisoAdapter
 import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_avisos.*
 import javax.inject.Inject
@@ -79,7 +81,11 @@ class AvisosFragment : DaggerFragment(), View.OnClickListener {
 
         val avisoAdapter = AvisoAdapter(object : OnItemClickListener.AvisoListener {
             override fun onItemClick(a: Aviso, v: View, position: Int) {
-
+                if (a.editable) {
+                    dialogFinParada(a)
+                } else {
+                    avisoViewModel.setError("El aviso no se puede modificar.")
+                }
             }
         })
 
@@ -123,7 +129,6 @@ class AvisosFragment : DaggerFragment(), View.OnClickListener {
             Util.toastMensaje(requireContext(), it)
             closeLoad()
         }
-
         avisoViewModel.mensajeSuccess.observe(viewLifecycleOwner) {
             closeLoad()
         }
@@ -180,17 +185,17 @@ class AvisosFragment : DaggerFragment(), View.OnClickListener {
 
     private fun generateSync(tipo: Int) {
         avisoViewModel.sync(token, tipo)
-        load()
+        load("Sincronizando...")
     }
 
-    private fun load() {
+    private fun load(title:String) {
         builder = AlertDialog.Builder(ContextThemeWrapper(requireContext(), R.style.AppTheme))
         @SuppressLint("InflateParams") val view =
             LayoutInflater.from(requireContext()).inflate(R.layout.dialog_login, null)
         val textViewTitle: TextView = view.findViewById(R.id.textViewTitle)
         builder.setView(view)
 
-        textViewTitle.text = String.format("Sincronizando...")
+        textViewTitle.text = title
 
         dialog = builder.create()
         dialog!!.setCanceledOnTouchOutside(false)
@@ -222,5 +227,40 @@ class AvisosFragment : DaggerFragment(), View.OnClickListener {
         avisoViewModel.setLoading(true)
         avisoViewModel.getPageNumber(1)
         avisoViewModel.paginationAviso(token, usuarioId)
+    }
+
+    private fun dialogFinParada(a: Aviso) {
+        val builder = AlertDialog.Builder(ContextThemeWrapper(requireContext(), R.style.AppTheme))
+        @SuppressLint("InflateParams") val view =
+            LayoutInflater.from(requireContext()).inflate(R.layout.dialog_fecha, null)
+        val editTextFecha: TextInputEditText = view.findViewById(R.id.editTextFecha)
+        val btnSi: MaterialButton = view.findViewById(R.id.btnSi)
+        val btnNo: MaterialButton = view.findViewById(R.id.btnNo)
+        builder.setView(view)
+        val dialog = builder.create()
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.setCancelable(false)
+        dialog.show()
+
+        editTextFecha.setOnClickListener {
+            Util.getFullDialog(requireContext(), editTextFecha)
+        }
+        btnSi.setOnClickListener {
+            val fecha = editTextFecha.text.toString()
+            if (fecha.isEmpty()) {
+                avisoViewModel.setError("Seleccionar fecha")
+                return@setOnClickListener
+            }
+            load("Actualizando..")
+            val q = Query()
+            q.avisoId = a.avisoId
+            q.finParada = fecha
+            avisoViewModel.actualizarfecha(token, q)
+            dialog.dismiss()
+        }
+
+        btnNo.setOnClickListener {
+            dialog.dismiss()
+        }
     }
 }

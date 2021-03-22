@@ -17,6 +17,9 @@ open class Query {
     var code: String = ""
     var name: String = ""
 
+    var avisoId :Int = 0
+    var finParada : String = ""
+
     constructor()
 
     //login

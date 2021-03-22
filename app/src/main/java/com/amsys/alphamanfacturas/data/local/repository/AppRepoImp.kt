@@ -16,7 +16,6 @@ import okhttp3.MediaType
 import okhttp3.RequestBody
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
 
 class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDataBase) :
     AppRepository {
@@ -42,7 +41,6 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
 
     override fun insertUsuario(o: Any): Completable {
         return Completable.fromAction {
-//            val u = Util.genericCastOrNull<Usuario>(o)
             val gson = Gson().toJson(o)
             Log.i("TAG", gson)
             val u: Usuario = Gson().fromJson(
@@ -113,36 +111,36 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
             val l: SyncAviso = Gson().fromJson(
                 gson, object : TypeToken<SyncAviso>() {}.type
             )
-            val v1: List<Consecuencia>? = l.consecuencias
-            if (v1 != null) {
+            val v1: List<Consecuencia> = l.consecuencias
+            if (v1.isNotEmpty()) {
                 dataBase.consecuenciaDao().insertConsecuenciaListTask(v1)
             }
-            val v2: List<Prioridad>? = l.prioridades
-            if (v2 != null) {
+            val v2: List<Prioridad> = l.prioridades
+            if (v2.isNotEmpty()) {
                 dataBase.prioridadDao().insertPrioridadListTask(v2)
             }
-            val v3: List<Parada>? = l.clasesParada
-            if (v3 != null) {
+            val v3: List<Parada> = l.clasesParada
+            if (v3.isNotEmpty()) {
                 dataBase.paradaDao().insertParadaListTask(v3)
             }
-            val v4: List<Deteccion>? = l.metodosDeteccion
-            if (v4 != null) {
+            val v4: List<Deteccion> = l.metodosDeteccion
+            if (v4.isNotEmpty()) {
                 dataBase.deteccionDao().insertDeteccionListTask(v4)
             }
-            val v5: List<MecanismoFalla>? = l.mecanismosFalla
-            if (v5 != null) {
+            val v5: List<MecanismoFalla> = l.mecanismosFalla
+            if (v5.isNotEmpty()) {
                 dataBase.mecanismoFallaDao().insertMecanismoFallaListTask(v5)
             }
-            val v6: List<Impacto>? = l.impactos
-            if (v6 != null) {
+            val v6: List<Impacto> = l.impactos
+            if (v6.isNotEmpty()) {
                 dataBase.impactoDao().insertImpactoListTask(v6)
             }
-            val v7: List<CausaFalla>? = l.causasFalla
-            if (v7 != null) {
+            val v7: List<CausaFalla> = l.causasFalla
+            if (v7.isNotEmpty()) {
                 dataBase.causaFallaDao().insertCausaFallaListTask(v7)
             }
-            val v8: List<TalleResponsable>? = l.talleresResponsable
-            if (v8 != null) {
+            val v8: List<TalleResponsable> = l.talleresResponsable
+            if (v8.isNotEmpty()) {
                 dataBase.talleResponsableDao().insertTalleResponsableListTask(v8)
             }
         }
@@ -194,7 +192,7 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
 
     override fun insertAviso(r: Registro): Completable {
         return Completable.fromAction {
-            val registro: Registro? = dataBase.registroDao().getRegistroByIdTask(r.registroId)
+            val registro: Registro? = dataBase.registroDao().getRegistroExistByIdTask(r.registroId)
             if (registro == null) {
                 dataBase.registroDao().insertRegistroTask(r)
                 return@fromAction
@@ -428,16 +426,16 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
                 gson, object : TypeToken<SyncInspeccion>() {}.type
             )
 
-            val v1: List<PuntoMedida>? = l.puntosMedida
-            if (v1 != null) {
+            val v1: List<PuntoMedida> = l.puntosMedida
+            if (v1.isNotEmpty()) {
                 dataBase.puntoMedidaDao().insertPuntoMedidaListTask(v1)
             }
-            val v2: List<Contador>? = l.contadores
-            if (v2 != null) {
+            val v2: List<Contador> = l.contadores
+            if (v2.isNotEmpty()) {
                 dataBase.contadorDao().insertContadorListTask(v2)
             }
-            val v3: List<Aspecto>? = l.aspectos
-            if (v3 != null) {
+            val v3: List<Aspecto> = l.aspectos
+            if (v3.isNotEmpty()) {
                 dataBase.aspectoDao().insertAspectoListTask(v3)
             }
         }
@@ -522,5 +520,18 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
         Log.i("TAG", json)
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
         return apiService.getReporteGeneral(token, body)
+    }
+
+    override fun actualizarFecha(token:String,q: Query): Observable<ResponseModel> {
+        val json = Gson().toJson(q)
+        Log.i("TAG", json)
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return apiService.actualizarFecha(token,body)
+    }
+
+    override fun updateFechaFinParadaAviso(q: Query): Completable {
+        return Completable.fromAction {
+            dataBase.avisoDao().updateFechaFinParadaAviso(q.avisoId,q.finParada,false)
+        }
     }
 }

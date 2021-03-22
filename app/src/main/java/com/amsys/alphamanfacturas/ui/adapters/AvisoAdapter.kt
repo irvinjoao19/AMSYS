@@ -1,13 +1,12 @@
 package com.amsys.alphamanfacturas.ui.adapters
 
 import android.graphics.Color
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.amsys.alphamanfacturas.R
 import com.amsys.alphamanfacturas.data.local.model.Aviso
+import com.amsys.alphamanfacturas.helper.Util
 import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
 import kotlinx.android.synthetic.main.cardview_avisos.view.*
 
@@ -59,6 +58,8 @@ class AvisoAdapter(private val listener: OnItemClickListener.AvisoListener) :
                     textView7.setTextColor(Color.WHITE)
                     textView8.setTextColor(Color.WHITE)
                     textView9.setTextColor(Color.WHITE)
+                    textView10.setTextColor(Color.WHITE)
+                    textView11.setTextColor(Color.WHITE)
                 } else {
                     card.setCardBackgroundColor(
                         ContextCompat.getColor(itemView.context, R.color.colorWhite)
@@ -71,11 +72,35 @@ class AvisoAdapter(private val listener: OnItemClickListener.AvisoListener) :
                 textView4.text = a.ubicacionNombre
                 textView5.text = a.equipoCodigo
                 textView6.text = a.equipoNombre
+                if (a.inicioParada.isEmpty()) {
+                    textView10.visibility = View.GONE
+                } else {
+                    textView10.visibility = View.VISIBLE
+                    Util.getTextStyleHtml(
+                        String.format(
+                            "<strong> Fecha Inicio Parada :</strong> %s",
+                            a.inicioParada
+                        ), textView10
+                    )
+                }
+                if (a.finParada.isEmpty()) {
+                    textView11.visibility = View.GONE
+                } else {
+                    textView11.visibility = View.VISIBLE
+                    Util.getTextStyleHtml(
+                        String.format(
+                            "<strong> Fecha Fin Parada :</strong> %s",
+                            a.finParada
+                        ), textView11
+                    )
+                }
                 textView7.text = a.comentarioRegistro
                 textView8.text = a.estado
                 textView9.text = a.fechaRegistro
-                itemView.setOnClickListener { v -> listener.onItemClick(a, v, adapterPosition) }
+                itemView.setOnLongClickListener {
+                    listener.onItemClick(a, it, adapterPosition)
+                    true
+                }
             }
     }
-
 }
