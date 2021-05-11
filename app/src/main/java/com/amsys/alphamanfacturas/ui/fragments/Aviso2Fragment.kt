@@ -2,8 +2,6 @@ package com.amsys.alphamanfacturas.ui.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,16 +24,8 @@ import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_aviso_1.*
 import kotlinx.android.synthetic.main.fragment_aviso_2.*
-import kotlinx.android.synthetic.main.fragment_aviso_2.editText1
-import kotlinx.android.synthetic.main.fragment_aviso_2.editText2
-import kotlinx.android.synthetic.main.fragment_aviso_2.editText3
-import kotlinx.android.synthetic.main.fragment_aviso_2.editText4
-import kotlinx.android.synthetic.main.fragment_aviso_2.editText5
-import kotlinx.android.synthetic.main.fragment_aviso_2.editText6
 import javax.inject.Inject
-
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"

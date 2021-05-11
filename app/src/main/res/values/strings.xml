@@ -67,4 +67,9 @@
     <string name="notificar_parada">Notificar Fecha Fin de la Parada</string>
     <string name="no">NO</string>
     <string name="si">SI</string>
+    <string name="inspeccion_fragment_4_1">¿He finalizado la inspección?</string>
+    <string name="inspeccion_fragment_4_2">Notificación de la inspección</string>
+    <string name="inspeccion_fragment_4_3">Tiempo de trabajo:</string>
+
+    <string name="no_si">No/Si</string>
 </resources>

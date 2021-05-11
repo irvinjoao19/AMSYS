@@ -1,7 +1,7 @@
 package com.amsys.alphamanfacturas.data.local.repository
 
 import android.content.Context
-import android.util.Log
+//import android.util.Log
 import androidx.lifecycle.LiveData
 import com.amsys.alphamanfacturas.data.local.AppDataBase
 import com.amsys.alphamanfacturas.data.local.model.*
@@ -26,7 +26,7 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
 
     override fun getUsuarioService(q: Query): Observable<ResponseModel> {
         val json = Gson().toJson(q)
-        Log.i("TAG", json)
+//        Log.i("TAG", json)
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
         return apiService.getLogin(body)
     }
@@ -42,7 +42,7 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
     override fun insertUsuario(o: Any): Completable {
         return Completable.fromAction {
             val gson = Gson().toJson(o)
-            Log.i("TAG", gson)
+//            Log.i("TAG", gson)
             val u: Usuario = Gson().fromJson(
                 gson, object : TypeToken<Usuario>() {}.type
             )
@@ -77,7 +77,7 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
     override fun insertLista(r: Any): Completable {
         return Completable.fromAction {
             val gson = Gson().toJson(r)
-            Log.i("TAG", gson)
+//            Log.i("TAG", gson)
             val l: Lista = Gson().fromJson(
                 gson, object : TypeToken<Lista>() {}.type
             )
@@ -107,7 +107,7 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
     override fun insertSync(a: Any): Completable {
         return Completable.fromAction {
             val gson = Gson().toJson(a)
-            Log.i("TAG", gson)
+//            Log.i("TAG", gson)
             val l: SyncAviso = Gson().fromJson(
                 gson, object : TypeToken<SyncAviso>() {}.type
             )
@@ -226,7 +226,7 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
 
     override fun getEquipos(token: String, q: Query): Observable<ResponseModel> {
         val json = Gson().toJson(q)
-        Log.i("TAG", json)
+//        Log.i("TAG", json)
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
         return apiService.getEquipos(token, body)
     }
@@ -234,7 +234,7 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
     override fun insertEquipos(t: Any): Completable {
         return Completable.fromAction {
             val gson = Gson().toJson(t)
-            Log.i("TAG", gson)
+//            Log.i("TAG", gson)
             val e: List<Equipo>? = Gson().fromJson(
                 gson, object : TypeToken<List<Equipo>>() {}.type
             )
@@ -250,7 +250,7 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
 
     override fun getInformacion(token: String, q: Query): Observable<ResponseModel> {
         val json = Gson().toJson(q)
-        Log.i("TAG", json)
+//        Log.i("TAG", json)
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
         return apiService.getInformacion(token, body)
     }
@@ -263,7 +263,7 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
 
     override fun getModoFalla(token: String, q: Query): Observable<ResponseModel> {
         val json = Gson().toJson(q)
-        Log.i("TAG", json)
+//        Log.i("TAG", json)
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
         return apiService.getModoFalla(token, body)
     }
@@ -271,7 +271,7 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
     override fun insertModoFalla(t: Any): Completable {
         return Completable.fromAction {
             val gson = Gson().toJson(t)
-            Log.i("TAG", gson)
+//            Log.i("TAG", gson)
             val e: List<ModoFalla>? = Gson().fromJson(
                 gson, object : TypeToken<List<ModoFalla>>() {}.type
             )
@@ -293,7 +293,7 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
 
     override fun getTipoParada(token: String, q: Query): Observable<ResponseModel> {
         val json = Gson().toJson(q)
-        Log.i("TAG", json)
+//        Log.i("TAG", json)
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
         return apiService.getTipoParada(token, body)
     }
@@ -301,7 +301,7 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
     override fun insertTipoParada(t: Any): Completable {
         return Completable.fromAction {
             val gson = Gson().toJson(t)
-            Log.i("TAG", gson)
+//            Log.i("TAG", gson)
             val e: List<TipoParada>? = Gson().fromJson(
                 gson, object : TypeToken<List<TipoParada>>() {}.type
             )
@@ -319,7 +319,7 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
 
     override fun getSubTipoParada(token: String, q: Query): Observable<ResponseModel> {
         val json = Gson().toJson(q)
-        Log.i("TAG", json)
+//        Log.i("TAG", json)
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
         return apiService.getSubTipoParada(token, body)
     }
@@ -327,7 +327,7 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
     override fun insertSubTipoParada(t: Any): Completable {
         return Completable.fromAction {
             val gson = Gson().toJson(t)
-            Log.i("TAG", gson)
+//            Log.i("TAG", gson)
             val e: List<SubTipoParada>? = Gson().fromJson(
                 gson, object : TypeToken<List<SubTipoParada>>() {}.type
             )
@@ -367,7 +367,7 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
     override fun insertAdjuntoRegistro(t: Any, id: Int): Completable {
         return Completable.fromAction {
             val gson = Gson().toJson(t)
-            Log.i("TAG", gson)
+//            Log.i("TAG", gson)
             val m: Mensaje = Gson().fromJson(
                 gson, object : TypeToken<Mensaje>() {}.type
             )
@@ -391,12 +391,12 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
     override fun insertInspecciones(r: Any): Completable {
         return Completable.fromAction {
             val gson = Gson().toJson(r)
-            Log.i("TAG", gson)
+//            Log.i("TAG", gson)
             val l: Lista = Gson().fromJson(
                 gson, object : TypeToken<Lista>() {}.type
             )
             val gson2 = Gson().toJson(l.lista)
-            Log.i("TAG", gson2)
+//            Log.i("TAG", gson2)
             val l2: List<Inspeccion>? = Gson().fromJson(
                 gson2, object : TypeToken<List<Inspeccion>>() {}.type
             )
@@ -413,18 +413,24 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
 
     override fun getSearchInspeccion(token: String, q: Query): Observable<ResponseModel> {
         val json = Gson().toJson(q)
-        Log.i("TAG", json)
+//        Log.i("TAG", json)
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
         return apiService.getSearchInspeccion(token, body)
     }
 
-    override fun insertSyncInspeccion(t: Any): Completable {
+    override fun insertSyncInspeccion(t: Any, q: Query): Completable {
         return Completable.fromAction {
             val gson = Gson().toJson(t)
-            Log.i("TAG", gson)
             val l: SyncInspeccion = Gson().fromJson(
                 gson, object : TypeToken<SyncInspeccion>() {}.type
             )
+
+            val e = Ejecucion()
+            e.inspeccionId = q.inspeccionId
+            e.usuarioId = q.userId
+            e.fecha = Util.getFecha()
+            e.ejecutado = l.ejecutado
+            dataBase.ejecucionDao().insertEjecucionTask(e)
 
             val v1: List<PuntoMedida> = l.puntosMedida
             if (v1.isNotEmpty()) {
@@ -499,6 +505,11 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
     override fun getInspeccionData(id: Int): Observable<SyncInspeccion> {
         return Observable.create {
             val sync = SyncInspeccion()
+            val e = dataBase.ejecucionDao().getEjecucionTask(id)
+            sync.ejecutado = e.ejecutado
+            sync.usuarioId = e.usuarioId
+            sync.fecha = e.fecha
+            sync.cantidad = e.cantidad
             sync.aspectos = dataBase.aspectoDao().getAspectosTask(id, true, "", "", "")
             sync.contadores = dataBase.contadorDao().getContadoresTask(id, true, "", "")
             sync.puntosMedida = dataBase.puntoMedidaDao().getPuntoMedidasTask(id, true, "", "", "")
@@ -517,21 +528,31 @@ class AppRepoImp(private val apiService: ApiService, private val dataBase: AppDa
 
     override fun getReporte(token: String, q: Query): Observable<ResponseModel> {
         val json = Gson().toJson(q)
-        Log.i("TAG", json)
+//        Log.i("TAG", json)
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
         return apiService.getReporteGeneral(token, body)
     }
 
-    override fun actualizarFecha(token:String,q: Query): Observable<ResponseModel> {
+    override fun actualizarFecha(token: String, q: Query): Observable<ResponseModel> {
         val json = Gson().toJson(q)
-        Log.i("TAG", json)
+//        Log.i("TAG", json)
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
-        return apiService.actualizarFecha(token,body)
+        return apiService.actualizarFecha(token, body)
     }
 
     override fun updateFechaFinParadaAviso(q: Query): Completable {
         return Completable.fromAction {
-            dataBase.avisoDao().updateFechaFinParadaAviso(q.avisoId,q.finParada,false)
+            dataBase.avisoDao().updateFechaFinParadaAviso(q.avisoId, q.finParada, false)
+        }
+    }
+
+    override fun getEjecucionById(id: Int): LiveData<Ejecucion> {
+        return dataBase.ejecucionDao().getEjecucionById(id)
+    }
+
+    override fun insertEjecucion(e: Ejecucion): Completable {
+        return Completable.fromAction {
+            dataBase.ejecucionDao().insertEjecucionTask(e)
         }
     }
 }

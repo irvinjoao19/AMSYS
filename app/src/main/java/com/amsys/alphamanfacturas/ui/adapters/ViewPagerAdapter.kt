@@ -44,6 +44,7 @@ abstract class ViewPagerAdapter {
                 1 -> Inspeccion2Fragment.newInstance(id, user)
                 2 -> Inspeccion3Fragment.newInstance(id, user)
                 3 -> Inspeccion4Fragment.newInstance(id, user)
+                4 -> Inspeccion5Fragment.newInstance(id, user)
                 else -> Fragment()
             }
         }

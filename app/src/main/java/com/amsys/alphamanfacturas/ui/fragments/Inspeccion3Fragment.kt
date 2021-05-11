@@ -28,9 +28,7 @@ import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_inspeccion_1.*
 import kotlinx.android.synthetic.main.fragment_inspeccion_3.*
-import kotlinx.android.synthetic.main.fragment_inspeccion_3.recyclerView
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList

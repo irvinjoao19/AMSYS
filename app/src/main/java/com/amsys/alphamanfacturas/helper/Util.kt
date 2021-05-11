@@ -8,19 +8,13 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.graphics.*
-import android.location.Address
-import android.location.Geocoder
-import android.location.Location
 import android.os.Build
 import android.provider.OpenableColumns
 import android.text.Html
-import android.text.InputFilter
 import android.text.Spanned
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -29,104 +23,23 @@ import com.amsys.alphamanfacturas.R
 import com.amsys.alphamanfacturas.data.local.model.AvisoFile
 import com.amsys.alphamanfacturas.data.local.model.InspeccionFile
 import com.amsys.alphamanfacturas.ui.activities.LoginActivity
-import com.google.android.gms.maps.model.BitmapDescriptor
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import io.reactivex.Observable
-import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import java.io.*
 import java.nio.channels.FileChannel
 import java.text.DecimalFormat
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
-import kotlin.math.*
-
 object Util {
 
-    val messageToken: String = "Token expirado volver a iniciar sesión."
+    private const val messageToken: String = "Token expirado volver a iniciar sesión."
     private var FechaActual: String? = ""
 
-    private const val img_height_default = 800
-    private const val img_width_default = 600
+//    private const val img_height_default = 800
+//    private const val img_width_default = 600
 
-    @SuppressLint("SimpleDateFormat")
-    @Throws(ParseException::class)
-    fun formatToYesterdayOrToday(date: String): String {
-        var day = "Ult. Llamada"
-        if (date.isNotEmpty()) {
-
-//            val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss a")
-//            sdf.timeZone = TimeZone.getTimeZone("GMT")
-//            val dateTime = sdf.parse(date)
-            val dateTime = SimpleDateFormat("dd/MM/yyyy HH:mm:ss a").parse(date)
-
-            val calendar = Calendar.getInstance()
-            calendar.time = dateTime!!
-            val today = Calendar.getInstance()
-            val yesterday = Calendar.getInstance()
-            yesterday.add(Calendar.DATE, -1)
-            val timeFormatter = SimpleDateFormat("HH:mm:ss aaa")
-
-            day =
-                if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == today.get(
-                        Calendar.DAY_OF_YEAR
-                    )
-                ) {
-                    "HOY " + timeFormatter.format(dateTime)
-                } else if (calendar.get(Calendar.YEAR) == yesterday.get(Calendar.YEAR) && calendar.get(
-                        Calendar.DAY_OF_YEAR
-                    ) == yesterday.get(
-                        Calendar.DAY_OF_YEAR
-                    )
-                ) {
-                    "AYER " + timeFormatter.format(dateTime)
-                } else {
-                    date
-                }
-        }
-
-        return day
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    fun getFirstDay(): String {
-        val sdf = SimpleDateFormat("dd/MM/yyyy")
-        val calendar = Calendar.getInstance()
-        calendar[Calendar.DAY_OF_MONTH] = 1
-        return sdf.format(calendar.time)
-    }
-
-    fun getMonthCurrent(): Int {
-        val c = Calendar.getInstance()
-//        var month: String = String.format("%s", c.get(Calendar.MONTH) + 1)
-//        if (month.length < 2) {
-//            month = "0$month"
-//        }
-        return c.get(Calendar.MONTH) + 1
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    fun getLastaDay(): String {
-        val sdf = SimpleDateFormat("dd/MM/yyyy")
-        val calendar = Calendar.getInstance()
-        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH))
-        return sdf.format(calendar.time)
-    }
-
-    fun getFormatDate(date: Date): String {
-        @SuppressLint("SimpleDateFormat") val format = SimpleDateFormat("dd/MM/yyyy HH:mm:ss a")
-        return format.format(date)
-    }
 
     fun getFecha(): String {
         val date = Date()
@@ -135,34 +48,19 @@ object Util {
 //        return "05/10/2019"
     }
 
-    fun getHora(): String {
-        val date = Date()
-        @SuppressLint("SimpleDateFormat") val format = SimpleDateFormat("HH:mm aaa")
-        return format.format(date)
-    }
-
-    fun getFechaActual(): String {
-        val date = Date()
-        @SuppressLint("SimpleDateFormat") val format = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
-        return format.format(date)
-    }
-
     private fun getHoraActual(): String {
         val date = Date()
         @SuppressLint("SimpleDateFormat") val format = SimpleDateFormat("HH:mm:ss aaa")
         return format.format(date)
     }
 
-    fun getFechaFile(id: Int, user: Int, type: String): String {
+    private fun getFechaFile(id: Int, user: Int, type: String): String {
         val date = Date()
         @SuppressLint("SimpleDateFormat") val format = SimpleDateFormat("ddMMyyyy_HHmmssSSSS")
         format.format(date)
         return String.format("%s_%s_%s%s", user, id, format.format(date), type)
     }
 
-    inline fun <reified T> genericCastOrNull(anything: Any): T {
-        return anything as T
-    }
 
     fun getFotoName(id: Int): String {
         val date = Date()
@@ -171,10 +69,6 @@ object Util {
         return String.format("Foto%s_%s.jpg", id, FechaActual)
     }
 
-    fun toggleTextInputLayoutError(textInputLayout: TextInputLayout, msg: String?) {
-        textInputLayout.error = msg
-        textInputLayout.isErrorEnabled = msg != null
-    }
 
     // TODO SOBRE ADJUNTAR PHOTO
 
@@ -205,319 +99,297 @@ object Util {
 
     // TODO SOBRE FOTO
 
-    fun generateImageAsync(pathFile: String): Observable<Boolean> {
-        return Observable.create { e ->
-            e.onNext(comprimirImagen(pathFile))
-            e.onComplete()
-        }
-    }
+//    fun generateImageAsync(pathFile: String): Observable<Boolean> {
+//        return Observable.create { e ->
+//            e.onNext(comprimirImagen(pathFile))
+//            e.onComplete()
+//        }
+//    }
 
-    fun comprimirImagen(PathFile: String): Boolean {
-        return try {
-            val result = getRightAngleImage(PathFile)
-            result == PathFile
-        } catch (ex: Exception) {
-            Log.i("exception", ex.message!!)
-            false
-        }
-    }
+//    fun comprimirImagen(PathFile: String): Boolean {
+//        return try {
+//            val result = getRightAngleImage(PathFile)
+//            result == PathFile
+//        } catch (ex: Exception) {
+////            Log.i("exception", ex.message!!)
+//            false
+//        }
+//    }
 
     private fun getDateTimeFormatString(date: Date): String {
         @SuppressLint("SimpleDateFormat") val df = SimpleDateFormat("dd/MM/yyyy - hh:mm:ss a")
         return df.format(date)
     }
 
-    fun getDateTimeFormatString(): String {
-        val date = Date()
-        @SuppressLint("SimpleDateFormat") val df = SimpleDateFormat("dd/MM/yyyy - hh:mm:ss a")
-        return df.format(date)
-    }
+//    private fun getDateTimeFormatString(): String {
+//        val date = Date()
+//        @SuppressLint("SimpleDateFormat") val df = SimpleDateFormat("dd/MM/yyyy - hh:mm:ss a")
+//        return df.format(date)
+//    }
 
-    private fun processingBitmapSetDateTime(bm1: Bitmap?, captionString: String?): Bitmap? {
-        //Bitmap bm1 = null;
-        var newBitmap: Bitmap? = null
-        try {
-
-            var config: Bitmap.Config? = bm1!!.config
-            if (config == null) {
-                config = Bitmap.Config.ARGB_8888
-            }
-            newBitmap = Bitmap.createBitmap(bm1.width, bm1.height, config)
-
-            val newCanvas = Canvas(newBitmap!!)
-            newCanvas.drawBitmap(bm1, 0f, 0f, null)
-
-            if (captionString != null) {
-
-                val paintText = Paint(Paint.ANTI_ALIAS_FLAG)
-                paintText.color = Color.RED
-                paintText.textSize = 22f
-                paintText.style = Paint.Style.FILL
-                paintText.setShadowLayer(0.7f, 0.7f, 0.7f, Color.YELLOW)
-
-                val rectText = Rect()
-                paintText.getTextBounds(captionString, 0, captionString.length, rectText)
-                newCanvas.drawText(captionString, 0f, rectText.height().toFloat(), paintText)
-            }
-
-            //} catch (FileNotFoundException e) {
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        return newBitmap
-    }
-
-
-    private fun copyBitmatToFile(filename: String, bitmap: Bitmap): String {
-        return try {
-            val f = File(filename)
-
-            val bos = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, bos)
-            val bitmapdata = bos.toByteArray()
-
-            val fos = FileOutputStream(f)
-            fos.write(bitmapdata)
-            "true"
-
-        } catch (ex: IOException) {
-            ex.message.toString()
-        }
-
-    }
+//    private fun processingBitmapSetDateTime(bm1: Bitmap?, captionString: String?): Bitmap? {
+//        //Bitmap bm1 = null;
+//        var newBitmap: Bitmap? = null
+//        try {
+//
+//            var config: Bitmap.Config? = bm1!!.config
+//            if (config == null) {
+//                config = Bitmap.Config.ARGB_8888
+//            }
+//            newBitmap = Bitmap.createBitmap(bm1.width, bm1.height, config)
+//
+//            val newCanvas = Canvas(newBitmap!!)
+//            newCanvas.drawBitmap(bm1, 0f, 0f, null)
+//
+//            if (captionString != null) {
+//
+//                val paintText = Paint(Paint.ANTI_ALIAS_FLAG)
+//                paintText.color = Color.RED
+//                paintText.textSize = 22f
+//                paintText.style = Paint.Style.FILL
+//                paintText.setShadowLayer(0.7f, 0.7f, 0.7f, Color.YELLOW)
+//
+//                val rectText = Rect()
+//                paintText.getTextBounds(captionString, 0, captionString.length, rectText)
+//                newCanvas.drawText(captionString, 0f, rectText.height().toFloat(), paintText)
+//            }
+//
+//            //} catch (FileNotFoundException e) {
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//        }
+//
+//        return newBitmap
+//    }
 
 
-    private fun shrinkBitmap(file: String, width: Int, height: Int): Bitmap {
-
-        val options = BitmapFactory.Options()
-        options.inSampleSize = 4
-        options.inJustDecodeBounds = true
-
-        val heightRatio = ceil((options.outHeight / height.toFloat()).toDouble()).toInt()
-        val widthRatio = ceil((options.outWidth / width.toFloat()).toDouble()).toInt()
-
-        if (heightRatio > 1 || widthRatio > 1) {
-            if (heightRatio > widthRatio) {
-                options.inSampleSize = heightRatio
-            } else {
-                options.inSampleSize = widthRatio
-            }
-        }
-
-        options.inJustDecodeBounds = false
-
-        return BitmapFactory.decodeFile(file, options)
-
-    }
-
-    private fun shrinkBitmapOnlyReduce(
-        file: String,
-        width: Int,
-        height: Int,
-        captionString: String?
-    ) {
-
-        val options = BitmapFactory.Options()
-        options.inSampleSize = 4
-        options.inJustDecodeBounds = true
-
-        val heightRatio = ceil((options.outHeight / height.toFloat()).toDouble()).toInt()
-        val widthRatio = ceil((options.outWidth / width.toFloat()).toDouble()).toInt()
-
-        if (heightRatio > 1 || widthRatio > 1) {
-            if (heightRatio > widthRatio) {
-                options.inSampleSize = heightRatio
-            } else {
-                options.inSampleSize = widthRatio
-            }
-        }
-
-        options.inJustDecodeBounds = false
-
-        try {
+//    private fun copyBitmatToFile(filename: String, bitmap: Bitmap): String {
+//        return try {
+//            val f = File(filename)
+//
+//            val bos = ByteArrayOutputStream()
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, bos)
+//            val bitmapdata = bos.toByteArray()
+//
+//            val fos = FileOutputStream(f)
+//            fos.write(bitmapdata)
+//            "true"
+//
+//        } catch (ex: IOException) {
+//            ex.message.toString()
+//        }
+//
+//    }
 
 
-            val b = BitmapFactory.decodeFile(file, options)
+//    private fun shrinkBitmap(file: String, width: Int, height: Int): Bitmap {
+//        val options = BitmapFactory.Options()
+//        options.inSampleSize = 4
+//        options.inJustDecodeBounds = true
+//        val heightRatio = ceil((options.outHeight / height.toFloat()).toDouble()).toInt()
+//        val widthRatio = ceil((options.outWidth / width.toFloat()).toDouble()).toInt()
+//        if (heightRatio > 1 || widthRatio > 1) {
+//            if (heightRatio > widthRatio) {
+//                options.inSampleSize = heightRatio
+//            } else {
+//                options.inSampleSize = widthRatio
+//            }
+//        }
+//        options.inJustDecodeBounds = false
+//        return BitmapFactory.decodeFile(file, options)
+//    }
 
-            var config: Bitmap.Config? = b.config
-            if (config == null) {
-                config = Bitmap.Config.ARGB_8888
-            }
-            val newBitmap = Bitmap.createBitmap(b.width, b.height, config)
+//    private fun shrinkBitmapOnlyReduce(
+//        file: String, width: Int, height: Int, captionString: String?
+//    ) {
+//        val options = BitmapFactory.Options()
+//        options.inSampleSize = 4
+//        options.inJustDecodeBounds = true
+//
+//        val heightRatio = ceil((options.outHeight / height.toFloat()).toDouble()).toInt()
+//        val widthRatio = ceil((options.outWidth / width.toFloat()).toDouble()).toInt()
+//
+//        if (heightRatio > 1 || widthRatio > 1) {
+//            if (heightRatio > widthRatio) {
+//                options.inSampleSize = heightRatio
+//            } else {
+//                options.inSampleSize = widthRatio
+//            }
+//        }
+//
+//        options.inJustDecodeBounds = false
+//
+//        try {
+//            val b = BitmapFactory.decodeFile(file, options)
+//            var config: Bitmap.Config? = b.config
+//            if (config == null) {
+//                config = Bitmap.Config.ARGB_8888
+//            }
+//            val newBitmap = Bitmap.createBitmap(b.width, b.height, config)
+//            val newCanvas = Canvas(newBitmap)
+//            newCanvas.drawBitmap(b, 0f, 0f, null)
+//
+//            if (captionString != null) {
+//
+//                val paintText = Paint(Paint.ANTI_ALIAS_FLAG)
+//                paintText.color = Color.RED
+//                paintText.textSize = 22f
+//                paintText.style = Paint.Style.FILL
+//                paintText.setShadowLayer(0.7f, 0.7f, 0.7f, Color.YELLOW)
+//
+//                val rectText = Rect()
+//                paintText.getTextBounds(captionString, 0, captionString.length, rectText)
+//                newCanvas.drawText(captionString, 0f, rectText.height().toFloat(), paintText)
+//            }
+//
+//            val fOut = FileOutputStream(file)
+//            val imageName = file.substring(file.lastIndexOf("/") + 1)
+//            val imageType = imageName.substring(imageName.lastIndexOf(".") + 1)
+//
+//            val out = FileOutputStream(file)
+//            if (imageType.equals("png", ignoreCase = true)) {
+//                newBitmap.compress(Bitmap.CompressFormat.PNG, 70, out)
+//            } else if (imageType.equals("jpeg", ignoreCase = true) || imageType.equals(
+//                    "jpg",
+//                    ignoreCase = true
+//                )
+//            ) {
+//                newBitmap.compress(Bitmap.CompressFormat.JPEG, 70, out)
+//            }
+//            fOut.flush()
+//            fOut.close()
+//            newBitmap.recycle()
+//
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//        }
+//    }
+//
+//    private fun shrinkBitmapOnlyReduceCamera2(
+//        file: String
+//    ) {
+//        val b = BitmapFactory.decodeFile(file)
+//        val text = getDateTimeFormatString()
+//        var config: Bitmap.Config? = b.config
+//        if (config == null) {
+//            config = Bitmap.Config.ARGB_8888
+//        }
+//        val newBitmap = Bitmap.createBitmap(b.width, b.height, config)
+//        val newCanvas = Canvas(newBitmap)
+//        newCanvas.drawBitmap(b, 0f, 0f, null)
+//
+//        val paintText = Paint(Paint.ANTI_ALIAS_FLAG)
+//        paintText.color = Color.RED
+//        paintText.textSize = 22f
+//        paintText.style = Paint.Style.FILL
+//        paintText.setShadowLayer(0.7f, 0.7f, 0.7f, Color.YELLOW)
+//
+//        val rectText = Rect()
+//        paintText.getTextBounds(text, 0, text.length, rectText)
+//        newCanvas.drawText(text, 0f, rectText.height().toFloat(), paintText)
+//
+//        val fOut = FileOutputStream(file)
+//        val imageName = file.substring(file.lastIndexOf("/") + 1)
+//        val imageType = imageName.substring(imageName.lastIndexOf(".") + 1)
+//
+//        val out = FileOutputStream(file)
+//        if (imageType.equals("png", ignoreCase = true)) {
+//            newBitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
+//        } else if (imageType.equals("jpeg", ignoreCase = true) || imageType.equals(
+//                "jpg",
+//                ignoreCase = true
+//            )
+//        ) {
+//            newBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+//        }
+//        fOut.flush()
+//        fOut.close()
+//        newBitmap.recycle()
+//    }
 
-            val newCanvas = Canvas(newBitmap)
-            newCanvas.drawBitmap(b, 0f, 0f, null)
+//    private fun getRightAngleImage(photoPath: String): String {
+//
+//        try {
+//            val ei = ExifInterface(photoPath)
+//
+//            val degree: Int = when (ei.getAttributeInt(
+//                ExifInterface.TAG_ORIENTATION,
+//                ExifInterface.ORIENTATION_NORMAL
+//            )) {
+//                ExifInterface.ORIENTATION_NORMAL -> 0
+//                ExifInterface.ORIENTATION_ROTATE_90 -> 90
+//                ExifInterface.ORIENTATION_ROTATE_180 -> 180
+//                ExifInterface.ORIENTATION_ROTATE_270 -> 270
+//                ExifInterface.ORIENTATION_UNDEFINED -> 0
+//                else -> 90
+//            }
+//
+//            return rotateImage(degree, photoPath)
+//
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//        }
+//
+//        return photoPath
+//    }
 
-            if (captionString != null) {
+//    private fun rotateImage(degree: Int, imagePath: String): String {
+//        if (degree <= 0) {
+//            shrinkBitmapOnlyReduce(
+//                imagePath,
+//                img_width_default,
+//                img_height_default,
+//                getDateTimeFormatString(Date(File(imagePath).lastModified()))
+//            )
+//            return imagePath
+//        }
+//        try {
+//
+//            var b: Bitmap? = shrinkBitmap(imagePath, img_width_default, img_height_default)
+//            val matrix = Matrix()
+//            if (b!!.width > b.height) {
+//                matrix.setRotate(degree.toFloat())
+//                b = Bitmap.createBitmap(b, 0, 0, b.width, b.height, matrix, true)
+//                b = processingBitmapSetDateTime(
+//                    b,
+//                    getDateTimeFormatString(Date(File(imagePath).lastModified()))
+//                )
+//            }
+//
+//            val fOut = FileOutputStream(imagePath)
+//            val imageName = imagePath.substring(imagePath.lastIndexOf("/") + 1)
+//            val imageType = imageName.substring(imageName.lastIndexOf(".") + 1)
+//
+//            val out = FileOutputStream(imagePath)
+//            if (imageType.equals("png", ignoreCase = true)) {
+//                b!!.compress(Bitmap.CompressFormat.PNG, 70, out)
+//            } else if (imageType.equals("jpeg", ignoreCase = true) || imageType.equals(
+//                    "jpg",
+//                    ignoreCase = true
+//                )
+//            ) {
+//                b!!.compress(Bitmap.CompressFormat.JPEG, 70, out)
+//            }
+//            fOut.flush()
+//            fOut.close()
+//            b!!.recycle()
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//        }
+//
+//        return imagePath
+//    }
 
-                val paintText = Paint(Paint.ANTI_ALIAS_FLAG)
-                paintText.color = Color.RED
-                paintText.textSize = 22f
-                paintText.style = Paint.Style.FILL
-                paintText.setShadowLayer(0.7f, 0.7f, 0.7f, Color.YELLOW)
+//    fun getVersion(context: Context): String {
+//        val pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+//        return pInfo.versionName
+//    }
 
-                val rectText = Rect()
-                paintText.getTextBounds(captionString, 0, captionString.length, rectText)
-                newCanvas.drawText(captionString, 0f, rectText.height().toFloat(), paintText)
-            }
-
-            val fOut = FileOutputStream(file)
-            val imageName = file.substring(file.lastIndexOf("/") + 1)
-            val imageType = imageName.substring(imageName.lastIndexOf(".") + 1)
-
-            val out = FileOutputStream(file)
-            if (imageType.equals("png", ignoreCase = true)) {
-                newBitmap.compress(Bitmap.CompressFormat.PNG, 70, out)
-            } else if (imageType.equals("jpeg", ignoreCase = true) || imageType.equals(
-                    "jpg",
-                    ignoreCase = true
-                )
-            ) {
-                newBitmap.compress(Bitmap.CompressFormat.JPEG, 70, out)
-            }
-            fOut.flush()
-            fOut.close()
-            newBitmap.recycle()
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    private fun shrinkBitmapOnlyReduceCamera2(
-        file: String
-    ) {
-        val b = BitmapFactory.decodeFile(file)
-        val text = getDateTimeFormatString()
-        var config: Bitmap.Config? = b.config
-        if (config == null) {
-            config = Bitmap.Config.ARGB_8888
-        }
-        val newBitmap = Bitmap.createBitmap(b.width, b.height, config)
-        val newCanvas = Canvas(newBitmap)
-        newCanvas.drawBitmap(b, 0f, 0f, null)
-
-        val paintText = Paint(Paint.ANTI_ALIAS_FLAG)
-        paintText.color = Color.RED
-        paintText.textSize = 22f
-        paintText.style = Paint.Style.FILL
-        paintText.setShadowLayer(0.7f, 0.7f, 0.7f, Color.YELLOW)
-
-        val rectText = Rect()
-        paintText.getTextBounds(text, 0, text.length, rectText)
-        newCanvas.drawText(text, 0f, rectText.height().toFloat(), paintText)
-
-        val fOut = FileOutputStream(file)
-        val imageName = file.substring(file.lastIndexOf("/") + 1)
-        val imageType = imageName.substring(imageName.lastIndexOf(".") + 1)
-
-        val out = FileOutputStream(file)
-        if (imageType.equals("png", ignoreCase = true)) {
-            newBitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
-        } else if (imageType.equals("jpeg", ignoreCase = true) || imageType.equals(
-                "jpg",
-                ignoreCase = true
-            )
-        ) {
-            newBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
-        }
-        fOut.flush()
-        fOut.close()
-        newBitmap.recycle()
-    }
-
-    // TODO SOBRE ROTAR LA PHOTO
-
-    fun getRightAngleImage(photoPath: String): String {
-
-        try {
-            val ei = ExifInterface(photoPath)
-            val orientation =
-                ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
-            val degree: Int
-
-            degree = when (orientation) {
-                ExifInterface.ORIENTATION_NORMAL -> 0
-                ExifInterface.ORIENTATION_ROTATE_90 -> 90
-                ExifInterface.ORIENTATION_ROTATE_180 -> 180
-                ExifInterface.ORIENTATION_ROTATE_270 -> 270
-                ExifInterface.ORIENTATION_UNDEFINED -> 0
-                else -> 90
-            }
-
-            return rotateImage(degree, photoPath)
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        return photoPath
-    }
-
-    private fun rotateImage(degree: Int, imagePath: String): String {
-        if (degree <= 0) {
-            shrinkBitmapOnlyReduce(
-                imagePath,
-                img_width_default,
-                img_height_default,
-                getDateTimeFormatString(Date(File(imagePath).lastModified()))
-            )
-            return imagePath
-        }
-        try {
-
-            var b: Bitmap? = shrinkBitmap(imagePath, img_width_default, img_height_default)
-            val matrix = Matrix()
-            if (b!!.width > b.height) {
-                matrix.setRotate(degree.toFloat())
-                b = Bitmap.createBitmap(b, 0, 0, b.width, b.height, matrix, true)
-                b = processingBitmapSetDateTime(
-                    b,
-                    getDateTimeFormatString(Date(File(imagePath).lastModified()))
-                )
-            }
-
-            val fOut = FileOutputStream(imagePath)
-            val imageName = imagePath.substring(imagePath.lastIndexOf("/") + 1)
-            val imageType = imageName.substring(imageName.lastIndexOf(".") + 1)
-
-            val out = FileOutputStream(imagePath)
-            if (imageType.equals("png", ignoreCase = true)) {
-                b!!.compress(Bitmap.CompressFormat.PNG, 70, out)
-            } else if (imageType.equals("jpeg", ignoreCase = true) || imageType.equals(
-                    "jpg",
-                    ignoreCase = true
-                )
-            ) {
-                b!!.compress(Bitmap.CompressFormat.JPEG, 70, out)
-            }
-            fOut.flush()
-            fOut.close()
-            b!!.recycle()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        return imagePath
-    }
-
-    fun getVersion(context: Context): String {
-        val pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
-        return pInfo.versionName
-    }
-
-    fun getToken(context: Context): String? {
-        return context.getSharedPreferences("TOKEN", MODE_PRIVATE).getString("token", "empty")
-    }
 
     fun getNotificacionValid(context: Context): String? {
         return context.getSharedPreferences("TOKEN", MODE_PRIVATE).getString("update", "")
     }
 
-    fun updateNotificacionValid(context: Context) {
-        context.getSharedPreferences("TOKEN", MODE_PRIVATE).edit().putString("update", "").apply()
-    }
 
     fun snackBarMensaje(view: View, mensaje: String) {
         val mSnackbar = Snackbar.make(view, mensaje, Snackbar.LENGTH_SHORT)
@@ -529,15 +401,15 @@ object Util {
         Toast.makeText(context, mensaje, Toast.LENGTH_LONG).show()
     }
 
-    fun dialogMensaje(context: Context, title: String, mensaje: String) {
-        val dialog = MaterialAlertDialogBuilder(context)
-            .setTitle(title)
-            .setMessage(mensaje)
-            .setPositiveButton("Entendido") { dialog, _ ->
-                dialog.dismiss()
-            }
-        dialog.show()
-    }
+//    fun dialogMensaje(context: Context, title: String, mensaje: String) {
+//        val dialog = MaterialAlertDialogBuilder(context)
+//            .setTitle(title)
+//            .setMessage(mensaje)
+//            .setPositiveButton("Entendido") { dialog, _ ->
+//                dialog.dismiss()
+//            }
+//        dialog.show()
+//    }
 
     // TODO CLOSE TECLADO
 
@@ -561,20 +433,20 @@ object Util {
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
-    fun getDateDialogText(context: Context, text: TextView) {
-        val c = Calendar.getInstance()
-        val mYear = c.get(Calendar.YEAR)
-        val mMonth = c.get(Calendar.MONTH)
-        val mDay = c.get(Calendar.DAY_OF_MONTH)
-        val datePickerDialog = DatePickerDialog(context, { _, year, monthOfYear, dayOfMonth ->
-            val month =
-                if (((monthOfYear + 1) / 10) == 0) "0" + (monthOfYear + 1).toString() else (monthOfYear + 1).toString()
-            val day = String.format("%02d", dayOfMonth)
-            val fecha = "$day/$month/$year"
-            text.text = fecha
-        }, mYear, mMonth, mDay)
-        datePickerDialog.show()
-    }
+//    fun getDateDialogText(context: Context, text: TextView) {
+//        val c = Calendar.getInstance()
+//        val mYear = c.get(Calendar.YEAR)
+//        val mMonth = c.get(Calendar.MONTH)
+//        val mDay = c.get(Calendar.DAY_OF_MONTH)
+//        val datePickerDialog = DatePickerDialog(context, { _, year, monthOfYear, dayOfMonth ->
+//            val month =
+//                if (((monthOfYear + 1) / 10) == 0) "0" + (monthOfYear + 1).toString() else (monthOfYear + 1).toString()
+//            val day = String.format("%02d", dayOfMonth)
+//            val fecha = "$day/$month/$year"
+//            text.text = fecha
+//        }, mYear, mMonth, mDay)
+//        datePickerDialog.show()
+//    }
 
     fun getFullDialog(context: Context, input: TextInputEditText) {
         val c = Calendar.getInstance()
@@ -603,78 +475,58 @@ object Util {
 
         }, mYear, mMonth, mDay)
         datePickerDialog.show()
-
-
     }
 
-    fun getDateDialog(context: Context, input: TextInputEditText) {
-        val c = Calendar.getInstance()
-        val mYear = c.get(Calendar.YEAR)
-        val mMonth = c.get(Calendar.MONTH)
-        val mDay = c.get(Calendar.DAY_OF_MONTH)
-        val datePickerDialog = DatePickerDialog(context, { _, year, monthOfYear, dayOfMonth ->
-            val month =
-                if (((monthOfYear + 1) / 10) == 0) "0" + (monthOfYear + 1).toString() else (monthOfYear + 1).toString()
-            val day = String.format("%02d", dayOfMonth)
-            val fecha = "$day/$month/$year"
-            input.setText(fecha)
-        }, mYear, mMonth, mDay)
-        datePickerDialog.show()
-    }
+//    fun getDateDialog(context: Context, input: TextInputEditText) {
+//        val c = Calendar.getInstance()
+//        val mYear = c.get(Calendar.YEAR)
+//        val mMonth = c.get(Calendar.MONTH)
+//        val mDay = c.get(Calendar.DAY_OF_MONTH)
+//        val datePickerDialog = DatePickerDialog(context, { _, year, monthOfYear, dayOfMonth ->
+//            val month =
+//                if (((monthOfYear + 1) / 10) == 0) "0" + (monthOfYear + 1).toString() else (monthOfYear + 1).toString()
+//            val day = String.format("%02d", dayOfMonth)
+//            val fecha = "$day/$month/$year"
+//            input.setText(fecha)
+//        }, mYear, mMonth, mDay)
+//        datePickerDialog.show()
+//    }
+//
+//    fun getHourDialog(context: Context, input: TextInputEditText) {
+//        val c = Calendar.getInstance()
+//        val mHour = c.get(Calendar.HOUR_OF_DAY)
+//        val mMinute = c.get(Calendar.MINUTE)
+//        val timePickerDialog =
+//            TimePickerDialog(context, { _, hourOfDay, minute ->
+//                val hour = if (hourOfDay < 10) "0$hourOfDay" else hourOfDay.toString()
+//                val minutes = if (minute < 10) "0$minute" else minute.toString()
+//                val day = if (hourOfDay < 12) "a.m." else "p.m."
+//                input.setText(String.format("%s:%s %s", hour, minutes, day))
+//            }, mHour, mMinute, false)
+//        timePickerDialog.show()
+//    }
 
-    fun getHourDialog(context: Context, input: TextInputEditText) {
-        val c = Calendar.getInstance()
-        val mHour = c.get(Calendar.HOUR_OF_DAY)
-        val mMinute = c.get(Calendar.MINUTE)
-        val timePickerDialog =
-            TimePickerDialog(context, { _, hourOfDay, minute ->
-                val hour = if (hourOfDay < 10) "0$hourOfDay" else hourOfDay.toString()
-                val minutes = if (minute < 10) "0$minute" else minute.toString()
-                val day = if (hourOfDay < 12) "a.m." else "p.m."
-                input.setText(String.format("%s:%s %s", hour, minutes, day))
-            }, mHour, mMinute, false)
-        timePickerDialog.show()
-    }
 
-    private fun getCompareFecha(fechaInicial: String, fechaFinal: String): Boolean {
-        @SuppressLint("SimpleDateFormat") val format = SimpleDateFormat("dd/MM/yyyy")
-        var date1 = Date()
-        try {
-            date1 = format.parse(fechaFinal)!!
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
-
-        var date2 = Date()
-        try {
-            date2 = format.parse(fechaInicial)!!
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
-
-        return date1.before(date2)
-    }
-
-    fun getDateDialog(context: Context, view: View, input: TextInputEditText) {
-        val c = Calendar.getInstance()
-        val mYear = c.get(Calendar.YEAR)
-        val mMonth = c.get(Calendar.MONTH)
-        val mDay = c.get(Calendar.DAY_OF_MONTH)
-        val datePickerDialog = DatePickerDialog(context, { _, year, monthOfYear, dayOfMonth ->
-            val month =
-                if (((monthOfYear + 1) / 10) == 0) "0" + (monthOfYear + 1).toString() else (monthOfYear + 1).toString()
-            val day = if (((dayOfMonth + 1) / 10) == 0) "0$dayOfMonth" else dayOfMonth.toString()
-            val fecha = "$day/$month/$year"
-
-            if (!getCompareFecha(getFecha(), fecha)) {
-                input.setText(fecha)
-            } else {
-                snackBarMensaje(view, "Fecha Propuesta no debe ser menor a la fecha actual")
-            }
-
-        }, mYear, mMonth, mDay)
-        datePickerDialog.show()
-    }
+//    fun getDateDialog(context: Context, view: View, input: TextInputEditText) {
+//        val c = Calendar.getInstance()
+//        val mYear = c.get(Calendar.YEAR)
+//        val mMonth = c.get(Calendar.MONTH)
+//        val mDay = c.get(Calendar.DAY_OF_MONTH)
+//        val datePickerDialog = DatePickerDialog(context, { _, year, monthOfYear, dayOfMonth ->
+//            val month =
+//                if (((monthOfYear + 1) / 10) == 0) "0" + (monthOfYear + 1).toString() else (monthOfYear + 1).toString()
+//            val day = if (((dayOfMonth + 1) / 10) == 0) "0$dayOfMonth" else dayOfMonth.toString()
+//            val fecha = "$day/$month/$year"
+//
+//            if (!getCompareFecha(getFecha(), fecha)) {
+//                input.setText(fecha)
+//            } else {
+//                snackBarMensaje(view, "Fecha Propuesta no debe ser menor a la fecha actual")
+//            }
+//
+//        }, mYear, mMonth, mDay)
+//        datePickerDialog.show()
+//}
 
     private fun getTextHTML(html: String): Spanned {
 //        textViewTotal.setText(
@@ -700,38 +552,38 @@ object Util {
     }
 
 
-    fun isNumeric(strNum: String): Boolean {
-        try {
-            val d = Integer.parseInt(strNum)
-            Log.i("TAG", d.toString())
-        } catch (nfe: NumberFormatException) {
-            return false
-        } catch (nfe: NullPointerException) {
-            return false
-        }
-        return true
-    }
+//    fun isNumeric(strNum: String): Boolean {
+//        try {
+//            Integer.parseInt(strNum)
+////            Log.i("TAG", d.toString())
+//        } catch (nfe: NumberFormatException) {
+//            return false
+//        } catch (nfe: NullPointerException) {
+//            return false
+//        }
+//        return true
+//    }
 
-    fun isDecimal(s: String): Boolean {
-        try {
-            val d = s.toDouble()
-            Log.i("TAG", d.toString())
-        } catch (nfe: NumberFormatException) {
-            return false
-        } catch (nfe: NullPointerException) {
-            return false
-        }
-        return true
-    }
+//    fun isDecimal(s: String): Boolean {
+//        try {
+//            val d = s.toDouble()
+////            Log.i("TAG", d.toString())
+//        } catch (nfe: NumberFormatException) {
+//            return false
+//        } catch (nfe: NullPointerException) {
+//            return false
+//        }
+//        return true
+//    }
 
-    @Throws(IOException::class)
-    fun deleteDirectory(file: File) {
-        if (file.isDirectory) {
-            file.listFiles()?.forEach {
-                it.delete()
-            }
-        }
-    }
+//    @Throws(IOException::class)
+//    fun deleteDirectory(file: File) {
+//        if (file.isDirectory) {
+//            file.listFiles()?.forEach {
+//                it.delete()
+//            }
+//        }
+//    }
 
     fun deleteFile(photo: String, context: Context) {
         val f = File(getFolder(context), photo)
@@ -740,88 +592,88 @@ object Util {
         }
     }
 
-    fun decodePoly(encoded: String): List<LatLng> {
-        val poly: MutableList<LatLng> = ArrayList()
-        var index = 0
-        val len = encoded.length
-        var lat = 0
-        var lng = 0
-        while (index < len) {
-            var b: Int
-            var shift = 0
-            var result = 0
-            do {
-                b = encoded[index++].toInt() - 63
-                result = result or (b and 0x1f) shl shift
-                shift += 5
-            } while (b >= 0x20)
-            val dlat = if (result and 1 != 0) (result shr 1).inv() else result shr 1
-            lat += dlat
-            shift = 0
-            result = 0
-            do {
-                b = encoded[index++].toInt() - 63
-                result = result or (b and 0x1f) shl shift
-                shift += 5
-            } while (b >= 0x20)
-            val dlng = if (result and 1 != 0) (result shr 1).inv() else result shr 1
-            lng += dlng
-            val p = LatLng(
-                lat.toDouble() / 1E5,
-                lng.toDouble() / 1E5
-            )
-            poly.add(p)
-        }
-        return poly
-    }
+//    fun decodePoly(encoded: String): List<LatLng> {
+//        val poly: MutableList<LatLng> = ArrayList()
+//        var index = 0
+//        val len = encoded.length
+//        var lat = 0
+//        var lng = 0
+//        while (index < len) {
+//            var b: Int
+//            var shift = 0
+//            var result = 0
+//            do {
+//                b = encoded[index++].toInt() - 63
+//                result = result or (b and 0x1f) shl shift
+//                shift += 5
+//            } while (b >= 0x20)
+//            val dlat = if (result and 1 != 0) (result shr 1).inv() else result shr 1
+//            lat += dlat
+//            shift = 0
+//            result = 0
+//            do {
+//                b = encoded[index++].toInt() - 63
+//                result = result or (b and 0x1f) shl shift
+//                shift += 5
+//            } while (b >= 0x20)
+//            val dlng = if (result and 1 != 0) (result shr 1).inv() else result shr 1
+//            lng += dlng
+//            val p = LatLng(
+//                lat.toDouble() / 1E5,
+//                lng.toDouble() / 1E5
+//            )
+//            poly.add(p)
+//        }
+//        return poly
+//    }
 
-    fun calculationByDistance(StartP: Location, EndP: LatLng): Double {
-        val radius = 6371 * 1000  // radius of earth in Km * meters
-        val lat1 = StartP.latitude
-        val lat2 = EndP.latitude
-        val lon1 = StartP.longitude
-        val lon2 = EndP.longitude
-        val dLat = Math.toRadians(lat2 - lat1)
-        val dLon = Math.toRadians(lon2 - lon1)
-        val a = sin(dLat / 2) * sin(dLat / 2) + (cos(Math.toRadians(lat1))
-                * cos(Math.toRadians(lat2)) * sin(dLon / 2)
-                * sin(dLon / 2))
-        val c = 2 * asin(sqrt(a))
-        val valueResult = radius * c
-        val km = valueResult / 1
-        val newFormat = DecimalFormat("####")
-        val kmInDec = Integer.valueOf(newFormat.format(km))
-        return kmInDec.toDouble()
-    }
-
-    fun calculationByDistance(StartP: Location, EndP: Location): Double {
-        val radius = 6371 * 1000  // radius of earth in Km * meters
-        val lat1 = StartP.latitude
-        val lat2 = EndP.latitude
-        val lon1 = StartP.longitude
-        val lon2 = EndP.longitude
-        val dLat = Math.toRadians(lat2 - lat1)
-        val dLon = Math.toRadians(lon2 - lon1)
-        val a = sin(dLat / 2) * sin(dLat / 2) + (cos(Math.toRadians(lat1))
-                * cos(Math.toRadians(lat2)) * sin(dLon / 2)
-                * sin(dLon / 2))
-        val c = 2 * asin(sqrt(a))
-        val valueResult = radius * c
-        val km = valueResult / 1
-        val newFormat = DecimalFormat("####")
-        val kmInDec = Integer.valueOf(newFormat.format(km))
-        return kmInDec.toDouble()
-    }
-
-    fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor? {
-        return ContextCompat.getDrawable(context, vectorResId)?.run {
-            setBounds(0, 0, intrinsicWidth, intrinsicHeight)
-            val bitmap =
-                Bitmap.createBitmap(intrinsicWidth, intrinsicHeight, Bitmap.Config.ARGB_8888)
-            draw(Canvas(bitmap))
-            BitmapDescriptorFactory.fromBitmap(bitmap)
-        }
-    }
+//    fun calculationByDistance(StartP: Location, EndP: LatLng): Double {
+//        val radius = 6371 * 1000  // radius of earth in Km * meters
+//        val lat1 = StartP.latitude
+//        val lat2 = EndP.latitude
+//        val lon1 = StartP.longitude
+//        val lon2 = EndP.longitude
+//        val dLat = Math.toRadians(lat2 - lat1)
+//        val dLon = Math.toRadians(lon2 - lon1)
+//        val a = sin(dLat / 2) * sin(dLat / 2) + (cos(Math.toRadians(lat1))
+//                * cos(Math.toRadians(lat2)) * sin(dLon / 2)
+//                * sin(dLon / 2))
+//        val c = 2 * asin(sqrt(a))
+//        val valueResult = radius * c
+//        val km = valueResult / 1
+//        val newFormat = DecimalFormat("####")
+//        val kmInDec = Integer.valueOf(newFormat.format(km))
+//        return kmInDec.toDouble()
+//    }
+//
+//    fun calculationByDistance(StartP: Location, EndP: Location): Double {
+//        val radius = 6371 * 1000  // radius of earth in Km * meters
+//        val lat1 = StartP.latitude
+//        val lat2 = EndP.latitude
+//        val lon1 = StartP.longitude
+//        val lon2 = EndP.longitude
+//        val dLat = Math.toRadians(lat2 - lat1)
+//        val dLon = Math.toRadians(lon2 - lon1)
+//        val a = sin(dLat / 2) * sin(dLat / 2) + (cos(Math.toRadians(lat1))
+//                * cos(Math.toRadians(lat2)) * sin(dLon / 2)
+//                * sin(dLon / 2))
+//        val c = 2 * asin(sqrt(a))
+//        val valueResult = radius * c
+//        val km = valueResult / 1
+//        val newFormat = DecimalFormat("####")
+//        val kmInDec = Integer.valueOf(newFormat.format(km))
+//        return kmInDec.toDouble()
+//    }
+//
+//    fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor? {
+//        return ContextCompat.getDrawable(context, vectorResId)?.run {
+//            setBounds(0, 0, intrinsicWidth, intrinsicHeight)
+//            val bitmap =
+//                Bitmap.createBitmap(intrinsicWidth, intrinsicHeight, Bitmap.Config.ARGB_8888)
+//            draw(Canvas(bitmap))
+//            BitmapDescriptorFactory.fromBitmap(bitmap)
+//        }
+//    }
 
     fun getAngleImage(
         context: Context,
@@ -832,11 +684,11 @@ object Util {
     ): String {
         try {
             val ei = ExifInterface(photoPath)
-            val orientation =
-                ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
-            val degree: Int
 
-            degree = when (orientation) {
+            val degree: Int = when (ei.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_NORMAL
+            )) {
                 ExifInterface.ORIENTATION_NORMAL -> 0
                 ExifInterface.ORIENTATION_ROTATE_90 -> 90
                 ExifInterface.ORIENTATION_ROTATE_180 -> 180
@@ -953,48 +805,48 @@ object Util {
         return bitmap
     }
 
-    fun getLocationName(
-        context: Context,
-        input: TextInputEditText,
-        location: Location,
-        progressBar: ProgressBar
-    ) {
-        val nombre = arrayOf("")
-        try {
-            val addressObservable = Observable.just(
-                Geocoder(context).getFromLocation(
-                    location.latitude,
-                    location.longitude,
-                    1
-                )[0]
-            )
-            addressObservable.subscribeOn(Schedulers.io())
-                .delay(1000, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Observer<Address> {
-                    override fun onSubscribe(d: Disposable) {
-
-                    }
-
-                    override fun onNext(address: Address) {
-                        nombre[0] = address.getAddressLine(0)
-                    }
-
-                    override fun onError(e: Throwable) {
-//                        toastMensaje(context, context.getString(R.string.try_again))
-                        progressBar.visibility = View.GONE
-                    }
-
-                    override fun onComplete() {
-                        input.setText(nombre[0])
-                        progressBar.visibility = View.GONE
-                    }
-                })
-        } catch (e: IOException) {
-            toastMensaje(context, e.toString())
-            progressBar.visibility = View.GONE
-        }
-    }
+//    fun getLocationName(
+//        context: Context,
+//        input: TextInputEditText,
+//        location: Location,
+//        progressBar: ProgressBar
+//    ) {
+//        val nombre = arrayOf("")
+//        try {
+//            val addressObservable = Observable.just(
+//                Geocoder(context).getFromLocation(
+//                    location.latitude,
+//                    location.longitude,
+//                    1
+//                )[0]
+//            )
+//            addressObservable.subscribeOn(Schedulers.io())
+//                .delay(1000, TimeUnit.MILLISECONDS)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(object : Observer<Address> {
+//                    override fun onSubscribe(d: Disposable) {
+//
+//                    }
+//
+//                    override fun onNext(address: Address) {
+//                        nombre[0] = address.getAddressLine(0)
+//                    }
+//
+//                    override fun onError(e: Throwable) {
+////                        toastMensaje(context, context.getString(R.string.try_again))
+//                        progressBar.visibility = View.GONE
+//                    }
+//
+//                    override fun onComplete() {
+//                        input.setText(nombre[0])
+//                        progressBar.visibility = View.GONE
+//                    }
+//                })
+//        } catch (e: IOException) {
+//            toastMensaje(context, e.toString())
+//            progressBar.visibility = View.GONE
+//        }
+//    }
 
     fun getFolderInspeccionAdjunto(
         user: Int, id: Int, context: Context, data: Intent
@@ -1071,22 +923,22 @@ object Util {
         }
     }
 
-    @Throws(IOException::class)
-    private fun createImageFile(name: String, type: String, file: File): File {
-        return File.createTempFile(
-            name, /* prefix */
-            type, /* suffix */
-            file /* directory */
-        ).apply {
-            // Save a file: path for use with ACTION_VIEW intents
-            absolutePath
-        }
-    }
+//    @Throws(IOException::class)
+//    private fun createImageFile(name: String, type: String, file: File): File {
+//        return File.createTempFile(
+//            name, /* prefix */
+//            type, /* suffix */
+//            file /* directory */
+//        ).apply {
+//            // Save a file: path for use with ACTION_VIEW intents
+//            absolutePath
+//        }
+//    }
 
 
-    fun editTextMaxLength(input: TextInputEditText, i: Int) {
-        input.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(i))
-    }
+//    fun editTextMaxLength(input: TextInputEditText, i: Int) {
+//        input.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(i))
+//    }
 
     fun dialogMensajeLogin(activity: Activity) {
         val dialog = MaterialAlertDialogBuilder(activity)
@@ -1118,9 +970,9 @@ object Util {
         }
     }
 
-    fun append(arr: Array<Int>, element: Int): Array<Int> {
-        val list: MutableList<Int> = arr.toMutableList()
-        list.add(element)
-        return list.toTypedArray()
-    }
+//    fun append(arr: Array<Int>, element: Int): Array<Int> {
+//        val list: MutableList<Int> = arr.toMutableList()
+//        list.add(element)
+//        return list.toTypedArray()
+//    }
 }

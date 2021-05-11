@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amsys.alphamanfacturas.R
 import com.amsys.alphamanfacturas.data.local.model.Inspeccion
-import com.amsys.alphamanfacturas.data.local.model.Query
 import com.amsys.alphamanfacturas.data.viewModel.InspeccionViewModel
 import com.amsys.alphamanfacturas.data.viewModel.ViewModelFactory
 import com.amsys.alphamanfacturas.helper.Util

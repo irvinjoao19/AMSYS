@@ -3,7 +3,6 @@ package com.amsys.alphamanfacturas.ui.fragments
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
-import android.text.Editable
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -14,16 +13,13 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amsys.alphamanfacturas.R
 import com.amsys.alphamanfacturas.data.local.model.Contador
-import com.amsys.alphamanfacturas.data.local.model.PuntoMedida
 import com.amsys.alphamanfacturas.data.viewModel.InspeccionViewModel
 import com.amsys.alphamanfacturas.data.viewModel.ViewModelFactory
 import com.amsys.alphamanfacturas.ui.adapters.ContadorAdapter
 import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
 import com.google.android.material.textfield.TextInputEditText
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_inspeccion_1.*
 import kotlinx.android.synthetic.main.fragment_inspeccion_2.*
-import kotlinx.android.synthetic.main.fragment_inspeccion_2.recyclerView
 import java.util.*
 import javax.inject.Inject
 

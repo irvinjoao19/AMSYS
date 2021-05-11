@@ -30,9 +30,10 @@ import com.amsys.alphamanfacturas.data.local.model.*
         Aspecto::class,
         Contador::class,
         InspeccionFile::class,
-        TalleResponsable::class
+        TalleResponsable::class,
+        Ejecucion::class
     ],
-    version = 5, // version 1 en play store
+    version = 7, // version 1 en play store
     exportSchema = false
 )
 @TypeConverters(Converts::class)
@@ -60,11 +61,12 @@ abstract class AppDataBase : RoomDatabase() {
     abstract fun contadorDao(): ContadorDao
     abstract fun inspeccionFileDao(): InspeccionFileDao
     abstract fun talleResponsableDao(): TalleResponsableDao
+    abstract fun ejecucionDao(): EjecucionDao
 
     companion object {
         @Volatile
         var INSTANCE: AppDataBase? = null
-        val DB_NAME = "amsys_db"
+        const val DB_NAME = "amsys_db"
     }
 
     fun getDatabase(context: Context): AppDataBase {

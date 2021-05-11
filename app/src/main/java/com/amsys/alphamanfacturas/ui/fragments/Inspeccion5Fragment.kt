@@ -10,32 +10,32 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amsys.alphamanfacturas.R
-import com.amsys.alphamanfacturas.data.local.model.AvisoFile
-import com.amsys.alphamanfacturas.data.viewModel.AvisoViewModel
+import com.amsys.alphamanfacturas.data.local.model.InspeccionFile
+import com.amsys.alphamanfacturas.data.viewModel.InspeccionViewModel
 import com.amsys.alphamanfacturas.data.viewModel.ViewModelFactory
 import com.amsys.alphamanfacturas.helper.Permission
 import com.amsys.alphamanfacturas.helper.Util
-import com.amsys.alphamanfacturas.ui.adapters.AvisoFileAdapter
+import com.amsys.alphamanfacturas.ui.adapters.InspeccionFileAdapter
 import com.amsys.alphamanfacturas.ui.listeners.OnItemClickListener
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_aviso_6.*
+import kotlinx.android.synthetic.main.fragment_inspeccion_5.*
 import javax.inject.Inject
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class Aviso6Fragment : DaggerFragment(), View.OnClickListener {
+class Inspeccion5Fragment : DaggerFragment(), View.OnClickListener {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-    lateinit var avisoViewModel: AvisoViewModel
-    private var registroId: Int = 0
+    lateinit var inspeccionViewModel: InspeccionViewModel
+    private var inspeccionId: Int = 0
     private var usuarioId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            registroId = it.getInt(ARG_PARAM1)
+            inspeccionId = it.getInt(ARG_PARAM1)
             usuarioId = it.getInt(ARG_PARAM2)
         }
     }
@@ -43,7 +43,7 @@ class Aviso6Fragment : DaggerFragment(), View.OnClickListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_aviso_6, container, false)
+        return inflater.inflate(R.layout.fragment_inspeccion_5, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,13 +52,13 @@ class Aviso6Fragment : DaggerFragment(), View.OnClickListener {
     }
 
     private fun bindUI() {
-        avisoViewModel =
-            ViewModelProvider(this, viewModelFactory).get(AvisoViewModel::class.java)
+        inspeccionViewModel =
+            ViewModelProvider(this, viewModelFactory).get(InspeccionViewModel::class.java)
 
         val fileAdapter =
-            AvisoFileAdapter(object : OnItemClickListener.AvisoFileListener {
-                override fun onItemClick(a: AvisoFile, v: View, position: Int) {
-                    avisoViewModel.deleteFile(a, requireContext())
+            InspeccionFileAdapter(object : OnItemClickListener.InspeccionFileListener {
+                override fun onItemClick(f: InspeccionFile, v: View, position: Int) {
+                    inspeccionViewModel.deleteFile(f, requireContext())
                 }
             })
 
@@ -67,14 +67,14 @@ class Aviso6Fragment : DaggerFragment(), View.OnClickListener {
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = fileAdapter
 
-        avisoViewModel.getAvisoFiles(registroId).observe(viewLifecycleOwner) {
+        inspeccionViewModel.getInspeccionFiles(inspeccionId).observe(viewLifecycleOwner) {
             fileAdapter.addItems(it)
         }
 
-        avisoViewModel.mensajeSuccess.observe(viewLifecycleOwner) {
+        inspeccionViewModel.mensajeSuccess.observe(viewLifecycleOwner) {
             Util.toastMensaje(requireContext(), it)
         }
-        avisoViewModel.mensajeError.observe(viewLifecycleOwner) {
+        inspeccionViewModel.mensajeError.observe(viewLifecycleOwner) {
             Util.toastMensaje(requireContext(), it)
         }
 
@@ -83,8 +83,8 @@ class Aviso6Fragment : DaggerFragment(), View.OnClickListener {
 
     companion object {
         @JvmStatic
-        fun newInstance(param1: Int,param2: Int) =
-            Aviso6Fragment().apply {
+        fun newInstance(param1: Int, param2: Int) =
+            Inspeccion5Fragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_PARAM1, param1)
                     putInt(ARG_PARAM2, param2)
@@ -103,8 +103,8 @@ class Aviso6Fragment : DaggerFragment(), View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == Permission.GALERY_REQUEST) {
             if (data != null) {
-                avisoViewModel.getFolderAdjunto(
-                    usuarioId,registroId, requireContext(), data
+                inspeccionViewModel.getFolderAdjunto(
+                    usuarioId, inspeccionId, requireContext(), data
                 )
             }
         }

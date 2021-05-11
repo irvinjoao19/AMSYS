@@ -46,10 +46,9 @@ class Aviso5Fragment : DaggerFragment(), View.OnClickListener {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     lateinit var avisoViewModel: AvisoViewModel
-
+    private lateinit var r: Registro
     private var registroId: Int = 0
     private var textChange: Boolean = true
-    lateinit var r: Registro
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

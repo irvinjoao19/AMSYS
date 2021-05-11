@@ -81,7 +81,7 @@ interface AppRepository {
     fun insertInspecciones(r: Any): Completable
     fun getInspecciones(): LiveData<List<Inspeccion>>
     fun getSearchInspeccion(token: String, q: Query): Observable<ResponseModel>
-    fun insertSyncInspeccion(t: Any): Completable
+    fun insertSyncInspeccion(t: Any,q:Query): Completable
 
     //Form Inspecciones
     fun getPuntoMedidaById(inspeccionId: Int): LiveData<List<PuntoMedida>>
@@ -105,4 +105,6 @@ interface AppRepository {
     fun getReporte(token:String,q:Query) : Observable<ResponseModel>
     fun actualizarFecha(token:String,q: Query) : Observable<ResponseModel>
     fun updateFechaFinParadaAviso(q: Query): Completable
+    fun getEjecucionById(id: Int): LiveData<Ejecucion>
+    fun insertEjecucion(e: Ejecucion): Completable
 }

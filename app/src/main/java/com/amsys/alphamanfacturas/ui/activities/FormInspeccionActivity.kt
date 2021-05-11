@@ -92,7 +92,7 @@ class FormInspeccionActivity : DaggerAppCompatActivity() {
         }
 
         val formAdapter =
-            ViewPagerAdapter.FormInspeccion(supportFragmentManager, 4, id, token, user)
+            ViewPagerAdapter.FormInspeccion(supportFragmentManager, 5, id, token, user)
         viewPager.adapter = formAdapter
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(p: Int, pos: Float, posp: Int) {}

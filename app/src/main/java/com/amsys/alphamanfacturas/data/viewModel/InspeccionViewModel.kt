@@ -36,9 +36,9 @@ internal constructor(private val roomRepository: AppRepository, private val retr
     val mensajeSuccess = MutableLiveData<String>()
     val mensajeLogout = MutableLiveData<String>()
     val loading: MutableLiveData<Boolean> = MutableLiveData()
-    val compositeDisposable = CompositeDisposable()
+    private val compositeDisposable = CompositeDisposable()
     val paginator = PublishProcessor.create<Int>()
-    val pageNumber: MutableLiveData<Int> = MutableLiveData()
+    private val pageNumber: MutableLiveData<Int> = MutableLiveData()
 
     fun setError(s: String) {
         mensajeError.value = s
@@ -117,7 +117,7 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                 override fun onComplete() {}
                 override fun onNext(t: ResponseModel) {
                     if (t.response.codigo == "0000") {
-                        insertSyncInspeccion(t.data)
+                        insertSyncInspeccion(t.data, q)
                     } else {
                         mensajeError.value = t.response.comentario
                     }
@@ -129,8 +129,8 @@ internal constructor(private val roomRepository: AppRepository, private val retr
             })
     }
 
-    private fun insertSyncInspeccion(t: Any) {
-        roomRepository.insertSyncInspeccion(t)
+    private fun insertSyncInspeccion(t: Any, q: Query) {
+        roomRepository.insertSyncInspeccion(t, q)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : CompletableObserver {
@@ -317,4 +317,20 @@ internal constructor(private val roomRepository: AppRepository, private val retr
                 }
             })
     }
+
+    fun getEjecucionById(id: Int): LiveData<Ejecucion> {
+        return roomRepository.getEjecucionById(id)
+    }
+
+    fun insertEjecucion(e: Ejecucion) {
+        roomRepository.insertEjecucion(e)
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : CompletableObserver {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onError(e: Throwable) {}
+                override fun onComplete() {}
+            })
+    }
+
 }

@@ -134,4 +134,9 @@ class DataBaseModule {
     internal fun provideInspeccionFileDao(appDataBase: AppDataBase): InspeccionFileDao {
         return appDataBase.inspeccionFileDao()
     }
+
+    @Provides
+    internal fun provideEjecucionDao(appDataBase: AppDataBase): EjecucionDao {
+        return appDataBase.ejecucionDao()
+    }
 }

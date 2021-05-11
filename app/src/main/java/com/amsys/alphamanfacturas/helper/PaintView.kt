@@ -7,8 +7,6 @@ import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.View
-import java.io.File
-import java.io.FileOutputStream
 import java.util.*
 import kotlin.math.abs
 
@@ -117,23 +115,23 @@ class PaintView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         return x1 + y1 > 100
     }
 
-    fun save(context: Context, user: Int, id: Int, tipo: String): String {
-        val folder = Util.getFolder(context)
-        val nameImg: String = Util.getFechaFile(user, id, tipo)
-
-        val image = File(folder, nameImg)
-        val direccion = "$folder/$nameImg"
-        try {
-            val out = FileOutputStream(image)
-            mBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
-            out.flush()
-            out.close()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        Util.comprimirImagen(direccion)
-        return nameImg
-    }
+//    fun save(context: Context, user: Int, id: Int, tipo: String): String {
+//        val folder = Util.getFolder(context)
+//        val nameImg: String = Util.getFechaFile(user, id, tipo)
+//
+//        val image = File(folder, nameImg)
+//        val direccion = "$folder/$nameImg"
+//        try {
+//            val out = FileOutputStream(image)
+//            mBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
+//            out.flush()
+//            out.close()
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//        }
+//        Util.comprimirImagen(direccion)
+//        return nameImg
+//    }
 
     companion object {
         var BRUSH_SIZE = 4
