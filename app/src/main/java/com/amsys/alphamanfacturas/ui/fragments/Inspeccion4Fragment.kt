@@ -94,14 +94,16 @@ class Inspeccion4Fragment : DaggerFragment(), View.OnClickListener,
                         text = text.substring(0, index + 3)
                         editTextTiempoTrabajo.setText(text)
                         editTextTiempoTrabajo.setSelection(text.length)
-                        when {
-                            s.toString().isEmpty() -> e.cantidad = 0.0
-                            else -> e.cantidad = text.toDouble()
-                        }
-                        if (e.fecha.isNotEmpty()) {
-                            inspeccionViewModel.insertEjecucion(e)
-                        }
+
                     }
+                }
+
+                when {
+                    s.toString().isEmpty() -> e.cantidad = 0.0
+                    else -> e.cantidad = text.toDouble()
+                }
+                if (e.fecha.isNotEmpty()) {
+                    inspeccionViewModel.insertEjecucion(e)
                 }
             }
         })

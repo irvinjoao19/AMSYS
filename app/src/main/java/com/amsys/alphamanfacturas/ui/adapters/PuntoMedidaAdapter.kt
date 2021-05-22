@@ -60,7 +60,7 @@ class PuntoMedidaAdapter(private val listener: OnItemClickListener.PuntoMedidaLi
 
                 if (a.editable) {
                     editText1.setOnClickListener { v ->
-                        listener.onItemClick(a, v, adapterPosition)
+                        listener.onItemClick(a, v, absoluteAdapterPosition)
                     }
                     editText2.setOnEditorActionListener { editText, p1, p2 ->
                         listener.onEditorAction(a, editText, p1, p2)
@@ -77,13 +77,13 @@ class PuntoMedidaAdapter(private val listener: OnItemClickListener.PuntoMedidaLi
                     textView11.isEndIconVisible = true
 
                     textView7.setEndIconOnClickListener {
-                        listener.onItemClick(a, textView7, adapterPosition)
+                        listener.onItemClick(a, textView7, absoluteAdapterPosition)
                     }
                     textView9.setEndIconOnClickListener {
-                        listener.onItemClick(a, textView9, adapterPosition)
+                        listener.onItemClick(a, textView9, absoluteAdapterPosition)
                     }
                     textView11.setEndIconOnClickListener {
-                        listener.onItemClick(a, textView11, adapterPosition)
+                        listener.onItemClick(a, textView11, absoluteAdapterPosition)
                     }
                 } else {
                     view.visibility = View.VISIBLE
